@@ -69,7 +69,9 @@ conc[101:200, 3] <- 1 # C
 conc[201:300, 1] <- 0.05 # AC
 conc[201:300, 3] <- 1 # AC
 
-# sensor array of 5 sensors with parametrized noise parameters
+conc <- conc[sample(1:nrow(conc)  ), ]
+
+# sensor array of 5 sensors with parametrized noise levels
 sa <- SensorArray(num=1:5, csd=0.1, ssd=0.1, dsd=0.1)
 
 # get information about the array
@@ -86,9 +88,9 @@ plot(sa, "prediction", conc=conc)
 <h3>Animation demo</h3>
 <p>This animation presents a simulation of synthetic data with different noise parameters. The synthetic data (top of the graphics) is visually compared with the reference UNIMAN data (bottom of the graphics) by plotting PCA scores.</p>
 
-<p>The simulation objective is to reproduce the reference dataset by playing with combinations of the parameters (barplot on the graphics).</p> 
+<p>Objective of the simulation is to reproduce the reference dataset by playing with combinations of the parameters (barplot on the graphics). The virtual sensor array is composed of the same number of sensors (17) as the UNIMAN array. The concentration profile of 200 samples contains eight gas classes (legend of the graphics).</p> 
 
-<p>Three noise parameters represents concentration noise (csd), sensor noise (csd) and drift (dsd).</p>
+<p>Three noise parameters represents concentration noise (csd), sensor noise (ssd) and drift (dsd).</p>
 
 <p><object width="550" height="360" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="src" value="uniman-vsa-200.swf" /><embed width="1100" height="720" type="application/x-shockwave-flash" src="uniman-vsa-200.swf" /></object></p>
 
@@ -98,5 +100,20 @@ plot(sa, "prediction", conc=conc)
 
 <p><a href="http://neurochem.sisbio.recerca.upc.edu/?page_id=86">The UPC site for Neurochem project</a> is another source of additional information.</p>
 
+<h3>Contacts</h3>
+<p>Alexandre Perera<br>
+Email: alexandre.perera [at] upc.edu</p>
+
+<p>Andrey Ziyatdinov<br>
+Email: andrey.ziyatdinov [at] upc.edu<p>
+
+<p>
+Address:<br>
+Universitat Politècnica de Catalunya, dept. ESAII<br>
+c/ Pau Gargallo 5, 08028 Barcelona, Spain<br>
+Tel.: +34 93 407 07 73</p>
+
+<h3>Acknowledgment</h3>
+<p>This work was funded from the European Community's Seventh Framework Programme (FP7/2007-2013) under grant agreement no. 216916: Biologically inspired computation for chemical sensing (NEUROChem), the Ramon y Cajal program from the Spanish Ministerio de Educacion y Ciencia and TEC2010-20886-C02-02. CIBER-BBN is an initiative of the Spanish ISCIII.</p>
 </body>
 </html>
