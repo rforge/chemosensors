@@ -90,7 +90,7 @@ plot(sa, "prediction", conc=conc)
 
 <p>Objective of the simulation is to reproduce the reference dataset by playing with combinations of the parameters (barplot on the graphics). The virtual sensor array is composed of the same number of sensors (17) as the UNIMAN array. The concentration profile of 200 samples contains eight gas classes (legend of the graphics).</p> 
 
-<p>Three noise parameters represents concentration noise (csd), sensor noise (ssd) and drift (dsd).</p>
+<p>Three noise parameters represent concentration noise (csd), sensor noise (ssd) and drift (dsd).</p>
 
 <p><object width="550" height="360" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="src" value="uniman-vsa-200.swf" /><embed width="1100" height="720" type="application/x-shockwave-flash" src="uniman-vsa-200.swf" /></object></p>
 
