@@ -30,22 +30,71 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 </table>
 
 
-<!-- get project title  -->
-<!-- own website starts here, the following may be changed as you like -->
+<h3>R package chemosensors</h3>
+<p>The development of chemosensors package was originated in <a href="http://neurochem.sisbio.recerca.upc.edu/">NEUROChem project</a> with requirements of large-scale gas sensor array data to run simulations on artificial olfaction. This package introduces a software tool that allows for the design of synthetic experiments with so-called virtual gas sensor arrays.</p>
 
-<?php if ($handle=fopen('http://'.$domain.'/export/projtitl.php?group_name='.$group_name,'r')){
-$contents = '';
-while (!feof($handle)) {
-	$contents .= fread($handle, 8192);
-}
-fclose($handle);
-echo $contents; } ?>
+<p>The generator of sensor signals can be used in applications related to educational tools, neuromorphic simulations in machine olfaction, and test and benchmarking of signal processing methods.</p>
+
+<p>The synthetic array of sensors allows for the generation of chemosensor data with a variety of characteristics: unlimited number of sensors, support of multicomponent gas mixtures and full parametric control of the noise in the system. 
+</p>
+
+<p>The released package makes use of the object-oriented programming paradigm (S4 classes), supports parallel computing and contains the datasets exploited in projects of the authors.</p>
 
 <!-- end of project description -->
 
-<p> No content added. </p>
+<h3>Installation</h3>
+<p>Chemosensors package can be installed as a regular R package from the R-Forge repository. The command to type in R:</p>
+<pre>
+install.packages("chemosensors", dep=TRUE, repos="http://r-forge.r-project.org")
+</pre>
+<p>That will install the latest development version with all dependencies.</p>
 
-<p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+<h3>Documetation</h3>
+<p>Help pages in html format are available on the UPC server <a href="http://neurochem.sisbio.recerca.upc.edu/public/chemosensors/html/00Index.html">http://neurochem.sisbio.recerca.upc.edu/public/chemosensors/html/00Index.html</a>.</p> 
+
+<h3>Examples</h3>
+<p>You might prefer to start with demos of the package. To see the list of available demos type in R:</p>
+<pre>
+demo(package="chemosensors")
+</pre>
+
+<p>Basic commands to generate synthetic data from a virtual sensor array could be:</p>
+<pre>
+# concentration matrix of 3 gas classes: A, C and AC
+conc <- matrix(0, 300, 3)
+conc[1:100, 1] <- 0.05 # A
+conc[101:200, 3] <- 1 # C
+conc[201:300, 1] <- 0.05 # AC
+conc[201:300, 3] <- 1 # AC
+
+# sensor array of 5 sensors with parametrized noise parameters
+sa <- SensorArray(num=1:5, csd=0.1, ssd=0.1, dsd=0.1)
+
+# get information about the array
+print(sa)
+plot(sa)
+
+# generate the data
+sdata <- predict(sa, conc)
+
+# plot the data
+plot(sa, "prediction", conc=conc)
+</pre>
+
+<h3>Animation demo</h3>
+<p>This animation presents a simulation of synthetic data with different noise parameters. The synthetic data (top of the graphics) is visually compared with the reference UNIMAN data (bottom of the graphics) by plotting PCA scores.</p>
+
+<p>The simulation objective is to reproduce the reference dataset by playing with combinations of the parameters (barplot on the graphics).</p> 
+
+<p>Three noise parameters represents concentration noise (csd), sensor noise (csd) and drift (dsd).</p>
+
+<p><object width="550" height="360" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="src" value="uniman-vsa-200.swf" /><embed width="1100" height="720" type="application/x-shockwave-flash" src="uniman-vsa-200.swf" /></object></p>
+
+<h3>References</h3>
+
+<p>The project summary page you can find on <a href="http://r-forge.r-project.org/projects/chemosensors/">development page</a> on the R-Forge website.</p>
+
+<p><a href="http://neurochem.sisbio.recerca.upc.edu/?page_id=86">The UPC site for Neurochem project</a> is another source of additional information.</p>
 
 </body>
 </html>
