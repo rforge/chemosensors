@@ -1,0 +1,12 @@
+chemosensors 0.5.3
+==================
+
+* Added the file NAMESPACE.
+* Added the classes 'DriftCommonModel' and 'DriftNoiseModel'.
+  The latter class is a sub-class of the class 'SensorArray'.
+
+chemosensors 0.5.2
+==================
+
+* Initial import includes basic classes, two demos, tests.
+
