@@ -20,7 +20,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 	<meta content="R package chemosensors, machine olfaction, synthetic datasets, benchmarks, data generation tool" name="keywords" />
 
 	<title><?php echo $group_name; ?></title>
-	<link href="http://<?php echo $themeroot; ?>styles/estilo1.css" rel="stylesheet" type="text/css" />
+	<!-- <link href="http://<?php echo $themeroot; ?>styles/estilo1.css" rel="stylesheet" type="text/css" /> -->
+	<link rel="stylesheet" type="text/css" href="R.css">	
   </head>
 
 <body>
