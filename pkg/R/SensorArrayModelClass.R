@@ -75,7 +75,7 @@ setClass(Class="SensorArrayModel",
 setMethod ("print","SensorArrayModel", function(x, ...)
 {
   cat(" Sensor Array Model\n")
-  cat(" - num", paste(num(object), collapse=", "), "\n")
+  cat(" - num", paste(num(x), collapse=", "), "\n")
   cat(" -", ngases(x), "gases", paste(gnames(x), collapse=", "), "\n")
   print(x@dataModel)
 })

@@ -206,7 +206,7 @@ plot.Sensor.snoise <- function(x, y, conc,
 }
 
 plot.Sensor.response <- function(x, y,  
-  lwd = 2, lty = 1, type="inc",
+  lwd = 2, lty = 1, type="range",
   main = "Sensor: response", ...)
 {   
   plotResponse(x, y, type = type, lwd = lwd, lty = lty, main=main, ...)

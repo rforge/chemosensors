@@ -1,21 +1,59 @@
 Package: chemosensors
 Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
 License: GPL (>= 3)
-Title: A tool for the design of synthetic experiments in machine olfaction.
+Title: A tool for the design of synthetic experiments in machine
+    olfaction.
 Type: Package
 LazyLoad: yes
 Author: Alexandre Perera-Lluna and Andrey Ziyatdinov
-Description: This package introduces a software tool that allows for the design of synthetic experiments in machine olfaction. The generator of sensor signals can be used in applications related to educational tools, neuromorphic simulations in machine olfaction, and test and benchmarking of signal processing methods. The synthetic array of sensors allows for the generation of chemosensor data with a variety of characteristics: unlimited number of sensors, support of multicomponent gas mixtures and full parametric control of the noise in the system.  The released package makes use of the object-oriented programming paradigm (s4 classes), supports parallel computing and contains the datasets exploited in projects of the authors.
-Version: 0.5.1
+Description: This package introduces a software tool that allows for
+    the design of synthetic experiments in machine olfaction. The
+    generator of sensor signals can be used in applications related to
+    educational tools, neuromorphic simulations in machine olfaction,
+    and test and benchmarking of signal processing methods. The
+    synthetic array of sensors allows for the generation of chemosensor
+    data with a variety of characteristics: unlimited number of
+    sensors, support of multicomponent gas mixtures and full parametric
+    control of the noise in the system.  The released package makes use
+    of the object-oriented programming paradigm (s4 classes), supports
+    parallel computing and contains the datasets exploited in projects
+    of the authors.
+Version: 0.5.2
 Date: 2012-01-09
-Depends: methods, pls, quadprog, plyr, colorspace, RColorBrewer
-Suggests: snow, rpvm, rsprng
-Collate: 'ChemosensorsClass.R' 'ChemosensorsClassMethods.R'
-    'ConcNoiseModelClass.R' 'ConcNoiseModelClassMethods.R' 'demos.R'
-    'dev.lib.R' 'package.R' 'SorptionModelClass.R'
-    'SensorArrayModelClass.R' 'SensorNoiseModelClass.R'
-    'SensorArrayClass.R' 'SensorArrayClassMethods.R'
-    'SensorArrayModelClassMethods.R' 'SensorModelClass.R'
-    'SensorClass.R' 'SensorClassMethods.R'
-    'SensorDataModelClassMethods.R' 'SensorModelClassMethods.R'
-    'SensorNoiseModelClassMethods.R' 'SorptionModelClassMethods.R'
+Depends:
+    methods,
+    pls,
+    LearnBayes,
+    quadprog,
+    plyr,
+    colorspace,
+    RColorBrewer
+Suggests:
+    snow,
+    rpvm,
+    rsprng
+Collate:
+    'support.lib.R'
+    'ChemosensorsClass.R'
+    'ChemosensorsClassMethods.R'
+    'ConcNoiseModelClass.R'
+    'ConcNoiseModelClassMethods.R'
+    'demos.R'
+    'dev.lib.R'
+    'DriftCommonModelClassMethods.R'
+    'DriftNoiseModelClassMethods.R'
+    'DriftNoiseModelClass.R'
+    'package.R'
+    'SorptionModelClass.R'
+    'SensorArrayModelClass.R'
+    'SensorNoiseModelClass.R'
+    'SensorArrayClass.R'
+    'SensorArrayClassMethods.R'
+    'SensorArrayModelClassMethods.R'
+    'SensorModelClass.R'
+    'SensorClass.R'
+    'SensorClassMethods.R'
+    'SensorDataModelClassMethods.R'
+    'SensorModelClassMethods.R'
+    'SensorNoiseModelClassMethods.R'
+    'SorptionModelClassMethods.R'

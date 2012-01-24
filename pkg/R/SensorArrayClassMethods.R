@@ -256,6 +256,8 @@ setMethod("predict", "SensorArray", function(object, conc, coef="numeric", concU
     sdata <- sdataModel(object, conc=conc, coef=coef, concUnits=concUnitsInt(object), ...)  # sdataModel
   }
   
+  sdata <- predict(as(object, "DriftNoiseModel"), sdata=sdata, ...) # Drift Noise Model
+    
   return(sdata)
 })
 

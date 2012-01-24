@@ -10,10 +10,11 @@ mod <- prcomp(X, center=TRUE, scale=FALSE)
 col <- ccol(sa, conc=C, concUnits="perc")
 scoreplot(mod, pch=20, col=col)
 
-# -1- default csd/ssd 
+# -1- default csd/ssd/dsd
 plot(sa, "prediction", conc=conc, mod=mod)
 
-# -2- csd = 0.5, ssd =0.5
+# -2- csd = 0.5, ssd =0.5, dsd = 0.5
 csd(sa) <- 0.5
 ssd(sa) <- 0.5
+dsd(sa) <- 0.5
 plot(sa, "prediction", conc=conc, mod=mod)

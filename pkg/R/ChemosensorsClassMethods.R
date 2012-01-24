@@ -54,7 +54,7 @@ defaultConcUnitsSorption <- function() return("norm")
 #----------------------------
 
 #' @export
-defaultDataPackage <- function() return("chemodata")
+defaultDataPackage <- function() return("chemosensors")
 
 #' @export
 defaultDataSensorModel <- function() return("UNIMANshort")
@@ -64,6 +64,9 @@ defaultDataSensorNoiseModel <- function() return("UNIMANsnoise")
 
 #' @export
 defaultDataSorptionModel <- function() return("UNIMANsorption")
+
+#' @export
+defaultDataDriftNoiseModel <- function() return("UNIMANdnoise")
 
 #----------------------------
 # Get/Set Methods

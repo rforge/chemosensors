@@ -96,7 +96,8 @@ setReplaceMethod("nsd", "SensorArray", function(object, value)
 {
   csd(object) <- value
   ssd(object) <- value
-  
+  dsd(object) <- value
+    
   validObject(object)
   return (object)
 })

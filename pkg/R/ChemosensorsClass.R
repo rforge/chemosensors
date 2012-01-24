@@ -1,5 +1,8 @@
 # last revision: 9 Jan 2012
 
+#' @include support.lib.R
+NULL
+
 #----------------------------
 # Sub Classes
 #----------------------------
@@ -21,7 +24,7 @@ subClasses <- function(class)
   else if(class == "SensorNoiseModel")
     return(c("DriftCommonModel"))
   else if(class == "SensorArray")
-    return(c("SensorArrayModel", "ConcNoiseModel", "SensorNoiseModel", "SorptionModel"))    
+    return(c("SensorArrayModel", "ConcNoiseModel", "SensorNoiseModel", "SorptionModel", "DriftNoiseModel"))
   else if(class == "SDataBox")
     return(c("Scenario", "SensorArray"))    
   else
@@ -39,43 +42,77 @@ subClasses <- function(class)
 #----------------------------
 # Get/Set Methods
 #----------------------------
-
+#' @exportMethod num
 setGeneric("num", function(x) standardGeneric("num"))
+#' @exportMethod idx
 setGeneric("idx", function(x) standardGeneric("idx"))
+#' @exportMethod gases
 setGeneric("gases", function(x) standardGeneric("gases"))
+#' @exportMethod gind
 setGeneric("gind", function(x) standardGeneric("gind"))
+#' @exportMethod ngases
 setGeneric("ngases", function(x) standardGeneric("ngases"))
+#' @exportMethod gnames
 setGeneric("gnames", function(x) standardGeneric("gnames"))
 
+#' @exportMethod nsensors
 setGeneric("nsensors", function(x) standardGeneric("nsensors"))
 
+#' @exportMethod concUnits
 setGeneric("concUnits", function(x) standardGeneric("concUnits"))
+#' @exportMethod concUnitsInt
 setGeneric("concUnitsInt", function(x) standardGeneric("concUnitsInt"))
 
+#' @exportMethod type
 setGeneric("type", function(x) standardGeneric("type"))
 
+#' @exportMethod coefnames
 setGeneric("coefnames", function(x) standardGeneric("coefnames"))
+#' @exportMethod ncoef
 setGeneric("ncoef", function(x) standardGeneric("ncoef"))
 
 # SensorModel
+#' @exportMethod modelName
 setGeneric("modelName", function(x) standardGeneric("modelName"))
+#' @exportMethod coeffNonneg
 setGeneric("coeffNonneg", function(x) standardGeneric("coeffNonneg"))
 
 # ConcNoiseModel
+#' @exportMethod csd
 setGeneric("csd", function(x) standardGeneric("csd"))
+#' @exportMethod csd<-
 setGeneric("csd<-", function(object, value) standardGeneric("csd<-"))
+#' @exportMethod logf
 setGeneric("logf", function(x) standardGeneric("logf"))
 
 # SensorNoiseModel
+#' @exportMethod ssd
 setGeneric("ssd", function(x) standardGeneric("ssd"))
+#' @exportMethod ssd<-
 setGeneric("ssd<-", function(object, value) standardGeneric("ssd<-"))
+#' @exportMethod noisef
 setGeneric("noisef", function(x) standardGeneric("noisef"))
 
 # SorptionModel
+#' @exportMethod knum
 setGeneric("knum", function(x) standardGeneric("knum"))
+#' @exportMethod concUnitsSorption
 setGeneric("concUnitsSorption", function(x) standardGeneric("concUnitsSorption"))
 
+# DriftNoiseModel
+#' @exportMethod dsd
+setGeneric("dsd", function(x) standardGeneric("dsd"))
+#' @exportMethod dsd<-
+setGeneric("dsd<-", function(object, value) standardGeneric("dsd<-"))
+#' @exportMethod ndcomp
+setGeneric("ndcomp", function(x) standardGeneric("ndcomp"))
+#' @exportMethod ndvar
+setGeneric("ndvar", function(x) standardGeneric("ndvar"))
+#' @exportMethod dspace
+setGeneric("dspace", function(x) standardGeneric("dspace"))
+
 # Sensor 
+#' @exportMethod enableSorption
 setGeneric("enableSorption", function(x) standardGeneric("enableSorption"))
 
 #----------------------------
@@ -112,6 +149,7 @@ setGeneric("coefSample", function(object, ...) standardGeneric("coefSample"))
 
 #' @exportMethod scaledNoiseSd
 setGeneric("scaledNoiseSd", function(object, ...) standardGeneric("scaledNoiseSd"))
+#' @exportMethod nsd<-
 setGeneric("nsd<-", function(object, value) standardGeneric("nsd<-"))
 
 #----------------------------
