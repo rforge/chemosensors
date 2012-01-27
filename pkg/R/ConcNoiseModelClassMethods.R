@@ -89,17 +89,21 @@ setMethod("plot", "ConcNoiseModel", function (x, y, ...)
     stop("Error in ConcNoiseModel::plot: plot type 'y' is unknown."))
 })
 
-plot.ConcNoiseModel.noise <- function(x, y, n, conc, concUnits="default",
+plot.ConcNoiseModel.noise <- function(x, y, n = 100, conc, concUnits="default",
+  col, lty = c(3, 1), lwd = 2,
   main = paste("Concentration Noise: csd", csd(x)), xlab = "Samples", ylab="Concentration", ...)
 {
   if(concUnits == "default") concUnits <- concUnits(x)
-  if(missing(n)) n <- 100
   if(missing(conc)) conc <- concSample(x, n=n, concUnits=concUnits, ...)
   
+  if(missing(col)) col <- gcol(x)
+  
+  ngases <- ngases(x)
   nconc <- predict(x, conc, ...)  
 
-  ylab <- paste(ylab, ConcUnitsStr(concUnits), sep=", ")
-  matplot(cbind(conc, nconc), t='l', 
+  lty <- rep(lty, each=ngases)
+  ylab <- paste(ylab, ", [", ConcUnitsStr(concUnits), "]", sep="")
+  matplot(cbind(conc, nconc), t='l', col=col, lwd = lwd, lty = lty,
     bty='n',
     main=main, xlab = xlab, ylab = ylab)  
 }

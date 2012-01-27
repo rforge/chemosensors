@@ -55,11 +55,19 @@ setGeneric("ngases", function(x) standardGeneric("ngases"))
 #' @exportMethod gnames
 setGeneric("gnames", function(x) standardGeneric("gnames"))
 
+#' @exportMethod coefficients
+setGeneric("coefficients", function(object, ...) standardGeneric("coefficients"))
+#' @exportMethod coef
+setGeneric("coef", function(object, ...) standardGeneric("coef"))
+
+
 #' @exportMethod nsensors
 setGeneric("nsensors", function(x) standardGeneric("nsensors"))
 
 #' @exportMethod concUnits
 setGeneric("concUnits", function(x) standardGeneric("concUnits"))
+#' @exportMethod concUnits<-
+setGeneric("concUnits<-", function(object, value) standardGeneric("concUnits<-"))
 #' @exportMethod concUnitsInt
 setGeneric("concUnitsInt", function(x) standardGeneric("concUnitsInt"))
 
@@ -139,6 +147,9 @@ setGeneric("sdataModel", function(object, conc, ...) standardGeneric("sdataModel
 
 #' @exportMethod concSample
 setGeneric("concSample", function(object, ...) standardGeneric("concSample"))
+
+#' @exportMethod sdataSample
+setGeneric("sdataSample", function(object, ...) standardGeneric("sdataSample"))
 
 #' @exportMethod coefSample
 setGeneric("coefSample", function(object, ...) standardGeneric("coefSample"))

@@ -18,7 +18,7 @@ defaultSorptionModel <- function()
   par <- list(gases=1:3, gnames=LETTERS[1:3], concUnits="perc", concUnitsSorption=defaultConcUnitsSorption(),
     knum=1,
     datasetSorptionModel=defaultDataSorptionModel(), pck=defaultDataPackage(),
-    srdata=NULL, Qequal=TRUE, Knorm=TRUE, Kmin=1, Kmax=50)
+    srdata=NULL, Qequal=TRUE, Knorm=TRUE, Kmin=1, Kmax=150, Knonlin = 0.33)
   
   return(par)
 }
@@ -29,7 +29,8 @@ setMethod("initialize", "SorptionModel", function(.Object,
   gases="numeric", gnames="character", concUnits="character", concUnitsSorption="character",
   # specific for class SorptionModel
   datasetSorptionModel = "character", pck = "character",
-  knum = "numeric", srdata, Qequal="logic", Knorm="logic", Kmin="numeric", Kmax="numeric", ...)
+  knum = "numeric", srdata, Qequal="logic", Knorm="logic", 
+  Kmin="numeric", Kmax="numeric", Knonlin = "numeric", ...)
 {   
   # missing
   def.par <- defaultSorptionModel()
@@ -46,10 +47,16 @@ setMethod("initialize", "SorptionModel", function(.Object,
   if(missing(Knorm)) Knorm <- def.par$Knorm
   if(missing(Kmin)) Kmin <- def.par$Kmin
   if(missing(Kmax)) Kmax <- def.par$Kmax  
-
+  if(missing(Knonlin)) Knonlin <- def.par$Knonlin  
+  
   if(missing(knum)) knum <- def.par$knum
   idx <- 1:length(knum)
-      
+
+  # process 'Knonlin'
+  Kmax <- Knonlin * Kmax
+  if(Kmax <= Kmin)
+    stop("Error in SorptionModel::initialize: 'Kmax <= Kmin'; check parameter 'Knonlin'.")
+    
   # load data
   if(is.null(srdata)) {
     data(list=datasetSorptionModel, package=pck, envir=environment()) # -> 'qkc'
@@ -110,7 +117,7 @@ setMethod("initialize", "SorptionModel", function(.Object,
   # check 'Qequal'
   if(Qequal) {  
     #Q <- matrix(1, nrow=nrow(Q), ncol=ncol(Q))
-    Q <- matrix(c(20, 20, 1)[gases], nrow=nrow(Q), ncol=ncol(Q))
+    Q <- matrix(c(1, 1, 1)[gases], nrow=nrow(Q), ncol=ncol(Q))
   }
   else  
     stop("Error in SorptionModel::initialize: 'Qequal' is FALSE.")  
@@ -120,6 +127,13 @@ setMethod("initialize", "SorptionModel", function(.Object,
   rownames(K) <- gnames
   colnames(Q) <- idx
   rownames(Q) <- gnames
+  
+  # update 'srdata'
+  srdata.names <- dimnames(srdata)
+  srdata <- array(srdata[knum, gases, ], c(length(knum), ngases, dim(srdata)[3]))
+  srdata.names[[1]] <- srdata.names[[1]][knum]
+  srdata.names[[2]] <- srdata.names[[2]][gases]
+  dimnames(srdata) <- srdata.names
   
   # assign
   .Object@idx <- idx
@@ -131,6 +145,7 @@ setMethod("initialize", "SorptionModel", function(.Object,
   .Object@concUnitsSorption <- concUnitsSorption
 
   .Object@knum <- knum
+  .Object@Knonlin <- Knonlin  
   .Object@srdata <- srdata  
   .Object@sorptionModel <- list(K=K, Q=Q,
     Qequal=Qequal, Knorm=Knorm, Kmin=Kmin, Kmax=Kmax)
@@ -162,21 +177,21 @@ initSorptionK <- function(K, Kmin, Kmax)
 #----------------------------
 setMethod("plot", "SorptionModel", function (x, y, ...) 
 {
-  yval <- c("response", "heatmap", "barplot", "model")
+  yval <- c("response", "heatmap", "data", "predict")
   # missing
   if(missing(y)) y <- "response"
    
   switch(y,
     heatmap = plot.SorptionModel.heatmap(x, y, ...),    
-    barplot = plot.SorptionModel.barplot(x, y, ...),
-    model = plot.SorptionModel.model(x, y, ...),
+    data = plot.SorptionModel.data(x, y, ...),
+    predict = plot.SorptionModel.predict(x, y, ...),
     response = plot.SorptionModel.response(x, y, ...),    
     stop("Error in ConcNoiseModel::plot: plot type 'y' is unknown."))
 })
 
 plot.SorptionModel.heatmap <- function(x, y, param="KCmax",
   pal="Blues",
-  main = paste("Sorption Model: UNIMAN data '", param, "'", sep=''), 
+  main = paste("Sorption Model: data, parameter '", param, "'", sep=''), 
   xlab = "Sensors", ylab="Gases", ...)
 {
   col <- switch(pal,
@@ -191,24 +206,31 @@ plot.SorptionModel.heatmap <- function(x, y, param="KCmax",
   axis(2, at=seq(0, 1, length.out=ncol(img)), labels=colnames(img), las=2, tick=FALSE)  
 }
 
-plot.SorptionModel.barplot <- function(x, y, param="KCmax",
+plot.SorptionModel.data <- function(x, y, param="KCmax",
   main = paste("Sorption Model: UNIMAN data '", param, "'", sep=''),  ...)
 {
-  barplot(x@srdata[, , param], beside=TRUE)
+  barplot(x@srdata[, , param], beside=TRUE, main = main)
 }
 
-plot.SorptionModel.model <- function(x, y, n, conc, concUnits="default",
-  main = paste("Sorption Model"), xlab = "Samples", ylab="Concentration", ...)
+plot.SorptionModel.predict <- function(x, y, n, conc, concUnits="default",
+  col, lty = c(1, 3), lwd = 2,
+  main = paste("Sorption Model: data"), xlab = "Samples", ylab="Concentration", ...)
 {
   if(concUnits == "default") concUnits <- concUnits(x)
   if(missing(n)) n <- 100
   if(missing(conc)) conc <- concSample(x, "inc", n=n, concUnits=concUnits, ...)
+
+  if(missing(main))
+    main <- paste(main, "\n knum ", paste(knum(x), collapse=", "), ", non-linearity ", x@Knonlin, sep="")
   
   nconc <- predict(x, conc, ...)  
 
+  if(missing(col)) col <- gcol(x)
+  lty <- rep(lty, each=ngases(x))
   ylab <- paste(ylab, ConcUnitsStr(concUnits), sep=", ")
-  matplot(cbind(conc, nconc), t='l', 
-    bty='n',
+  
+  matplot(cbind(nconc, conc), t='l', col = col, lty=lty, lwd=lwd,
+    bty='n', 
     main=main, xlab = xlab, ylab = ylab)  
 }
 
@@ -219,6 +241,11 @@ plot.SorptionModel.response <- function(x, y,
   main = "Sorption Model: response", xlab = "Normalized Concentration", ylab="Soprtion Concenration", ...)
 { 
   if(sum(gases == 0)) gases <- gases(x)
+
+  if(missing(main))
+    main <- paste(main, "\n knum ", paste(knum(x), collapse=", "), ", non-linearity ", x@Knonlin, sep="")
+
+  concUnits(x) <- "norm"
 
   concUnits <- concUnits(x)  
   gind <- gind(x)

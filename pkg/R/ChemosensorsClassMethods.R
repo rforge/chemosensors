@@ -74,15 +74,28 @@ defaultDataDriftNoiseModel <- function() return("UNIMANdnoise")
 
 setMethod("num", "ANY", function(x) x@num)
 setMethod("idx", "ANY", function(x) x@idx)
+
 setMethod("gases", "ANY", function(x) x@gases)
 setMethod("gind", "ANY", function(x) x@gind)
 setMethod("ngases", "ANY", function(x) x@ngases)
 setMethod("gnames", "ANY", function(x) x@gnames)
 
+setMethod("gases", "missing", function(x) 1:3)
+setMethod("gind", "missing", function(x) 1:3)
+setMethod("ngases", "missing", function(x) 3)
+setMethod("gnames", "missing", function(x) LETTERS[1:3])
+
 setMethod("nsensors", "ANY", function(x) length(x@num))
 
 setMethod("concUnits", "ANY", function(x) x@concUnits)
 setMethod("concUnitsInt", "ANY", function(x) x@concUnitsInt)
+
+setReplaceMethod("concUnits", "ANY", function(object, value) 
+{
+  object@concUnits <- value
+  validObject(object)
+  return (object)
+})
 
 #----------------------------
 # Predict Methods
@@ -100,26 +113,24 @@ setMethod("coef", "ANY", function(object, ...)
 #----------------------------
 setMethod("concMin", "ANY", function(object, concUnits=object@concUnits, ...)
 {
-  conc.min.perc <- c(0.01, 0.01, 0.1)
+  conc.min.perc <- c(0.01, 0.01, 0.1)[gases(object)]
   conc.min <- switch(concUnits,
     "perc" = conc.min.perc,
     "perc 1e-2" = 100 * conc.min.perc,
+    "norm" = conc.min.perc / concMax(object, concUnits="perc"),  
     stop("Error in ANY::concMin: 'concUnits' is not supported."))
-  
-  conc.min <- conc.min[gases(object)]
   
   return(conc.min)
 })
 
 setMethod("concMax", "ANY", function(object, concUnits=object@concUnits, ...)
 {
-  conc.max.perc <- c(0.05, 0.05, 1.0)
+  conc.max.perc <- c(0.05, 0.05, 1.0)[gases(object)]
   conc.max <- switch(concUnits,
     "perc" = conc.max.perc,
     "perc 1e-2" = 100 * conc.max.perc,
+    "norm" = c(1, 1, 1)[gases(object)],
     stop("Error in ANY::concMax: 'concUnits' is not supported."))
-  
-  conc.max <- conc.max[gases(object)]
   
   return(conc.max)
 })
@@ -246,13 +257,30 @@ setMethod("concSample", "ANY", function(object, type, n,
     stop("Error in ANY::concSample: 'type' is unknown.")
   
   # convert 'conc' to '@concUnits'
-  conc <- switch(concUnits,
-    'perc' = conc,
-    'perc 1e-2' = 100 * conc,
-    stop("Error in ANY::concSample: 'concUnits' is not supported."))
+  #conc <- switch(concUnits,
+  #  'perc' = conc,
+  #  'perc 1e-2' = 100 * conc,
+  #   'norm' = sweep(conc, 2, concMax(object, concUnits=concUnits), "/"),    
+  #  stop("Error in ANY::concSample: 'concUnits' is not supported."))
     
   return(conc)
 })
+
+setMethod("sdataSample", "ANY", function(object, n, ...)
+{
+  if(missing(n)) n <- 100
+  nsensors <- nsensors(object)
+  
+  sdata.base <- matrix(seq(0, nsensors, length=nsensors), nrow=n, ncol=nsensors, byrow=TRUE)
+  sdata.inc <- matrix(seq(2, 5, length=n), nrow=n, ncol=nsensors)
+  sdata <- sdata.inc # + sdata.base
+
+  # set names of 'coef'
+  colnames(sdata) <- num(object)
+  
+  return(sdata)
+})
+
 
 #----------------------------
 # Noise Methods
@@ -341,22 +369,14 @@ setMethod("plotResponse", "ANY", function(x, y, jitter,
   }
 })
 
-### Method ccol
-setMethod("ccol", "ANY", function(object, conc, palA, palB, palC, ...)
-{  
-  if(missing(conc))
-    stop("Error in 'ANY::ccol': 'conc' is missing.")        
-    
-  if(missing(palA)) palA <- brewer.pal(4, "Blues")
-  if(missing(palB)) palB <- brewer.pal(4, "Reds")
-  if(missing(palC)) palC <- brewer.pal(4, "Greens")
-  
-  pal <- list(palA=palA, palB=palB, palC=palC)
-  
+#----------------------------
+# Color Methods
+#----------------------------
+ccol.function <- function(conc, pal,
+  gases, ngases, ...)
+{
   nsamples <- nrow(conc)
-  gases <- gases(object)
-  ngases <- ngases(object)
-  
+
   # cmode
   all.pure <- (sum(apply(conc, 1, function(x) sum(x!=0) <= 1)) == nsamples)
   cmode <- ifelse(all.pure, 'pures', 'mixtures')
@@ -376,35 +396,54 @@ setMethod("ccol", "ANY", function(object, conc, palA, palB, palC, ...)
   #  warning("Error in 'ANY::ccol': 'cmode' is unknown.")        
   #}
 
+  return(col)  
+}
+  
+### Method ccol
+setMethod("ccol", "ANY", function(object, conc, pal, ...)
+{ 
+  # missing object/conc
+  missing.object <- ifelse(missing(object), TRUE, FALSE) 
+  missing.conc <- ifelse(missing(conc), TRUE, FALSE) 
+
+  if(!missing.object) {
+    if(class(object) %in% c("matrix", "data.frame")) {
+      missing.object <- TRUE
+      missing.conc <- FALSE
+      conc <- object
+    }
+  }
+  
+  if(missing.conc)
+    stop("Error in 'ANY::ccol': 'conc' is missing.")        
+      
+  palA <- brewer.pal(4, "Blues")
+  palB <- brewer.pal(4, "Reds")
+  palC <- brewer.pal(4, "Greens")
+  
+  pal <- list(A=palA, B=palB, C=palC)
+
+  gases <- ifelse(missing.object, gases(), gases(object))
+  ngases <- ifelse(missing.object, ngases(), ngases(object))  
+  
+  col <- ccol.function(conc, pal, 
+    gases=gases, ngases=ngases)
+
   return(col)
 })
 
 ### Method gcol
-setMethod("gcol", "ANY", function(object, conc, gases, pal, ...)
+setMethod("gcol", "ANY", function(object, gases=0, pal, ...)
 {
-  npal <- 7
-  
-  if(missing(pal)) pal <- brewer.pal(npal, "Set1") 
+  if(sum(gases == 0)) gases <- gases(object)
   # gases: color
-  # 1: 1, 2: 2, 3: 3 
-  # c(1, 2): 4, c(1, 3): 5, c(2, 3): 6
-  # c(1, 2, 3): 7
+  # A: 1, B: 2, C: 3 
+  # AB: 4, AC: 5, BC: 6
+  # ABC: 7
+  npal <- 7  
+  if(missing(pal)) pal <- brewer.pal(npal, "Set1") 
   
-  # -1- 'conc' based
-  if(missing(gases)) {
-    gases <- gases(object)
-    col.index <- apply(conc, 1, function(x) {
-      switch(which(x != 0),
-        '1' = 1, '2' = 2, '3' = 3,
-        stop("Error in ANY::gcol: switch."))
-    })
+  col <- pal[gases]
   
-    col <- pal[col.index]
-  }
-  # -2- 'gases' based
-  else {
-    col <- pal[gases]
-  }
-
   return(col)
 })

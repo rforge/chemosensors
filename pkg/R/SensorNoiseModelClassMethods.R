@@ -126,34 +126,45 @@ setMethod("plot", "SensorNoiseModel", function (x, y, ...)
 })
 
 plot.SensorNoiseModel.barplot <- function(x, y, 
-  main = paste("Sensor Noise Model: ", nsensors(x), " sensor(s).", sep=''),  
+  main = "Sensor Noise",  
   xlab = "Gases", ylab="Parameter 'sd'", ...)
 {
+  nsensors <- nsensors(x)
+  
+  # main
+  if(missing(main)) {
+    if(nsensors <= 5) main <- paste(main, ": num ", paste(num(x), collapse=", "), sep='')
+    else main <- paste(main, ": ", nsensors, " sensors", sep='')
+    main <- paste(main, ", ssd ", ssd(x), sep='')
+  }
+  
   barplot(t(x@sndata), beside=TRUE, 
     main=main, xlab=xlab, ylab=ylab, ...)
 }
 
 plot.SensorNoiseModel.noise <- function(x, y, n, coef, 
-  main = paste("Random Walk: ssd", paste(ssd(x), collapse=", ")), xlab = "Samples", ylab="Coefficients", ...)
+  lwd = 2, lty = 1,
+  main = paste("Sensor Noise: noise '", type(x), "', ssd ", ssd(x), sep=''), 
+  xlab = "Samples", ylab="Coefficients", ...)
 {
   if(missing(coef)) coef <- coefSample(x)
   if(missing(n)) n <- 100
   
   ncoef <- predict(x, coef=coef, n=n, ...) # noise + coef
    
-  matplot(ncoef, t='l', 
+  col <- grey.colors(ncoef(x), start=0.3, end=0.7) 
+  
+  matplot(ncoef, t='l', col=col, lwd = lwd, lty = lty,
     bty='n',
     main=main, xlab = xlab, ylab = ylab, ...)  
 }
 
-plot.SensorNoiseModel.walk <- function(x, y, n, k, coef, coefind,
-  pch=20,
-  main = paste("Random Walk: ssd", paste(ssd(x), collapse=", ")), xlab = "Coefficient", ylab="Coefficient", ...)
+plot.SensorNoiseModel.walk <- function(x, y, n = 100, k = 5, coef, coefind = 1:2,
+  pch = 20,
+  main = paste("Sensor Noise Walk: ssd ", ssd(x), ", k ", k, sep=''), 
+  xlab = "Coefficient", ylab="Coefficient", ...)
 {
   if(missing(coef)) coef <- coefSample(x)
-  if(missing(coefind)) coefind <- 1:2
-  if(missing(n)) n <- 100
-  if(missing(k)) k <- 5  
   
   nsensors <- nsensors(x)
   

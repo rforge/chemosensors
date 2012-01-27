@@ -192,40 +192,45 @@ initModelPlsr <- function(X, C, ...)
 #----------------------------
 setMethod("plot", "SensorModel", function (x, y, ...) 
 {
-  yval <- c("response", "prediction")
+  yval <- c("response", "predict")
 
   # missing
   if(missing(y)) y <- "response"
   
   switch(y,
-    prediction = plot.SensorModel.prediction(x, y, ...),
+    predict = plot.SensorModel.predict(x, y, ...),
     response = plot.SensorModel.response(x, y, ...),
     stop("Error in SensorModel::plot: plot type 'y' is unknown."))
 })
 
-plot.SensorModel.prediction <- function(x, y, C, gas = 1, jitter=FALSE, 
-  main = "Prediction: y ~ c", xlab = paste("Concentration of gas", gnames(x)[gas]), ylab="Sensor Signal", ...)
+plot.SensorModel.predict <- function(x, y, conc, gases = 1, jitter=FALSE,  
+  col, pch = 20, cex = 1,
+  main = "Prediction: y ~ c", xlab = paste("Concentration of gas", gnames(x)[gases]), ylab="Sensor Model Response, [a.u.]", ...)
 {
-  if(missing(C))
-    stop("Error in 'plot.SensorModel.prediction': 'C' is missing.")
+  if(missing(conc))
+    stop("Error in 'plot.SensorModel.prediction': 'conc' is missing.")
+  if(missing(col)) col <- "black" # gcol(x, gases=gases)
   
-  X <- predict(x, C, ...)  
+  C <- conc
+  X <- predict(x, conc, ...)  
 
   # points
-  ind <- (C[, gas] != 0)  
-  cp <- C[ind, gas]
+  ind <- (C[, gases] != 0)  
+  cp <- C[ind, gases]
   if(jitter) cp <- jitter(cp)  
   xp <- X[ind, 1]
   if(jitter) xp <- jitter(xp)
   
   if(jitter) main <- paste(main, " (jittered points)", sep='')
-  plot(cp, xp, bty='n',
+  xlab <- paste(xlab, ", [", ConcUnitsStr(concUnits(x)), "]", sep='')
+  
+  plot(cp, xp, bty = 'n', pch = pch, cex = cex, col=col,
     main=main, xlab = xlab, ylab = ylab)  
 }
 
 plot.SensorModel.response <- function(x, y,  
   lwd = 2, lty = 1,
-  main = "Sensor Model: response", ...)
+  main = paste("Sensor Model: response \n num ", num(x), ", model '", modelName(x), "'", sep=""), ...)
 { 
   plotResponse(x, y, lwd = lwd, lty = lty, main=main, ...)
 }

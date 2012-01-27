@@ -28,8 +28,8 @@ DriftModelNames <- function()
 #' @export
 defaultParDriftNoiseModel <- function()
 {
-  par <- list(num=1, 
-    dsd = 0.1, ndcomp = 1, ndvar = NULL, dmodel = "cpc",
+  par <- list(num=1:2, 
+    dsd = 0.1, ndcomp = 2, ndvar = NULL, dmodel = "cpc",
     datasetDriftNoiseModel=defaultDataDriftNoiseModel(), pck=defaultDataPackage())
 
   return(par)
@@ -114,17 +114,37 @@ DriftNoiseModel <- function(...)
 #----------------------------
 setMethod("plot", "DriftNoiseModel", function (x, y, ...) 
 {
-  yval <- c("pc")
+  yval <- c("noise", "pc")
 
   # missing
-  if(missing(y)) y <- "pc"
+  if(missing(y)) y <- "noise"
   
   switch(y,
     pc = plot.DriftNoiseModel.pc(x, y, ...),
+    noise = plot.DriftNoiseModel.noise(x, y, ...),
     stop("Error in DriftNoiseModel::plot: plot type 'y' is unknown."))
 })
 
-plot.DriftNoiseModel.pc <- function(x, y, X, C,
+plot.DriftNoiseModel.noise <- function(x, y, n = 100, sdata, 
+  lty = c(3, 1), lwd = 2,
+  main = paste("Drift Noise: noise '", type(x), "', dsd ", dsd(x), sep=''), 
+  xlab = "Samples", ylab="Sensor Signals", ...)
+{
+  if(missing(sdata)) sdata <- sdataSample(x, n=n)
+  
+  nsensors <- nsensors(x)
+  
+  nsdata <- predict(x, sdata=sdata, n=n, ...) # noise + sdata
+   
+  col <- grey.colors(nsensors, start=0.3, end=0.7) 
+  
+  lty <- rep(lty, each=nsensors)
+  matplot(cbind(sdata, nsdata), t='l', col=col, lwd = lwd, lty = lty,
+    bty='n',
+    main=main, xlab = xlab, ylab = ylab, ...)  
+}
+
+plot.DriftNoiseModel.pc <- function(x, y, X,
   comp = 1:2, 
   pch = 20, col,
   main = paste("Drift:", nsensors(x), "sensors,", ndcomp(x), "components."), xlab = paste("PC1"), ylab="PC2", ...)

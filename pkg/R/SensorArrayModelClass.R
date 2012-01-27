@@ -30,32 +30,43 @@ validSensorArrayModel <- function(object)
 
 #' Class SensorArrayModel.
 #'
-#' Class \code{\link{SensorArrayModel}} predicts a sensor signal in response to an input concentration matrix
-#' by means of a data model in slot \code{model}.
+#' Class \code{\link{SensorArrayModel}} is a extension of the class \code{\link{SensorModel}}
+#' for many sensor elements.
 #'
-#' The training of the data model is based on the reference data from a dataset
-#' measured at The University of Manchester (UNIMAN) for three analytes 
-#' ammonia, propanoic acid and n-buthanol at different concentration levels.
+#' In comparision to the class \code{\link{SensorModel}}, 
+#' slot \code{dataModel} is a list containig the data models of class \code{\link{SensorDataModel}}.
 #'
+#' See \code{\link{SensorModel}} for more details.
+#' 
 #' Slots of the class:
 #' \tabular{rl}{
-#'   \code{num} \tab Sensor number (1:17). The default value is 1. \cr
+#'   \code{num} \tab Sensor number (\code{1:17}). The default value is \code{c(1, 2)}. \cr
 #'   \code{gases} \tab Gas indices. \cr
 #'   \code{ngases} \tab The number of gases. \cr
 #'   \code{gnames} \tab Names of gases. \cr
 #'   \code{concUnits} \tab Concentration units external to the model, values given in an input concentration matrix. \cr
-#'   \code{concUnitsInt} \tab Concentration units internal for the model. \cr
-#'   \code{conc} \tab List of characteristic concentration values per gas (in the adsorbed form):
-#'       \code{min}, \code{max}, \code{crit}, \code{sat}. \cr
-#'   \code{conc0} \tab List of characteristic concentration values per gas (in air):
-#'       \code{min}, \code{max}, \code{crit}, \code{sat}. \cr
-#'   \code{dataModel} \tab Data model of class \code{\link{SensorDataModel}}. \cr
-#'   \code{coeffNonneg} \tab Logical whether model coefficients must be non-negative. By default, FALSE. \cr
+#'   \code{concUnitsInt} \tab Concentration units internal for the model, values used numerically to build regression models. \cr
+#'   \code{dataModel} \tab List of data models of class \code{\link{SensorDataModel}}. \cr
+#'   \code{coeffNonneg} \tab Logical whether model coefficients must be non-negative. By default, \code{FALSE}. \cr
 #'   \code{coeffNonnegTransform} \tab Name of transformation to convert negative model coefficients to non-negative values. \cr
 #' }
+#'
+#' Methods of the class:
+#' \tabular{rl}{
+#'   \code{predict} \tab Predicts a model response to an input concentration matrix. \cr
+#'   \code{coef} \tab Extracts the coefficients of models stored in slot \code{dataModel}. \cr
+#' }
+#' 
+#' The \code{plot} method has the only type (parameter \code{y}):
+#' \tabular{rl}{
+#'   \code{response} \tab (default) Shows the sensitivity curves per gas in normalized concentration units. \cr
+#' }
+#'
 #' @name SensorArrayModel
 #' @rdname www-SensorArrayModel
-#' @keywords SensorArrayModel-class
+#' @keywords SensorArrayModel
+#' @seealso \code{\link{SensorModel}}
+#' @example R/example/SensorArrayModel-class.R
 #' @exportClass SensorArrayModel
 setClass(Class="SensorArrayModel", 
   representation=representation(
@@ -77,7 +88,8 @@ setMethod ("print","SensorArrayModel", function(x, ...)
   cat(" Sensor Array Model\n")
   cat(" - num", paste(num(x), collapse=", "), "\n")
   cat(" -", ngases(x), "gases", paste(gnames(x), collapse=", "), "\n")
-  print(x@dataModel)
+  cat(" - (first)")
+  print(x@dataModel[[1]])
 })
 
 #' @exportMethod show

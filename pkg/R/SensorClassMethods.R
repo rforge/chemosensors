@@ -161,13 +161,13 @@ Sensor <- function(...)
 #----------------------------
 setMethod("plot", "Sensor", function (x, y, ...) 
 {
-  yval <- c("response", "prediction", "snoise")
+  yval <- c("response", "prediction", "noise")
   # missing
   if(missing(y)) y <- "response"
   
   switch(y,
     prediction = plot.Sensor.prediction(x, y, ...),
-    snoise = plot.Sensor.snoise(x, y, ...), 
+    noise = plot.Sensor.noise(x, y, ...), 
     response = plot.Sensor.response(x, y, ...), 
     stop("Error in Sensor::plot: plot type 'y' is unknown. Supported types: ", 
       paste(yval, collapse=", "), "."))
@@ -193,15 +193,18 @@ plot.Sensor.prediction <- function(x, y, conc, gas = 1, jitter=FALSE,
     main=main, xlab = xlab, ylab = ylab, ...)  
 }
 
-plot.Sensor.snoise <- function(x, y, conc, 
-  main = paste("Sensor: Sensor Noise, ssd", ssd(x)), xlab = "Sample", ylab="Sensor Signal", ...)
+plot.Sensor.noise <- function(x, y, conc, 
+  pch = 20,
+  main = paste("Sensor: noise"), xlab = "Sample Index", ylab="Sensor Signal", ...)
 {
+  if(missing(main)) main <- paste(main, "\n num ", num(x), ", csd ", csd(x), ", ssd ", ssd(x), sep='')
+  
   if(missing(conc)) conc <- concSample(x, "const")
   
   X <- predict(x, conc, ...)  
 
   # points
-  plot(X, bty='n',
+  plot(X, bty='n', pch=pch,
     main=main, xlab = xlab, ylab = ylab, ...)  
 }
 
@@ -209,6 +212,8 @@ plot.Sensor.response <- function(x, y,
   lwd = 2, lty = 1, type="range",
   main = "Sensor: response", ...)
 {   
+  if(missing(main)) main <- paste(main, "\n num ", num(x), ", csd ", csd(x), ", ssd ", ssd(x), sep='')
+  
   plotResponse(x, y, type = type, lwd = lwd, lty = lty, main=main, ...)
 }
 #----------------------------

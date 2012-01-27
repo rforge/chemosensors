@@ -1,3 +1,10 @@
+chemosensors 0.5.4
+==================
+
+* Updated dataset 'UNIMANdnoise'; components in variable 'dspace' are ordered
+  according to the importance values in variable 'ndvar'.
+* Updated documentation for all classes; added documentation for datasets.
+
 chemosensors 0.5.3
 ==================
 

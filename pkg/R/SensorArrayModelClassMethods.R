@@ -18,7 +18,7 @@ defaultParSensorArrayModel <- function()
 {
   par <- list(num=1:2, gases=1:3, gnames=LETTERS[1:3], concUnits=defaultConcUnits(), concUnitsInt=defaultConcUnitsInt(),
     datasetSensorModel=defaultDataSensorModel(), pck=defaultDataPackage(), 
-    model="plsr", coeffNonneg = FALSE, coeffNonnegTransform = "zero",
+    model="mvr", coeffNonneg = FALSE, coeffNonnegTransform = "zero",
     Conc0=NULL, Conc=NULL, dat=NULL)
   
   return(par)
@@ -134,9 +134,7 @@ setMethod("initialize", "SensorArrayModel", function(.Object,
     
   dataModel <- list()
   for(i in .Object@idx) {
-    dataModel[[i]] <- switch(model,
-      plsr = initDataModelPlsr(sdat[, i], Conc[, , i]),
-      stop("Error in SensorArrayModel::initialize: parameter 'model' is unknown."))
+    dataModel[[i]] <- SensorDataModel(model, sdat[, i], Conc[, , i])
   }
   .Object@dataModel <- dataModel
   
@@ -207,6 +205,14 @@ plot.SensorArrayModel.response <- function(x, y,
   lwd = 2, lty = 1,
   main = "Sensor Array Model: response", ...)
 { 
+  nsensors <- nsensors(x)
+  # main
+  if(missing(main)) {
+    if(nsensors <= 5) main <- paste(main, "\n num ", paste(num(x), collapse=", "), sep='')
+    else main <- paste(main, "\n ", nsensors, " sensors", sep='')
+    main <- paste(main, ", model '", modelName(x), "'", sep='')
+  }
+  
   plotResponse(x, y, lwd = lwd, lty = lty, main=main, ...)
 }
 

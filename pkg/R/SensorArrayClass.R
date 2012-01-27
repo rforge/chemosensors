@@ -23,15 +23,44 @@ validSensorArray <- function(object)
 
 #' Class SensorArray.
 #'
-#' Class \code{\link{SensorArray}} predicts a sensor array signal in response to an input concentration matrix
-#' by passing the data through a list of models.
+#' Class \code{SensorArray} is a extension of the class \code{\link{Sensor}} for many sensor elements.
 #'
-#' The models aggregated into the class are {\link{ConcNoiseModel}}, {\link{SensorNoiseModel}} and {\link{SensorArrayModel}}.
+#' The array aggregates classes \code{\link{ConcNoiseModel}}, \code{\link{SensorNoiseModel}}, 
+#' \code{\link{SorptionModel}}, \code{\link{SensorArrayModel}} and \code{\link{DriftNoiseModel}}.
 #' 
+#' In comparision to the class \code{\link{Sensor}}, slot \code{num} is a numeric vector, 
+#' and class \code{SensorArray} also inherits class \code{\link{DriftNoiseModel}}.
+#'
+#' See \code{\link{Sensor}} and \code{\link{DriftNoiseModel}} for more details.
+#' 
+#' Slots of the class:
+#' \tabular{rl}{
+#'   \code{type} \tab Sensor type (not used). Default value is \code{polymeric}. \cr
+#'   \code{idx} \tab Sensor index (unique ID number). \cr
+#'   \code{enableSorption} \tab Boolean whether \code{\link{SorptionModel}} is enabled. Default value is \code{TRUE}. \cr
+#'   \code{...} \tab Slots inherited from super-classes \code{\link{ConcNoiseModel}}, \code{\link{SensorNoiseModel}}, 
+#'     \code{\link{SorptionModel}}, \code{\link{SensorArrayModel}} and \code{\link{DriftNoiseModel}}. \cr
+#' }
+#'
+#' Methods of the class:
+#' \tabular{rl}{
+#'   \code{predict} \tab Predicts a model response to an input concentration matrix. \cr
+#'   \code{coef} \tab Extracts the coefficient matrix from sensors. \cr
+#'   \code{csd} \tab Gets the concentration noise level (inherited from class \code{\link{ConcNoiseModel}}). \cr
+#'   \code{csd<-} \tab Sets the concentration noise level. \cr
+#'   \code{ssd} \tab Gets the sensor noise level (inherited from class \code{\link{SensorNoiseModel}}). \cr
+#'   \code{ssd<-} \tab Sets the sensor noise level. \cr
+#' }
+#' 
+#' The \code{plot} method has the only type (parameter \code{y}):
+#' \tabular{rl}{
+#'   \code{response} \tab (default) Shows the sensitivity curves per gas in normalized concentration units. \cr
+#' }
 #' @name SensorArray
 #' @rdname www-SensorArray
-#' @keywords SensorArray-class
-#@example R/example/SensorArray-class.R
+#' @keywords SensorArray
+#' @seealso \code{\link{Sensor}}, \code{\link{DriftNoiseModel}}
+#' @example R/example/SensorArray-class.R
 #' @exportClass SensorArray
 setClass(Class="SensorArray", 
   representation = representation(

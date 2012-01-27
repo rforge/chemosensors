@@ -18,7 +18,7 @@ Description: This package introduces a software tool that allows for
     of the object-oriented programming paradigm (s4 classes), supports
     parallel computing and contains the datasets exploited in projects
     of the authors.
-Version: 0.5.2
+Version: 0.5.3
 Date: 2012-01-09
 Depends:
     methods,
@@ -38,6 +38,7 @@ Collate:
     'ChemosensorsClassMethods.R'
     'ConcNoiseModelClass.R'
     'ConcNoiseModelClassMethods.R'
+    'datasets.R'
     'demos.R'
     'dev.lib.R'
     'DriftCommonModelClassMethods.R'
