@@ -63,6 +63,9 @@ print(coef(sa)) # array coefficients
 plot(sa)  
 
 # model: custom parameters
+sa <- SensorArray(num=1:17) # 17 UNIMAN virtual sensors
+plot(sa, main="17 UNIMAN virtual sensors")
+
 sa <- SensorArray(num=15:17, Knonlin=0.01, model="plsr", gases=c(1, 3)) # array with quite linear sensors
 
 print(sa)

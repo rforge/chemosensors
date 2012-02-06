@@ -4,6 +4,10 @@ chemosensors 0.5.4
 * Updated dataset 'UNIMANdnoise'; components in variable 'dspace' are ordered
   according to the importance values in variable 'ndvar'.
 * Updated documentation for all classes; added documentation for datasets.
+* Updated dataset 'UNIMANsnoise'; values for the mode 'Sensor' are scaled
+  to produce a similar effect as in the mode 'SensorModel' (let's say level 
+  of 'ssd' 0.1 produce the same noise in sensor signals). See demo 'SensorNoise'.
+* Added datasets 'UNIMANtransient'.
 
 chemosensors 0.5.3
 ==================

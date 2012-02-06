@@ -45,6 +45,11 @@ data("UNIMANshort", package="chemosensors")
 # print the list of loaded data variables
 ls()
 
+# plot sensors in affinity space of gases
+plotAffinitySpace(conc=C, sdata=dat, gases=c(2, 1))
+plotAffinitySpace(conc=C, sdata=dat, gases=c(2, 3))
+plotAffinitySpace(conc=C, sdata=dat, gases=c(3, 1))
+
 # make standar PCA (package 'pls') to see:
 # - multi-variate class distribution (scoreplot)
 # - low-dimensionality of data (variance)

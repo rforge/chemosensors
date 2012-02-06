@@ -18,7 +18,7 @@ Description: This package introduces a software tool that allows for
     of the object-oriented programming paradigm (s4 classes), supports
     parallel computing and contains the datasets exploited in projects
     of the authors.
-Version: 0.5.3
+Version: 0.5.4
 Date: 2012-01-09
 Depends:
     methods,

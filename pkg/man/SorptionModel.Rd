@@ -29,8 +29,8 @@
   data of Lanmuir parameters from UNIMAN dataset (see
   \code{\link{UNIMANsorption}}). \cr \code{Knonlin} \tab A
   scaling coefficient of non-linearity induced via the
-  affinity parameter \code{K}. The default value is 0.33.
-  \cr }
+  affinity parameter \code{K}. The default value is
+  \code{0.33}. \cr }
 
   Methods of the class: \tabular{rl}{ \code{predict} \tab
   Predicts a model response to an input concentration
@@ -70,10 +70,10 @@ plot(sm)
 sm <- SorptionModel(Knonlin=0.01, gases=c(1, 3)) # almost linear model
 plot(sm, main="Almost linear model, non-linearity 0.01")
 
-sm <- SorptionModel(Knonlin=0.5, gases=c(1, 3)) # non-linear model
+sm <- SorptionModel(Knonlin=0.3, gases=c(1, 3)) # non-linear model
 plot(sm, main="Non-linear model, non-linearity 0.5")
 
-sm <- SorptionModel(Knonlin=1, gases=c(1, 3)) # saturated model
+sm <- SorptionModel(Knonlin=0.5, gases=c(1, 3)) # saturated model
 plot(sm, main="Saturated model, non-linearity 1")
 
 sm <- SorptionModel(Knorm=FALSE, gases=c(1, 3)) # model with UNIMAN sorption parameters
