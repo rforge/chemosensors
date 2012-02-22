@@ -20,16 +20,6 @@ test_that("class initialization: 'gases' ( 1, 3 ).", {
   expect_that(SensorModel(gases=c(1, 3)), is_a("SensorModel"))
 })
 
-test_that("model: 'conc' ( 1 column )", {
-  gases <- 2
-  pck <- defaultDataPackage()
-  data(UNIMANshort, package=pck)
-  model <- SensorModel(gases=gases)
-  conc <- C[, gases]
-  sdata <- predict(model, conc)
-  expect_that(length(sdata), is_identical_to(length(conc)))
-})
-
 test_that("model: incorrect 'conc' ( 2 columns ), model ( 3 gases ).", {
   pck <- defaultDataPackage()
   data(UNIMANshort, package=pck)

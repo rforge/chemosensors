@@ -1,60 +1,11 @@
 \name{Sensor}
 \alias{Sensor}
-\title{Class Sensor.}
-\description{
-  Class \code{\link{Sensor}} predicts a sensor signal in
-  response to an input concentration matrix by calling two
-  sub-models \code{\link{SorptionModel}} and
-  \code{\link{SensorModel}}.
+\title{Wrapper to Class Sensor.}
+\usage{
+  Sensor(num = 1, ...)
 }
-\details{
-  The sensor aggregates classes
-  \code{\link{ConcNoiseModel}},
-  \code{\link{SensorNoiseModel}},
-  \code{\link{SorptionModel}} and
-  \code{\link{SensorModel}}.
-
-  The sorption and calibration models (classes
-  \code{\link{SorptionModel}} and
-  \code{\link{SensorModel}}) have different roles in the
-  simulation flow. The sorption model controls the the
-  amount of gas absorbed by the sensor following the
-  Langmuir relation, and that emulates the non-linearity
-  nature intrinsic for the polymeric sensors. The
-  calibration model regulates the relationship between this
-  amount of the absorbed gas and the output sensor signal.
-  Both sorption and calibration models utilize the
-  short-term reference data \code{\link{UNIMANshort}} for
-  parameter estimation. The sorption model can be disabled
-  by parameter \code{enableSorption}.
-
-  Slots of the class: \tabular{rl}{ \code{type} \tab Sensor
-  type (not used). Default value is \code{polymeric}. \cr
-  \code{idx} \tab Sensor index (unique ID number). \cr
-  \code{enableSorption} \tab Boolean whether
-  \code{\link{SorptionModel}} is enabled. Default value is
-  \code{TRUE}. \cr \code{...} \tab Slots inherited from
-  super-classes \code{\link{ConcNoiseModel}},
-  \code{\link{SensorNoiseModel}},
-  \code{\link{SorptionModel}} and
-  \code{\link{SensorModel}}. \cr }
-
-  Methods of the class: \tabular{rl}{ \code{predict} \tab
-  Predicts a sensor response to an input concentration
-  matrix. \cr \code{coef} \tab Extracts the coefficients
-  inherited from class \code{\link{SensorModel}}. \cr
-  \code{csd} \tab Gets the concentration noise level
-  (inherited from class \code{\link{ConcNoiseModel}}). \cr
-  \code{csd<-} \tab Sets the concentration noise level. \cr
-  \code{ssd} \tab Gets the sensor noise level (inherited
-  from class \code{\link{SensorNoiseModel}}). \cr
-  \code{ssd<-} \tab Sets the sensor noise level. \cr }
-
-  The \code{plot} method has two types (parameter
-  \code{y}): \tabular{rl}{ \code{response} \tab (default)
-  Shows the sensitivity curves per gas in normalized
-  concentration units. \cr \code{noise} \tab Depicts the
-  noise induced in the output signal of the sensor. \cr }
+\description{
+  Wrapper to Class Sensor.
 }
 \examples{
 # sensor object: default initialization
@@ -92,9 +43,7 @@ plot(s, "noise", main="plot(s, 'noise')")
 
 }
 \seealso{
-  \code{\link{ConcNoiseModel}},
-  \code{\link{SensorNoiseModel}},
-  \code{\link{SorptionModel}}, \code{\link{SensorModel}}
+  \code{\link{SensorArray}}, \code{\link{SensorModel}}
 }
 \keyword{Sensor}
 

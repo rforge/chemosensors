@@ -1,13 +1,21 @@
+chemosensors 0.5.5
+==================
+
+* Added two new data models in 'SensorDataModel' class: 'broken-stick' and 'ispline'.
+* The default data model is set to 'ispline'.
+* The default value of 'Knonlin' parameter is set to 0.7 (adjusted for AC binary mixtures).
+* Function 'getISplineDesign' is replaced by 'getIQSplineDesign' (with a custom 
+  formula) when the spline basis functions are quadratic. Speed up by factor 2.
+
 chemosensors 0.5.4
 ==================
 
 * Updated dataset 'UNIMANdnoise'; components in variable 'dspace' are ordered
   according to the importance values in variable 'ndvar'.
 * Updated documentation for all classes; added documentation for datasets.
-* Updated dataset 'UNIMANsnoise'; values for the mode 'Sensor' are scaled
-  to produce a similar effect as in the mode 'SensorModel' (let's say level 
-  of 'ssd' 0.1 produce the same noise in sensor signals). See demo 'SensorNoise'.
 * Added datasets 'UNIMANtransient'.
+* Introduced method 'affinity' to compute the affinity charcacteristic of sensors.
+* Added a new demo VirtualSensors.
 
 chemosensors 0.5.3
 ==================

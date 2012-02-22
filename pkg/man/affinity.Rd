@@ -27,13 +27,11 @@ print(Kd)
 
 # plot sensor response at conc. range of type 'inc' (see 'concSample' for more details)
 #  - add lines related to computation of affinities
-plot(s, type="inc", affinity=TRUE, main="Sensor: num 1, affinity (C) > affinity (A), affinity(B) = 0")
+plot(s, Ka=Ka, type="inc", affinity=TRUE)
+plot(s, Ka=Ka, type="inc", affinity=TRUE, xlim=c(0, 0.1))
 
-nsensors <- c(17, 50, 100)
-for(n in nsensors) {
-  sa <- SensorArray(nsensors=n, gases=c(1, 3))
-  plot(sa, 'affinity', main=paste("Affinity Map: nsensors", n))
-}
+sa <- SensorArray(num=1:17, gases=c(1, 3))
+plot(sa, 'affinity')
 }
 \seealso{
   \code{\link{SensorArray}}

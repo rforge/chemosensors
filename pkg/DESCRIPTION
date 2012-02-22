@@ -18,10 +18,11 @@ Description: This package introduces a software tool that allows for
     of the object-oriented programming paradigm (s4 classes), supports
     parallel computing and contains the datasets exploited in projects
     of the authors.
-Version: 0.5.4
-Date: 2012-01-09
+Version: 0.5.5
+Date: 2012-02-22
 Depends:
     methods,
+    stats,
     pls,
     LearnBayes,
     quadprog,
@@ -36,6 +37,7 @@ Collate:
     'support.lib.R'
     'ChemosensorsClass.R'
     'ChemosensorsClassMethods.R'
+    'conc.lib.R'
     'ConcNoiseModelClass.R'
     'ConcNoiseModelClassMethods.R'
     'datasets.R'
@@ -45,16 +47,18 @@ Collate:
     'DriftNoiseModelClassMethods.R'
     'DriftNoiseModelClass.R'
     'package.R'
+    'ScenarioClass.R'
+    'ScenarioClassMethods.R'
+    'sdata.lib.R'
     'SorptionModelClass.R'
-    'SensorArrayModelClass.R'
+    'SensorDynamicsClass.R'
+    'SensorModelClass.R'
     'SensorNoiseModelClass.R'
     'SensorArrayClass.R'
     'SensorArrayClassMethods.R'
-    'SensorArrayModelClassMethods.R'
-    'SensorModelClass.R'
-    'SensorClass.R'
-    'SensorClassMethods.R'
+    'spline.lib.R'
     'SensorDataModelClassMethods.R'
+    'SensorDynamicsClassMethods.R'
     'SensorModelClassMethods.R'
     'SensorNoiseModelClassMethods.R'
     'SorptionModelClassMethods.R'

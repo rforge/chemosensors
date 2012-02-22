@@ -8,7 +8,7 @@ csd <- 0.1
 ssd <- 0.1
 dsd <- 0.1
 
-n <- 1000
+n <- 100
 n0 <- 10
 
 enableSorption <- TRUE
