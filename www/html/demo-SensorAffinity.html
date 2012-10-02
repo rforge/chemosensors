@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>demo-SensorAffinity. chemosensors 0.7.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Demo SensorAffinity.</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Demo SensorAffinity.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class="comment"># concentration matrix of 3 gas classes: A, C and AC</span>
+<span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/matrix'>matrix</a></span><span class="keyword">(</span><span class="number">0</span><span class="keyword">,</span> <span class="number">30</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span>
+<span class="symbol">conc</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">:</span><span class="number">10</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">0.05</span> <span class="comment">#  A</span>
+<span class="symbol">conc</span><span class="keyword">[</span><span class="number">11</span><span class="keyword">:</span><span class="number">20</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">1</span> <span class="comment"># C</span>
+<span class="symbol">conc</span><span class="keyword">[</span><span class="number">21</span><span class="keyword">:</span><span class="number">30</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">0.05</span> <span class="comment"># AC</span>
+<span class="symbol">conc</span><span class="keyword">[</span><span class="number">21</span><span class="keyword">:</span><span class="number">30</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">1</span> <span class="comment"># AC</span>
+
+<span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="symbol">conc</span><span class="keyword">[</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/sample'>sample</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/nrow'>nrow</a></span><span class="keyword">(</span><span class="symbol">conc</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="keyword">]</span>
+
+<span class="comment"># two sensor arrays composed of different sensors</span>
+<span class="symbol">sa1</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">1</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">dsd</span><span class="argument">=</span><span class="number">0</span><span class="keyword">)</span> <span class="comment"># sensors with affinity A &gt; C</span>
+<span class="symbol">sa2</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">13</span><span class="keyword">,</span> <span class="number">14</span><span class="keyword">,</span> <span class="number">17</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">dsd</span><span class="argument">=</span><span class="number">0</span><span class="keyword">)</span> <span class="comment"># sensors with affinity A &lt; C</span>
+
+<span class="comment"># PCA scoreplots of sensors array data in response to the concentration matrix</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">,</span> <span class="string">"prediction"</span><span class="keyword">,</span> <span class="argument">conc</span><span class="argument">=</span><span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">leg</span><span class="argument">=</span><span class="string">"top"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"num"</span><span class="keyword">,</span> <span class="functioncall">numStr</span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="string">"\n affinity A &gt; C"</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<p><img src='demo-SensorAffinity-2.png' alt='' width='400' height='400' /></p>
+<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa2</span><span class="keyword">,</span> <span class="string">"prediction"</span><span class="keyword">,</span> <span class="argument">conc</span><span class="argument">=</span><span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">leg</span><span class="argument">=</span><span class="string">"top"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"num"</span><span class="keyword">,</span> <span class="functioncall">numStr</span><span class="keyword">(</span><span class="symbol">sa2</span><span class="keyword">)</span><span class="keyword">,</span> <span class="string">"\n affinity A &lt; C"</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<p><img src='demo-SensorAffinity-4.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="comment"># 3rd array composed of all 17 UNIMAN types</span>
+<span class="symbol">sa3</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">1</span><span class="keyword">:</span><span class="number">17</span><span class="keyword">,</span> <span class="argument">dsd</span><span class="argument">=</span><span class="number">0</span><span class="keyword">)</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa3</span><span class="keyword">,</span> <span class="string">"prediction"</span><span class="keyword">,</span> <span class="argument">conc</span><span class="argument">=</span><span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">leg</span><span class="argument">=</span><span class="string">"top"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"num"</span><span class="keyword">,</span> <span class="functioncall">numStr</span><span class="keyword">(</span><span class="symbol">sa3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="string">"\n affinity from all UNIMAN sensor types"</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<p><img src='demo-SensorAffinity-6.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>demo-SensorAffinity</li>
+    </ul>
+    <ul>
+      <li>datasets</li><li>demo</li>
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

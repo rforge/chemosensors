@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>UNIMANdnoise. chemosensors 0.7.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Dataset UNIMANdnoise.</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>The dataset contains statistics on a multi-variate drift
+  sub-space for the long-term UNMIAN dataset of 1000
+  samples over 8 classes.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The subspace was evaluated via common principal component
+  analysis (power algorithm). Only three classes (analytes
+  at maximum concentration) are used in the computation for
+  more accurate estimation. The importance of the drift
+  components is computed as a projected variance of sensor
+  array data of the given three classes onto the
+  components.</p>
+  
+      <p>The datasets contains four variables: <table><tr><td>
+  <code>dspace</code> </td>
+<td> A square <code>17 x 17</code> matrix of the
+  drift subspace. Columns are drift component vectors. </td>
+</tr><tr><td>
+  <code>ndvar</code> </td>
+<td> A vector of length <code>17</code> with the
+  importance of the components.</td>
+</tr><tr><td> <code>centered</code> </td>
+<td>
+  Boolean indicating whether the UNIMAN data were centered
+  before the computation. </td>
+</tr><tr><td> <code>scaled</code> </td>
+<td> Boolean
+  indicating whether the UNIMAN data were scaled before the
+  computation. </td>
+</tr></table></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/data'>data</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">,</span> <span class="argument">package</span><span class="argument">=</span><span class="string">"chemosensors"</span><span class="keyword">)</span></div>
+<strong class='error'>Error in find.package(package, lib.loc, verbose = verbose): there is no package called ‘chemosensors’</strong>
+<div class='input'>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/str'>str</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">)</span></div>
+<div class='output'>List of 4
+ $ centered: logi TRUE
+ $ dspace  : num [1:17, 1:17] 0.274 0.312 0.28 0.278 0.278 ...
+ $ ndvar   : num [1:17] 0.86425 0.06216 0.04846 0.00693 0.00647 ...
+ $ scaled  : logi TRUE
+</div>
+<div class='input'>
+<span class="comment"># 17 sensor loadings, 17 drift components</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/dim'>dim</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">$</span><span class="symbol">dspace</span><span class="keyword">)</span></div>
+<div class='output'>[1] 17 17
+</div>
+<div class='input'>
+<span class="comment"># importance of 17 drift components</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/head'>head</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">$</span><span class="symbol">ndvar</span><span class="keyword">)</span></div>
+<div class='output'>[1] 0.864246632 0.062158036 0.048459565 0.006925524 0.006465561 0.005053250
+</div>
+<div class='input'>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/barplot'>barplot</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">$</span><span class="symbol">ndvar</span><span class="keyword">,</span> <span class="argument">names.arg</span><span class="argument">=</span><span class="number">1</span><span class="keyword">:</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/length'>length</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">$</span><span class="symbol">ndvar</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Importance of drift components"</span><span class="keyword">)</span></div>
+<p><img src='UNIMANdnoise-10.png' alt='' width='400' height='400' /></p>
+<div class='input'><span class="comment"># comp. 1 dominates, </span>
+<span class="comment"># comp. 1-3 dominate over the rest</span>
+
+<span class="symbol">loadings</span> <span class="assignement">&lt;-</span> <span class="symbol">UNIMANdnoise</span><span class="keyword">$</span><span class="symbol">dspace</span>
+<span class="symbol">col</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/grDevices/gray.colors'>grey.colors</a></span><span class="keyword">(</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">start</span><span class="argument">=</span><span class="number">0.3</span><span class="keyword">,</span> <span class="argument">end</span><span class="argument">=</span><span class="number">0.9</span><span class="keyword">)</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/matplot'>matplot</a></span><span class="keyword">(</span><span class="symbol">loadings</span><span class="keyword">[</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">]</span><span class="keyword">,</span> <span class="argument">t</span><span class="argument">=</span><span class="string">'l'</span><span class="keyword">,</span> <span class="argument">col</span><span class="argument">=</span><span class="symbol">col</span><span class="keyword">,</span> <span class="argument">lwd</span><span class="argument">=</span><span class="number">2</span><span class="keyword">,</span> <span class="argument">lty</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span>
+  <span class="argument">xlab</span><span class="argument">=</span><span class="string">"Sensors"</span><span class="keyword">,</span> <span class="argument">ylab</span><span class="argument">=</span><span class="string">"Loadings"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Loadings of sensors on first 3 drift components"</span><span class="keyword">)</span></div>
+<p><img src='UNIMANdnoise-12.png' alt='' width='400' height='400' /></p>
+<div class='input'># sensors 7, 8, 9, 17 seem to be less drifty  
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>UNIMANdnoise</li>
+    </ul>
+    <ul>
+      <li>data</li><li>datasets</li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  <code>DriftNoiseClass</code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

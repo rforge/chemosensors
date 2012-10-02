@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>demo-Mixtures. chemosensors 0.7.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Demo Mixtures.</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Demo Mixtures.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class="comment">### experiment #1: all type of mixtures</span>
+<span class="comment">#  - three pure analytes</span>
+<span class="comment">#  - three binary mixtures</span>
+<span class="comment">#  - one ternary mixture</span>
+<span class="comment"># NOTE: data model of type 'mvr' is prefered</span>
+
+<span class="symbol">n</span> <span class="assignement">&lt;-</span> <span class="number">10</span>
+<span class="symbol">sc</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Scenario.html'>Scenario</a></span><span class="keyword">(</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="number">0.05</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="string">"B"</span><span class="keyword">,</span> <span class="number">0.05</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="string">"C"</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="string">"B"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0.05</span><span class="keyword">,</span> <span class="number">0.05</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="string">"C"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0.05</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"B"</span><span class="keyword">,</span> <span class="string">"C"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0.05</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="string">"B"</span><span class="keyword">,</span> <span class="string">"C"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0.05</span><span class="keyword">,</span> <span class="number">0.05</span><span class="keyword">,</span> <span class="number">0.5</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+
+<span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="functioncall">getConc</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span>
+
+<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">model</span><span class="argument">=</span><span class="string">"mvr"</span><span class="keyword">,</span> <span class="argument">num</span><span class="argument">=</span><span class="number">1</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">csd</span><span class="argument">=</span><span class="number">0.1</span><span class="keyword">,</span> <span class="argument">ssd</span><span class="argument">=</span><span class="number">0.1</span><span class="keyword">,</span> <span class="argument">dsd</span><span class="argument">=</span><span class="number">0</span><span class="keyword">)</span>
+<span class="symbol">sdata</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/predict'>predict</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="symbol">conc</span><span class="keyword">)</span> <span class="comment"># generate the data</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="string">'pca'</span><span class="keyword">,</span> <span class="argument">conc</span><span class="argument">=</span><span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">sdata</span><span class="argument">=</span><span class="symbol">sdata</span><span class="keyword">,</span> <span class="argument">leg</span><span class="argument">=</span><span class="string">"top"</span><span class="keyword">)</span> <span class="comment"># plot</span></div>
+<p><img src='demo-Mixtures-2.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="comment">### experiment #2: analytes A and C + their binary mixture</span>
+
+<span class="symbol">n</span> <span class="assignement">&lt;-</span> <span class="number">10</span>
+<span class="symbol">sc</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Scenario.html'>Scenario</a></span><span class="keyword">(</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="number">0.01</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="number">0.05</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="string">"C"</span><span class="keyword">,</span> <span class="number">0.1</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="string">"C"</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="string">"C"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0.01</span><span class="keyword">,</span> <span class="number">0.1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="string">"C"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0.05</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">n</span><span class="keyword">)</span>
+
+<span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="functioncall">getConc</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span>
+
+<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">1</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">csd</span><span class="argument">=</span><span class="number">0.1</span><span class="keyword">,</span> <span class="argument">ssd</span><span class="argument">=</span><span class="number">0.1</span><span class="keyword">,</span> <span class="argument">dsd</span><span class="argument">=</span><span class="number">0</span><span class="keyword">)</span> <span class="comment"># default data model: 'ispline'</span>
+<span class="symbol">sdata</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/predict'>predict</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="symbol">conc</span><span class="keyword">)</span> <span class="comment"># generate the data</span>
+<span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="argument">conc</span><span class="argument">=</span><span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">sdata</span><span class="argument">=</span><span class="symbol">sdata</span><span class="keyword">,</span> <span class="argument">leg</span><span class="argument">=</span><span class="string">"top"</span><span class="keyword">)</span> <span class="comment"># plot</span></div>
+<p><img src='demo-Mixtures-4.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>demo-Mixtures</li>
+    </ul>
+    <ul>
+      <li>datasets</li><li>demo</li>
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
