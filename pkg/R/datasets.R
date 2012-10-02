@@ -35,7 +35,7 @@
 #' @docType data
 #' @keywords data
 #' @seealso \code{\link{SensorModel}}, \code{\link{SensorArrayModel}}
-#' @example R/example/UNIMANshort-data.R
+#' @example inst/examples/UNIMANshort-data.R
 NULL
 
 #' Dataset UNIMANsnoise.
@@ -55,7 +55,7 @@ NULL
 #' @docType data
 #' @keywords data
 #' @seealso \code{\link{SensorNoiseClass}}
-#' @example R/example/UNIMANsnoise-data.R
+#' @example inst/examples/UNIMANsnoise-data.R
 NULL
 
 #' Dataset UNIMANdnoise.
@@ -81,7 +81,7 @@ NULL
 #' @docType data
 #' @keywords data
 #' @seealso \code{\link{DriftNoiseClass}}
-#' @example R/example/UNIMANdnoise-data.R
+#' @example inst/examples/UNIMANdnoise-data.R
 NULL
 
 #' Dataset UNIMANsorption.
@@ -117,5 +117,5 @@ NULL
 #' @docType data
 #' @keywords data
 #' @seealso \code{\link{SorptionModel}}
-#' @example R/example/UNIMANsorption-data.R
+#' @example inst/examples/UNIMANsorption-data.R
 NULL

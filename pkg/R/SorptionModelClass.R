@@ -43,7 +43,8 @@ validSorptionModel <- function(object)
 #'   \code{concUnitsInt} \tab Concentration units internal for the model, values used numerically to evaluate the Langmuir relation. \cr
 #'   \code{sorptionModel} \tab A list that contains the Langmuir parameters. \cr
 #'   \code{srdata} \tab The reference data of Lanmuir parameters from UNIMAN dataset (see \code{\link{UNIMANsorption}}). \cr
-#'   \code{Knonlin} \tab A scaling coefficient of non-linearity induced via the affinity parameter \code{K}. The default value is 0.33. \cr
+#'   \code{alpha} \tab (parameter of sensor non-linearity in mixtures) A scaling coefficient of non-linearity 
+#'     induced via the affinity parameter \code{K}. The default value is \code{2.25}. \cr
 #' }
 #'
 #' Methods of the class:
@@ -59,9 +60,9 @@ validSorptionModel <- function(object)
 #' }
 #'
 #' @note
-#' We introduce a single parameter \code{Knonlin} of the model to control the level of non-linearity
+#' We introduce a single parameter \code{alpha} of the model to control the level of non-linearity
 #' simulated by the Langmuir isotherm. 
-#' This parameter \code{Knonlin} defines a normalization across the 17 UNIMAN sorption profiles from dataset \code{\link{UNIMANsorption}},
+#' This parameter \code{alpha} defines a normalization across the 17 UNIMAN sorption profiles from dataset \code{\link{UNIMANsorption}},
 #' scaling \code{K} values based on other two parameters \code{Kmin} (default value \code{1} and \code{Kmax} (default value \code{150}).
 #' Normalization can be disable by setting parameter \code{Knorm} to \code{FALSE},
 #' that results in usage of the sorption \code{K} parameters, equal to UNIMAN ones.
@@ -70,7 +71,7 @@ validSorptionModel <- function(object)
 #' @rdname www-SorptionModel
 #' @keywords SorptionModel-class
 #' @seealso \code{\link{UNIMANsorption}}
-#' @example R/example/SorptionModel-class.R
+#' @example inst/examples/SorptionModel-class.R
 #' @exportClass SorptionModel
 setClass(Class="SorptionModel", 
   representation=representation(
@@ -81,7 +82,7 @@ setClass(Class="SorptionModel",
     gases = "numeric", ngases = "numeric", gind = "numeric", gnames="character", 
     concUnits="character", concUnitsSorption="character",
     # class-specific slots
-    srdata = "array", Knonlin = "numeric", sorptionModel = "list"),  
+    srdata = "array", alpha = "numeric", sorptionModel = "list"),  
   validity=validSorptionModel
 )
 
@@ -94,14 +95,14 @@ setClass(Class="SorptionModel",
 setMethod ("print","SorptionModel", function(x, ...)
 {
   cat(" Sorption Model\n")
-  cat(" - knum:", paste(knum(x), collapse=", "), "\n")
+  cat(" - knum", knumStr(x), "\n")  
   cat(" -", ngases(x), "gases", paste(gnames(x), collapse=", "), "\n")
 })
 
 #' @exportMethod show
 setMethod ("show","SorptionModel", function(object)
 {
-  cat(" Sorption Model (knum ", paste(knum(object), collapse=", "), "), (", ngases(object), " gases)", "\n", sep='')
+  cat(" Sorption Model (knum ", knumStr(object), "), alpha ", alpha(object), "\n", sep='')
 })
 
 
@@ -114,7 +115,16 @@ setMethod ("show","SorptionModel", function(object)
 #----------------------------
 
 setMethod("knum", "SorptionModel", function(x) x@knum)
+setMethod("knumStr", "ANY", function(x) {
+  num <- x@knum
+  n <- length(num)
+  numStr <- ifelse(n <= 5, 
+    paste(num, collapse=", "), 
+    paste(paste(num[1:3], collapse=", "), " ... ", num[n], sep=''))
+  return(numStr)
+})
 setMethod("concUnitsSorption", "SorptionModel", function(x) x@concUnitsSorption)
+setMethod("alpha", "SorptionModel", function(x) x@alpha)
 
 setMethod("nsensors", "SorptionModel", function(x) length(x@knum))
 

@@ -60,7 +60,7 @@ validConcNoiseModel <- function(object)
 #' @name ConcNoiseModel
 #' @rdname www-ConcNoiseModel
 #' @keywords ConcNoiseModel-class
-#' @example R/example/ConcNoiseModel-class.R
+#' @example inst/examples/ConcNoiseModel-class.R
 #' @exportClass ConcNoiseModel
 setClass(Class="ConcNoiseModel", 
   representation=representation(

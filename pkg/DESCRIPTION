@@ -1,26 +1,26 @@
 Package: chemosensors
-Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
-License: GPL (>= 3)
-Title: A tool for the design of synthetic experiments in machine
-    olfaction.
 Type: Package
-LazyLoad: yes
-Author: Alexandre Perera-Lluna and Andrey Ziyatdinov
-Description: This package introduces a software tool that allows for
-    the design of synthetic experiments in machine olfaction. The
-    generator of sensor signals can be used in applications related to
-    educational tools, neuromorphic simulations in machine olfaction,
-    and test and benchmarking of signal processing methods. The
-    synthetic array of sensors allows for the generation of chemosensor
-    data with a variety of characteristics: unlimited number of
-    sensors, support of multicomponent gas mixtures and full parametric
-    control of the noise in the system.  The released package makes use
-    of the object-oriented programming paradigm (s4 classes), supports
-    parallel computing and contains the datasets exploited in projects
-    of the authors.
-Version: 0.5.5
+Title: A tool for the design of synthetic experiments in machine olfaction.
+Version: 0.7.1
 Date: 2012-02-22
+Author: Alexandre Perera-Lluna and Andrey Ziyatdinov
+Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
+Description: This package introduces a software tool that allows for the design
+    of synthetic experiments in machine olfaction. The generator of sensor
+    signals can be used in applications related to educational tools,
+    neuromorphic simulations in machine olfaction, and test and benchmarking of
+    signal processing methods. The synthetic array of sensors allows for the
+    generation of chemosensor data with a variety of characteristics: unlimited
+    number of sensors, support of multicomponent gas mixtures and full
+    parametric control of the noise in the system.  The released package makes
+    use of the object-oriented programming paradigm (s4 classes), supports
+    parallel computing and contains the datasets exploited in projects of the
+    authors.
+License: GPL (>= 3)
+LazyData: yes
+LazyLoad: yes
 Depends:
+    R (>= 2.11.0),
     methods,
     stats,
     pls,
@@ -28,37 +28,40 @@ Depends:
     quadprog,
     plyr,
     colorspace,
-    RColorBrewer
+    RColorBrewer,
+    reshape,
+    ggplot2,
+    ppls,
+    splines,
+    MASS
 Suggests:
-    snow,
-    rpvm,
-    rsprng
+    multicore
 Collate:
-    'support.lib.R'
-    'ChemosensorsClass.R'
-    'ChemosensorsClassMethods.R'
-    'conc.lib.R'
-    'ConcNoiseModelClass.R'
-    'ConcNoiseModelClassMethods.R'
+    'package.R'
     'datasets.R'
     'demos.R'
     'dev.lib.R'
+    'support.lib.R'
+    'spline.lib.R'
+    'ChemosensorsClass.R'
+    'ChemosensorsClassMethods.R'
+    'conc.lib.R'
+    'sdata.lib.R'
+    'ConcNoiseModelClass.R'
+    'ConcNoiseModelClassMethods.R'
     'DriftCommonModelClassMethods.R'
-    'DriftNoiseModelClassMethods.R'
     'DriftNoiseModelClass.R'
-    'package.R'
+    'DriftNoiseModelClassMethods.R'
     'ScenarioClass.R'
     'ScenarioClassMethods.R'
-    'sdata.lib.R'
-    'SorptionModelClass.R'
+    'SensorDataModelClassMethods.R'
     'SensorDynamicsClass.R'
+    'SensorDynamicsClassMethods.R'
     'SensorModelClass.R'
+    'SensorModelClassMethods.R'
     'SensorNoiseModelClass.R'
+    'SensorNoiseModelClassMethods.R'
+    'SorptionModelClass.R'
+    'SorptionModelClassMethods.R'
     'SensorArrayClass.R'
     'SensorArrayClassMethods.R'
-    'spline.lib.R'
-    'SensorDataModelClassMethods.R'
-    'SensorDynamicsClassMethods.R'
-    'SensorModelClassMethods.R'
-    'SensorNoiseModelClassMethods.R'
-    'SorptionModelClassMethods.R'

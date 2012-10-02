@@ -1,6 +1,6 @@
 # last revision: 9 Jan 2012
 
-#' @include ChemosensorsClassMethods.R
+#' @include SensorDynamicsClass.R
 NULL
 
 #----------------------------
@@ -53,6 +53,9 @@ validSensorModel <- function(object)
 #'   \code{dataModel} \tab Data model of class \code{\link{SensorDataModel}} performs a regression (free of the routine on units convertion, etc). \cr
 #'   \code{coeffNonneg} \tab Logical whether model coefficients must be non-negative. By default, \code{FALSE}. \cr
 #'   \code{coeffNonnegTransform} \tab Name of transformation to convert negative model coefficients to non-negative values. \cr
+#'   \code{beta} \tab (parameter of sensor diversity) A scaling coefficient of how different coefficients 
+#'     of \code{\link{SensorDataModel}} will be in comparision with those coefficients of the UNIMAN sensors. 
+#'     The default value is \code{2}. \cr
 #' }
 #'
 #' Methods of the class:
@@ -71,15 +74,18 @@ validSensorModel <- function(object)
 #' @rdname www-SensorModel
 #' @keywords SensorModel
 #' @seealso \code{\link{UNIMANshort}}
-#' @example R/example/SensorModel-class.R
+#' @example inst/examples/SensorModel-class.R
 #' @exportClass SensorModel
 setClass(Class="SensorModel", 
   representation=representation(
-    num="numeric",
+    beta = "numeric",
+    num="numeric", fnum="numeric", idx="numeric",
     gases = "numeric", ngases = "numeric", gind = "numeric", gnames="character", 
     concUnits="character", concUnitsInt="character",
     conc = "list", conc0 = "list",
-    dataModel = "SensorDataModel", coeffNonneg = "logical", coeffNonnegTransform = "character"),  
+    dataModel = "list", coefsd = "matrix",  
+    coeffNonneg = "logical", coeffNonnegTransform = "character"),  
+  contains = subClasses("SensorModel"), # from 'ChemoSensorArraysClassMethods.R'    
   validity=validSensorModel
 )
 
@@ -88,18 +94,22 @@ setClass(Class="SensorModel",
 #----------------------------
 
 #' @exportMethod print
-setMethod ("print","SensorModel", function(x, ...)
+setMethod ("print", "SensorModel", function(x, ...)
 {
   cat(" Sensor Model\n")
-  cat(" - num", num(x), "\n")
+  cat(" - num", numStr(x), "\n")
+  cat(" - beta", x@beta, "\n")
   cat(" -", ngases(x), "gases", paste(gnames(x), collapse=", "), "\n")
-  print(x@dataModel)
+  cat(" - (first)")
+  print(x@dataModel[[1]])
+  cat(" - sensor model: ", "coeffNonneg ", coeffNonneg(x), "\n", sep="")
+  cat("   -- coefficients (first):", coefStr(x, sensor=1), "\n")
 })
 
 #' @exportMethod show
-setMethod ("show","SensorModel", function(object)
+setMethod ("show", "SensorModel", function(object)
 {
-  cat(" Sensor Model (num ", num(object), "), ", "data model '", modelName(object), "'", "\n", sep='')
+  cat(" Sensor Model (num ", numStr(object), "), beta ", beta(object), ", data model '", modelName(object), "'", "\n", sep='')
 })
 
 #----------------------------
@@ -108,7 +118,9 @@ setMethod ("show","SensorModel", function(object)
 
 setMethod("coeffNonneg", "SensorModel", function(x) x@coeffNonneg)
 
-setMethod("modelName", "SensorModel", function(x) x@dataModel$method)
+setMethod("modelName", "SensorModel", function(x) x@dataModel[[1]]$method)
+
+setMethod("beta", "SensorModel", function(x) x@beta)
 
 #----------------------------
 # Plot Methods

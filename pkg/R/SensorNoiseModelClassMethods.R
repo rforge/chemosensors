@@ -50,39 +50,55 @@ setMethod("initialize", "SensorNoiseModel", function(.Object,
   
   # load data
   if(is.null(sndata)) {
-    data(list=datasetSensorNoiseModel, package=pck, envir=environment()) # -> 'Bsd'
-    if(!(exists("Bsd")))
-      stop("Error in SensorNoiseModel::initialize: 'datasetSensorNoiseModel' is not loaded; variable 'Bsd' is not found.")    
+    #data(list=datasetSensorNoiseModel, package=pck, envir=environment()) # -> 'Bsd'
+    #if(!(exists("Bsd")))
+    #  stop("Error in SensorNoiseModel::initialize: 'datasetSensorNoiseModel' is not loaded; variable 'Bsd' is not found.")    
+    
+    #if(!exists(datasetSensorNoiseModel)) # datasetSensorModel supposed to be `UNIMANsnoise`
+    #  stop("Error in SensorNoiseModel::initialize: dataset", datasetSensorNoiseModel, "is not loaded.")    
+    #eval(parse(text = paste("mdat <-", datasetSensorNoiseModel)))
+    
+    mdat <- loadUNIMANdata(datasetSensorNoiseModel)
+    
+    Bsd <- mdat$Bsd
+    
     sndata <- Bsd[["SensorModel"]][["plsr"]] # defaults
   }      
 
   # check 'num'
   if(sum(num <= 0 | num > ncol(sndata)))
-    stop("Error in SensorModel::initialize: 'num' is incorrect.")  
+    stop("Error in SensorNoiseModel::initialize: 'num' is incorrect.")  
   
   # filter by 'gases'
   ngases <- length(gases)
   if(length(gnames) != ngases) gnames <- gnames[gases]
-  if(length(snf) != ngases) snf <- snf[gases]    
 
   # NOT SUPPORTED: ssd
   if(length(ssd) > 1) {
     stop("Error in SensorNoiseModel::initialize: case 'length(ssd) > 1' not supported yet.")      
     #if(length(ssd) != ngases) ssd <- ssd[gases]
   }
-  
+
   # filter 'sndata' by 'gases'
-    
-  sndata <- sndata[gases, ]
+  ngases0 <- 3
+  ncoef0 <- nrow(sndata) / ngases0
+  coefi <- sort(as.numeric(sapply(gases, function(x) seq(x, by=ngases0, length=ncoef0))))
+  
+  sndata <- sndata[coefi, ]
   if(is.null(nrow(sndata))) sndata <- matrix(sndata, nrow=1) # 1-nrow case
 
   # filter 'sndata' by 'num'
   sndata <- sndata[, num]
-  if(is.null(ncol(sndata))) sndata <- matrix(sndata, ncol=1) # 1-nrow case
+  if(is.null(ncol(sndata))) sndata <- matrix(sndata, ncol=1) # 1-col case
 
   # set names of 'sndata'
   colnames(sndata) <- num
-  rownames(sndata) <- gnames
+  #rownames(sndata) <- rep(gnames, ncoef0)
+
+  # filter 'snf' by 'gases' (after 'sndata' is filtered)
+  if(length(snf) != ngases) snf <- snf[gases]
+  ncoef0 <- nrow(sndata) / ngases
+  snf <- rep(snf, each=ncoef0)
   
   # assign
   .Object@idx <- idx
@@ -235,8 +251,8 @@ setMethod("coefnames", "SensorNoiseModel", function(x)
   if(ncoef == ngases) {
     coefnames <- gnames(x)
   }  
-  else
-    stop("Error in SensorNoiseModel::coefnames: case 'ncoef != ngases' is not supported.")
+  #else
+  #  stop("Error in SensorNoiseModel::coefnames: case 'ncoef != ngases' is not supported.")
 
   return(coefnames)
 })
@@ -249,7 +265,7 @@ setMethod("coefnames", "SensorNoiseModel", function(x)
 setMethod("scaledNoiseSd", "SensorNoiseModel", function(object, ...)
 {
   scaledSd <- switch(type(object),
-    randomWalk = ssd(object),
+    randomWalk = 3 * ssd(object),
     stop("Error in SensorNoiseModel::scaledNoiseSd: 'type' is unknown."))
 
   return(scaledSd)
@@ -269,12 +285,11 @@ setMethod ("predict", "SensorNoiseModel", function(object, coef, n, ...)
                 
   ncoef <- ncoef(object)  
   nsensors <- nsensors(object)  
-  
-  #if(length(coef) != ncoef)
-  #  stop("Error in SensorNoiseModel::predict: length 'coef' is incorrect.")      
-  
-  ssd <- scaledNoiseSd(object)
   nsensors.str <- ifelse(nsensors == 1, "one", "many")
+  
+  # pre-process 'ssd'
+  ssd <- scaledNoiseSd(object)  
+  ssd <- ssd / sqrt(n) # random walk: sigma(n) = sd / sqrt(n)
   
   B <- switch(nsensors.str,
     one = array(coef, c(ncoef, n)),

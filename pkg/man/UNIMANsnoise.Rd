@@ -20,10 +20,11 @@
 
 data(UNIMANsnoise, package="chemosensors")
 
-# print the list of loaded data variables
-ls()
+str(UNIMANsnoise)
 
-print(str(Bsd))
+Bsd <- UNIMANsnoise$Bsd
+
+str(Bsd)
 
 # SD values for beta-coefficients in the case of 'SensorModel/mvr'
 bsd <- Bsd[["SensorModel"]][["mvr"]]

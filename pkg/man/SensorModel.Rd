@@ -27,7 +27,11 @@
   coefficients must be non-negative. By default,
   \code{FALSE}. \cr \code{coeffNonnegTransform} \tab Name
   of transformation to convert negative model coefficients
-  to non-negative values. \cr }
+  to non-negative values. \cr \code{beta} \tab (parameter
+  of sensor diversity) A scaling coefficient of how
+  different coefficients of \code{\link{SensorDataModel}}
+  will be in comparision with those coefficients of the
+  UNIMAN sensors.  The default value is \code{2}. \cr }
 
   Methods of the class: \tabular{rl}{ \code{predict} \tab
   Predicts a sensor model response to an input

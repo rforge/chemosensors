@@ -2,7 +2,7 @@
 
 #' @include ConcNoiseModelClass.R
 #' @include SensorNoiseModelClass.R
-#' @include SensorArrayModelClass.R
+#' @include SensorModelClass.R
 #' @include SorptionModelClass.R
 NULL
 
@@ -57,10 +57,10 @@ validSensorArray <- function(object)
 #'   \code{response} \tab (default) Shows the sensitivity curves per gas in normalized concentration units. \cr
 #' }
 #' @name SensorArray
-#' @rdname www-SensorArray
+#' @rdname SensorArray
 #' @keywords SensorArray
 #' @seealso \code{\link{Sensor}}, \code{\link{DriftNoiseModel}}
-#' @example R/example/SensorArray-class.R
+#' @example inst/examples/SensorArray-class.R
 #' @exportClass SensorArray
 setClass(Class="SensorArray", 
   representation = representation(
@@ -91,7 +91,9 @@ setMethod ("print","SensorArray", function(x, ...)
 #' @exportMethod show
 setMethod ("show", "SensorArray", function(object)
 {
-  cat(" SensorArray (enableSorption ", enableSorption(object), ")", "\n", sep='')
+  cat(" Sensor Array of ", nsensors(object), " sensors, ", 
+    ngases(object), " gases ", paste(gnames(object), collapse=", "), "\n", sep='')
+  cat(" - enableSorption ", enableSorption(object), ", enableDyn ", enableDyn(object), "\n", sep='')
   # print sub classes
   sub.classes <- subClasses(class(object)) # from 'ChemoSensorArraysClassMethods.R'
   for(cl in sub.classes) {

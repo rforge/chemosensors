@@ -27,10 +27,11 @@
   \code{sorptionModel} \tab A list that contains the
   Langmuir parameters. \cr \code{srdata} \tab The reference
   data of Lanmuir parameters from UNIMAN dataset (see
-  \code{\link{UNIMANsorption}}). \cr \code{Knonlin} \tab A
-  scaling coefficient of non-linearity induced via the
-  affinity parameter \code{K}. The default value is
-  \code{0.33}. \cr }
+  \code{\link{UNIMANsorption}}). \cr \code{alpha} \tab
+  (parameter of sensor non-linearity in mixtures) A scaling
+  coefficient of non-linearity induced via the affinity
+  parameter \code{K}. The default value is \code{2.25}. \cr
+  }
 
   Methods of the class: \tabular{rl}{ \code{predict} \tab
   Predicts a model response to an input concentration
@@ -44,17 +45,17 @@
   input and ouput of the model for all analytes. \cr }
 }
 \note{
-  We introduce a single parameter \code{Knonlin} of the
-  model to control the level of non-linearity simulated by
-  the Langmuir isotherm. This parameter \code{Knonlin}
-  defines a normalization across the 17 UNIMAN sorption
-  profiles from dataset \code{\link{UNIMANsorption}},
-  scaling \code{K} values based on other two parameters
-  \code{Kmin} (default value \code{1} and \code{Kmax}
-  (default value \code{150}). Normalization can be disable
-  by setting parameter \code{Knorm} to \code{FALSE}, that
-  results in usage of the sorption \code{K} parameters,
-  equal to UNIMAN ones.
+  We introduce a single parameter \code{alpha} of the model
+  to control the level of non-linearity simulated by the
+  Langmuir isotherm. This parameter \code{alpha} defines a
+  normalization across the 17 UNIMAN sorption profiles from
+  dataset \code{\link{UNIMANsorption}}, scaling \code{K}
+  values based on other two parameters \code{Kmin} (default
+  value \code{1} and \code{Kmax} (default value
+  \code{150}). Normalization can be disable by setting
+  parameter \code{Knorm} to \code{FALSE}, that results in
+  usage of the sorption \code{K} parameters, equal to
+  UNIMAN ones.
 }
 \examples{
 # sorption model: default initialization
@@ -67,13 +68,13 @@ print(sm)
 plot(sm)  
 
 # model: custom parameters
-sm <- SorptionModel(Knonlin=0.01, gases=c(1, 3)) # almost linear model
+sm <- SorptionModel(alpha=0.01, gases=c(1, 3)) # almost linear model
 plot(sm, main="Almost linear model, non-linearity 0.01")
 
-sm <- SorptionModel(Knonlin=0.3, gases=c(1, 3)) # non-linear model
+sm <- SorptionModel(alpha=0.3, gases=c(1, 3)) # non-linear model
 plot(sm, main="Non-linear model, non-linearity 0.5")
 
-sm <- SorptionModel(Knonlin=0.5, gases=c(1, 3)) # saturated model
+sm <- SorptionModel(alpha=0.5, gases=c(1, 3)) # saturated model
 plot(sm, main="Saturated model, non-linearity 1")
 
 sm <- SorptionModel(Knorm=FALSE, gases=c(1, 3)) # model with UNIMAN sorption parameters

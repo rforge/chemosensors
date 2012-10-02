@@ -42,17 +42,17 @@
 data(UNIMANsorption, package="chemosensors")
 
 # print the list of loaded data variables
-ls()
+str(UNIMANsorption)
 
-print(dim(qkc))
+dim(UNIMANsorption$qkc)
 
-print(str(qkc))
+str(UNIMANsorption$qkc)
 
-barplot(qkc[, , "K"], beside=TRUE, main="Affinity parameter K ~ UNIMAN sensors")
+barplot(UNIMANsorption$qkc[, , "K"], beside=TRUE, main="Affinity parameter K ~ UNIMAN sensors")
 
-barplot(qkc[, , "KCmin"], beside=TRUE, main="Parameter KCmin ~ UNIMAN sensors")
+barplot(UNIMANsorption$qkc[, , "KCmin"], beside=TRUE, main="Parameter KCmin ~ UNIMAN sensors")
 
-barplot(qkc[, , "KCmax"], beside=TRUE, main="Parameter KCmax ~ UNIMAN sensors")
+barplot(UNIMANsorption$qkc[, , "KCmax"], beside=TRUE, main="Parameter KCmax ~ UNIMAN sensors")
 }
 \seealso{
   \code{\link{SorptionModel}}

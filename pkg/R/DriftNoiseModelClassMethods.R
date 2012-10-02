@@ -12,7 +12,7 @@ NULL
 #' @rdname pub-DriftModelNames
 #' @keywords DriftNoiseModel
 #' @return Character vector of model names.
-#@example R/example/getDriftModelNames.R
+#@example inst/examples/getDriftModelNames.R
 #' @export
 DriftModelNames <- function()
 {
@@ -24,12 +24,12 @@ DriftModelNames <- function()
 #' @rdname pub-defaultParDriftNoiseModel
 #' @keywords DriftNoiseModel defaults
 #' @return List of the default parameters.
-#@example R/example/defaultParDriftNoiseModel.R
+#@example inst/examples/defaultParDriftNoiseModel.R
 #' @export
 defaultParDriftNoiseModel <- function()
 {
   par <- list(num=1:2, 
-    dsd = 0.1, ndcomp = 2, ndvar = NULL, dmodel = "cpc",
+    dsd = 0.1, ndcomp = 1, ndvar = NULL, dmodel = "cpc",
     datasetDriftNoiseModel=defaultDataDriftNoiseModel(), pck=defaultDataPackage())
 
   return(par)
@@ -55,9 +55,10 @@ setMethod("initialize", "DriftNoiseModel", function(.Object,
   if(missing(ndvar)) ndvar <- def.par$ndvar      
   if(missing(dmodel)) dmodel <- def.par$dmodel
   
-  # check parameters
-  if(length(num) < ndcomp)
+  # check parameter 'ndcomp'
+  if(length(num) < ndcomp) {
     stop("Error in DriftNoiseModel::initialize: 'ndcomp' is incosistent with 'num'.")  
+  }
   
   # check 'dmodel'
   is.correct.dmodel <- (dmodel %in% DriftModelNames())
@@ -65,9 +66,20 @@ setMethod("initialize", "DriftNoiseModel", function(.Object,
     stop("Error in DriftNoiseModel::initialize: name of 'dmodel' is incorrect.")  
      
   # load data
-  data(list=datasetDriftNoiseModel, package=pck, envir=environment()) # -> 'centered', 'scaled', 'dspace', 'ndvar'
-  if(!exists("dspace"))
-    stop("Error in DriftNoiseModel::initialize: 'datasetDriftNoiseModel' is not loaded; variable 'dspace' not found.")    
+  #data(list=datasetDriftNoiseModel, package=pck, envir=environment()) # -> 'centered', 'scaled', 'dspace', 'ndvar'
+  #if(!exists("dspace"))
+  #  stop("Error in DriftNoiseModel::initialize: 'datasetDriftNoiseModel' is not loaded; variable 'dspace' not found.")    
+
+  #if(!exists(datasetDriftNoiseModel)) # datasetDriftNoiseModel supposed to be `UNIMANdnoise`
+  #  stop("Error in DriftNoiseModel::initialize: dataset", datasetDriftNoiseModel, "is not loaded.")    
+  #eval(parse(text = paste("mdat <-", datasetDriftNoiseModel)))
+
+  mdat <- loadUNIMANdata(datasetDriftNoiseModel)
+  
+  centered <- mdat$centered
+  scaled <- mdat$scaled
+  dspace <- mdat$dspace
+  ndvar <- mdat$ndvar
   
   # set 'ndvar'
   ndvar <- ndvar[1:ndcomp]
@@ -77,7 +89,8 @@ setMethod("initialize", "DriftNoiseModel", function(.Object,
     stop("Error in DriftNoiseModel::initialize: 'num' is incorrect.")  
     
   # modify, normalize and orthogonolize 'dspace'
-  dspace <- dspace[num, num] 
+  comp.num <- seq(1, max(ndcomp, 10))
+  dspace <- dspace[num, comp.num] 
   if(length(num) == 1) dspace <- matrix(dspace, nrow=1, ncol=1)
   dspace.norm <- apply(dspace, 2, function(x) sqrt(sum(x*x)))
   dspace <- sweep(dspace, 2, dspace.norm, "/")
@@ -196,6 +209,20 @@ plot.DriftNoiseModel.pc <- function(x, y, X,
     text(coord[1], coord[2], labels=paste("CPC", i, " (", round(100*Vvar[i], 0), "%)", sep=''), col=ab.col[i])
   }
 }
+#----------------------------
+# Noise Methods
+#----------------------------
+
+
+### Method scaledNoiseSd
+setMethod("scaledNoiseSd", "DriftNoiseModel", function(object, ...)
+{
+  scaledSd <- switch(type(object),
+    cpc = dsd(object),
+    stop("Error in DriftNoiseModel::scaledNoiseSd: 'type' is unknown."))
+
+  return(scaledSd)
+})
 
 
 #----------------------------
@@ -215,5 +242,5 @@ setMethod("predict", "DriftNoiseModel", function(object, sdata, ...)
 ### Method sdataModel
 setMethod("sdataModel", "DriftNoiseModel", function(object, sdata, ...)
 {  
-  predict(object@driftModel, X=sdata, dsd=dsd(object), ...)  
+  predict(object@driftModel, X=sdata, dsd=scaledNoiseSd(object), ...)  
 })

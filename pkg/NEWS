@@ -1,3 +1,20 @@
+chemosensors 0.7.1
+==================
+
+* Reorganized the way the package loads the datasets. Now DESCRIPTION file has line 
+  `LazyData: yes`.
+* All the datasets are unified the the list structure. That means you get a list 
+  `UNIMANdistr` by loading dataset `UNIMANdistr.RData` by command `data(UNIMANdistr)`.
+  Updated datasets: `UNIMANdnoise.RData`, `UNIMANsorption.RData`, `UNIMANshort.RData`,
+  `UNIMANsnoise.RData` and `UNIMANtransient.RData`.
+* Added support of parallel computing via R package `multicore`.
+* Added new demo `NeuromorphicSim`.
+
+chemosensors 0.6.1
+==================
+
+* The internal development of the packaged is organized in the 'devtools' stype.
+
 chemosensors 0.5.5
 ==================
 

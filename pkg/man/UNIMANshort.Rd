@@ -42,8 +42,10 @@
 
 data("UNIMANshort", package="chemosensors")
 
-# print the list of loaded data variables
-ls()
+str(UNIMANshort)
+
+C <- UNIMANshort$C
+dat <- UNIMANshort$dat
 
 # plot sensors in affinity space of gases
 plotAffinitySpace(conc=C, sdata=dat, gases=c(2, 1))

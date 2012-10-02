@@ -12,19 +12,21 @@ NULL
 #' @rdname pub-defaultParSensorArray
 #' @keywords SensorArray defaults
 #' @return List of the default parameters.
-#@example R/example/defaultParSensorArray.R
+#@example inst/examples/defaultParSensorArray.R
 #' @export
 defaultParSensorArray <- function()
 {
   par <- list(type = "polymeric",
     enableSorption = TRUE, 
-    num = 1:2, gases=1:3, gnames=LETTERS[1:3], 
+    nsensors = 2, num = 1:2, gases=1:3, gnames=LETTERS[1:3], 
     concUnits="perc", concUnitsInt=defaultConcUnitsInt(), concUnitsSorption = defaultConcUnitsSorption(),
     # Sorption Model
     knum = 1:2,
     # Sensor Model
-    datasetSensorModel=defaultDataSensorModel(), datasetSensorNoiseModel=defaultDataSensorNoiseModel(), pck=defaultDataPackage(), 
-    Conc0=NULL, Conc=NULL, dat=NULL, sndata=NULL)
+    model = defaultDataModel(),
+    datasetSensorModel=defaultDataSensorModel(),  datasetDistr=defaultDataDistr(), 
+    datasetSensorNoiseModel=defaultDataSensorNoiseModel(), pck=defaultDataPackage(), 
+    Conc0=NULL, Conc=NULL, dat=NULL, sndata=NULL, coefsd=NULL)
   
   return(par)
 }
@@ -34,13 +36,14 @@ setMethod("initialize", "SensorArray", function(.Object,
   type = "character",
   enableSorption = "logical",
   # common for sub-classes
-  num="numeric", gases="numeric", gnames="character", 
+  nsensors="numeric", num="numeric", gases="numeric", gnames="character", 
   concUnits="character", concUnitsInt="character", concUnitsIntSorption="character", 
   # specific for Sorption Model
   knum="numeric",
   # specific for SensorArray Model
-  datasetSensorModel = "character", datasetSensorNoiseModel = "character", pck = "character", 
-  Conc0, Conc, dat, sndata, ...)  
+  model = "character",
+  datasetSensorModel = "character", datasetDistr = "character", datasetSensorNoiseModel = "character", pck = "character", 
+  Conc0, Conc, dat, sndata, coefsd, ...)  
 { 
   # missing
   def.par <- defaultParSensorArray()
@@ -48,8 +51,22 @@ setMethod("initialize", "SensorArray", function(.Object,
   if(missing(type)) type <- def.par$type
   if(missing(enableSorption)) enableSorption <- def.par$enableSorption
       
-  # missing 'num' and 'knum'
-  if(missing(num)) num <- def.par$num
+  # missing 'nsensors', 'num', 'knum'
+  if(missing(num)) {
+    if(missing(nsensors)) num <- def.par$num
+    else {
+      num <- seq(1, min(nsensors, 17))
+      nrep <- as.integer(nsensors / length(num)) + 1
+      num <- rep(num, nrep)[1:nsensors]
+    }
+  }    
+  else {
+    if(!missing(nsensors)) {
+      nrep <- as.integer(nsensors / length(num)) + 1    
+      num <- rep(num, nrep)[1:nsensors]  
+    }
+  }
+  nsensors <- length(num)
   if(missing(knum)) knum <- num
   
   if(missing(gases)) gases <- def.par$gases
@@ -58,14 +75,17 @@ setMethod("initialize", "SensorArray", function(.Object,
   if(missing(concUnitsInt)) concUnitsInt <- def.par$concUnitsInt
   if(missing(concUnitsIntSorption)) concUnitsIntSorption <- def.par$concUnitsIntSorption
   
+  if(missing(model)) model <- def.par$model
   if(missing(datasetSensorModel)) datasetSensorModel <- def.par$datasetSensorModel
   if(missing(datasetSensorNoiseModel)) datasetSensorNoiseModel <- def.par$datasetSensorNoiseModel  
+  if(missing(datasetDistr)) datasetDistr <- def.par$datasetDistr    
   if(missing(pck)) pck <- def.par$pck
   if(missing(Conc0)) Conc0 <- def.par$Conc0
   if(missing(Conc)) Conc <- def.par$Conc
   if(missing(dat)) dat <- def.par$dat
   if(missing(sndata)) sndata <- def.par$sndata
-  
+  if(missing(coefsd)) coefsd <- def.par$coefsd
+    
   # 'idx'
   idx <- 1:length(num)
         
@@ -75,25 +95,69 @@ setMethod("initialize", "SensorArray", function(.Object,
 
   # load data (1) 'datasetSensorModel'
   if(is.null(Conc0) | is.null(dat)) {
-    data(list=datasetSensorModel, package=pck, envir=environment()) # -> 'C', 'dat', 'dat.corrected'
-    if(!(exists("C") & exists("dat") & exists("dat.corrected")))
-      stop("Error in SensorArray::initialize: 'datasetSensorModel' is not loaded; variables 'C', 'dat' and 'dat.corrected' not found.")    
+    #data(list=datasetSensorModel, package=pck, envir=environment()) # -> 'C', 'dat', 'dat.corrected'
+    #if(!(exists("C") & exists("dat") & exists("dat.corrected")))
+    #  stop("Error in SensorArray::initialize: 'datasetSensorModel' is not loaded; variables 'C', 'dat' and 'dat.corrected' not found.")    
+    
+    #if(!exists(datasetSensorModel)) # datasetSensorModel supposed to be `UNIMANshort`
+    #  stop("Error in SensorArray::initialize: dataset", datasetSensorModel, "is not loaded.")    
+    #eval(parse(text = paste("mdat <-", datasetSensorModel)))
+
+    mdat <- loadUNIMANdata(datasetSensorModel)
+    
+    C <- mdat$C
+    dat <- mdat$dat
+    dat.corrected <- mdat$dat.corrected
+    
     Conc0 <- C
     # dat == dat
   }
+  
   if(is.null(Conc)) Conc <- C
   if(sum(dim(Conc0) == dim(Conc)) != 2)
     stop("Error in SensorArray::initialize: dimension of 'Conc0' and 'Conc' are different.")    
 
-  # load data (2) 'datasetSensorModel'    
+  # load data (2) 'datasetSensorNoiseModel'    
   if(is.null(sndata)) {
-    data(list=datasetSensorNoiseModel, package=pck, envir=environment()) # -> 'Bsd'
-    if(!(exists("Bsd")))
-      stop("Error in SensorArray::initialize: 'datasetSensorNoiseModel' is not loaded; variable 'Bsd' is not found.")    
+    #data(list=datasetSensorNoiseModel, package=pck, envir=environment()) # -> 'Bsd'
+    #if(!(exists("Bsd")))
+    #  stop("Error in SensorArray::initialize: 'datasetSensorNoiseModel' is not loaded; variable 'Bsd' is not found.")    
+    
+    #if(!exists(datasetSensorNoiseModel)) # datasetSensorModel supposed to be `UNIMANsnoise`
+    #  stop("Error in SensorArray::initialize: dataset", datasetSensorNoiseModel, "is not loaded.")    
+    #eval(parse(text = paste("mdat <-", datasetSensorNoiseModel)))
 
-    sndata <- switch(as.numeric(enableSorption),
-      '1' = Bsd[["Sensor"]][["plsr"]],
-      '0' = Bsd[["SensorModel"]][["plsr"]])
+    mdat <- loadUNIMANdata(datasetSensorNoiseModel)
+    
+    Bsd <- mdat$Bsd
+  
+    if(enableSorption) Bsd <- Bsd[["Sensor"]]
+    else Bsd <- Bsd[["SensorModel"]]
+  
+    if(!(model %in% names(Bsd)))
+      stop("Error in SensorArray::initialize: 'datasetSensorNoiseModel' doesn't have entry for model '", model, "'.", sep='')
+    
+    sndata <- Bsd[[model]]
+  }  
+
+  # load data (3) 'datasetDistr'    
+  if(is.null(coefsd)) {
+    #data(list=datasetDistr, package=pck, envir=environment()) # -> 'UNIMANdistr'
+    #if(!(exists("UNIMANdistr")))
+    #  stop("Error in SensorArray::initialize: 'datasetDistr' is not loaded; variable 'UNIMANdistr' is not found.")    
+
+    #if(!exists(datasetDistr)) # datasetDistr supposed to be `UNIMANdistr`
+    #  stop("Error in SensorArray::initialize: dataset", datasetDistr, "is not loaded.")    
+    #eval(parse(text = paste("mdat <-", datasetDistr)))
+    
+    mdat <- loadUNIMANdata(datasetDistr)
+      
+    if(enableSorption) mdat <- mdat[["uniform"]][["Sensor"]]
+    else mdat <- mdat[["uniform"]][["SensorModel"]]
+  
+    if(!(model %in% names(mdat)))
+      stop("Error in SensorArray::initialize: 'datasetDistr' doesn't have entry for model '", model, "'.", sep='')
+    coefsd <- mdat[[model]]
   }  
       
   # sub-classes 
@@ -113,10 +177,12 @@ setMethod("initialize", "SensorArray", function(.Object,
       Conc <- predict(obj, conc=conc, concUnits=concUnits)  
     }
   }  
-  # -2- Sensor Array Model
-  if("SensorArrayModel" %in% sub.classes) {
-    obj <- new("SensorArrayModel", num=num, gases=gases, gnames=gnames, concUnits=concUnits, concUnitsInt=concUnitsInt, 
-      Conc0=Conc0, Conc=Conc, dat=dat, ...)
+  # -2- Sensor Model
+  if("SensorModel" %in% sub.classes) {
+    obj <- new("SensorModel", 
+      model=model, # class-specific parameters for SensorNoiseModel
+      num=num, gases=gases, gnames=gnames, concUnits=concUnits, concUnitsInt=concUnitsInt, 
+      Conc0=Conc0, Conc=Conc, dat=dat, coefsd=coefsd, ...)
     for(s in slotNames(obj)) {
       slot(.Object, s) <- slot(obj, s)
     }    
@@ -124,8 +190,9 @@ setMethod("initialize", "SensorArray", function(.Object,
   
   # -3- Other sub-classes      
   for(cl in sub.classes) {    
-    if((cl != "SorptionModel" &  cl != "SensorArrayModel")) {
-      obj <- new(cl, num=num, gases=gases, gnames=gnames, concUnits=concUnits, concUnitsInt=concUnitsInt, 
+    if((cl != "SorptionModel" &  cl != "SensorModel")) {
+      obj <- new(cl, 
+        num=num, gases=gases, gnames=gnames, concUnits=concUnits, concUnitsInt=concUnitsInt, 
         sndata=sndata, # class-specific parameters for SensorNoiseModel
         ...)
       for(s in slotNames(obj)) {
@@ -149,6 +216,22 @@ SensorArray <- function(...)
   new("SensorArray", ...)
 }
 
+#' Wrapper to Class Sensor.
+#'
+#' @name Sensor
+#' @rdname www-Sensor
+#' @keywords Sensor
+#' @seealso \code{\link{SensorArray}}, \code{\link{SensorModel}}
+#' @example inst/examples/Sensor-class.R
+#' @export
+Sensor <- function(num = 1, ...)
+{
+  if(length(num) > 1)
+    stop("Error in 'Sensor': 'num' is a vector.")
+  new("SensorArray", num=num, ...)
+}
+
+
 #----------------------------
 # Get/Set Methods
 #----------------------------
@@ -158,41 +241,34 @@ SensorArray <- function(...)
 #----------------------------
 setMethod("plot", "SensorArray", function (x, y, ...) 
 {
-  yval <- c("response", "prediction", "snoise")
+  nsensors <- nsensors(x)
   # missing
-  if(missing(y)) y <- "response"
+  if(missing(y)) y <- ifelse(nsensors == 1, "response", "polar")
+
+  yval <- c("response", "timeline", "pca", "prediction", "snoise", 
+    "affinity", "affinityMap", "affinitySpace",  
+    "polar")
+  
+  # check par
+  match.arg(y, yval)
   
   switch(y,
     prediction = plot.SensorArray.prediction(x, y, ...),
     snoise = plot.SensorArray.snoise(x, y, ...), 
-    response = plot.SensorArray.response(x, y, ...), 
+    response = plot.SensorArray.response(x, y, ...),
+    timeline = plot.SensorArray.timeline(x, y, ...),    
+    pca = plotPCA(x, y, ...),      
+    affinity = plot.SensorArray.affinity(x, y, ...),
+    affinityMap = plot.SensorArray.affinityMap(x, y, ...),     
+    affinitySpace = plot.SensorArray.affinitySpace(x, y, ...),                  
+    polar = plot.SensorArray.polar(x, y, ...),     
     stop("Error in SensorArray::plot: plot type 'y' is unknown. Supported types: ", 
       paste(yval, collapse=", "), "."))
 })
 
-plot.SensorArray.prediction <- function(x, y, conc, mod,
-  center = TRUE, scale = FALSE, 
-  pch=20,
-  main = "Sensor Array: PCA scoreplot", xlab = "PC1", ylab = "PC2", ...)
+plot.SensorArray.prediction <- function(x, y, main = "Sensor Array: PCA scoreplot", ...)
 {
-  if(missing(conc))
-    stop("Error in 'plot.SensorArray.prediction': 'conc' is missing.")
-  
-  X <- predict(x, conc, ...)  
-  
-  if(missing(mod)) mod <- prcomp(X, center=center, scale=scale)
-  
-  if(mod$center[1]) X <- as.matrix(sweep(X, 2, mod$center))  
-  if(mod$scale[1])  X <- as.matrix(sweep(X, 2, mod$scale, "/"))
-
-  X.scores <- X %*% mod$rotation[, 1:2]
-
-  plot(X.scores, pch = pch, col = ccol(x, conc),
-    main=main,  ...)  #xlab = xlab, ylab = ylab,
-  #legend("bottom", legend=levels(Y), col=1:nlevels(Y), pch=20)
-  
-  #scoreplot(mod, pch=pch, col = ccol(x, conc),
-  #  main=main,  ...)  #xlab = xlab, ylab = ylab,
+  plotPCA(x, y, main=main, ...)
 }
 
 plot.SensorArray.snoise <- function(x, y, conc, 
@@ -208,10 +284,41 @@ plot.SensorArray.snoise <- function(x, y, conc,
 }
 
 plot.SensorArray.response <- function(x, y,  
-  lwd = 2, lty = 1,
+  type="inc", 
+  lwd = 2, lty = 1, 
   main = "Sensor Array: response", ...)
 {   
-  plotResponse(x, y, lwd = lwd, lty = lty, main=main, ...)
+  plotResponse(x, y, type=type, lwd = lwd, lty = lty, main=main, ...)
+}
+
+plot.SensorArray.timeline <- function(x, y,  
+  main = "Sensor Array: signal over time", ...)
+{   
+  plotTimeline(x, y, main=main, ...)
+}
+
+plot.SensorArray.affinity <- function(x, y,  
+  main = "Sensor Array: Affinity", ...)
+{   
+  plotAffinity(x, y, main=main, ...)
+}
+
+plot.SensorArray.affinitySpace <- function(x, y,  
+  main = "Sensor Array: Affinity Space", ...)
+{   
+  plotAffinitySpace(x, y, main=main, ...)
+}
+
+plot.SensorArray.affinityMap <- function(x, y,  
+  main = "Sensor Array: Affinity Map", ...)
+{   
+  plotAffinityMap(x, y, main=main, ...)
+}
+
+plot.SensorArray.polar <- function(x, y,  
+  main = "Sensor Array: Polar plot", ...)
+{   
+  plotPolar(x, y, main=main, ...)
 }
 #----------------------------
 # Predict Methods
@@ -220,9 +327,10 @@ plot.SensorArray.response <- function(x, y,
 ### Method coefficients
 setMethod("coefficients", "SensorArray", function(object, type, ...)
 {
-  if(missing(type)) type <- "SensorArrayModel"
+  if(missing(type)) type <- "SensorModel"
   coef <- switch(type,
-    SensorArrayModel = coefficients(as(object, "SensorArrayModel")),
+    SensorModel = coefficients(as(object, "SensorModel")),
+    SorptionModel = object@sorptionModel$K,
     stop("Error in SensorArray::coefficients: 'type' is unknown."))  
 
   return(coef)
@@ -234,29 +342,32 @@ setMethod("predict", "SensorArray", function(object, conc, coef="numeric", concU
   if(missing(coef)) coef <- coef(object)
   if(concUnits == "default") concUnits <- concUnits(object)
   
-  if(is.null(ncol(conc))) conc <- matrix(conc, ncol=1) # 1-column case
-  if(ncol(conc) != ngases(object))
+  ngases <- ngases(object)
+    
+  if(is.null(dim(conc))) conc <- matrix(conc, ncol=ngases) # numeric vector
+  if(ncol(conc) != ngases)
     stop("Error in SensorArray::predict: dimension of 'conc' is incorrect.")  
 
+  nsensors <- nsensors(object)
   n <- nrow(conc)
-  ngases <- ngases(object)
-  
+
   if(concUnits != concUnitsInt(object)) conc <- concNorm(object, conc, concUnits) # concNorm
   conc <- concModel(object, conc=conc, concUnits=concUnitsInt(object), ...)  # concModel
   if(ssd(object)) {
     coef <- predict(as(object, "SensorNoiseModel"), coef=coef, n=n, ...) # SensorArray noise   
-    #sdata <- matrix(NA, nrow=n, ncol=1)
-    #for(i in 1:nrow(coef)) {    
-    #  sdata[i, ] <- as.numeric(sdataModel(object, conc=matrix(conc[i, ], ncol=ngases), coef=coef[i, ],
-    #    concUnits=concUnitsInt(object)))
-    #}
+    if(nsensors == 1) coef <- array(coef, c(dim(coef), 1))
+    
     sdata <- sdataModel(object, conc=conc, coef=coef, concUnits=concUnitsInt(object), ...)
   }
   else {
     sdata <- sdataModel(object, conc=conc, coef=coef, concUnits=concUnitsInt(object), ...)  # sdataModel
   }
+
+  if(dsd(object)) {
+    sdata <- predict(as(object, "DriftNoiseModel"), sdata=sdata, ...) # Drift Noise Model
+  }
   
-  sdata <- predict(as(object, "DriftNoiseModel"), sdata=sdata, ...) # Drift Noise Model
+  colnames(sdata) <- paste("S", idx(object), ", num ", num(object), sep = "")
     
   return(sdata)
 })
@@ -300,6 +411,6 @@ setMethod("sdataModel", "SensorArray", function(object, conc, coef, concUnits="d
   if(concUnitsInt(object) != concUnits)
     stop("Error in SensorArray::sdataModel: 'concUnits' is different from slot 'concUnitsInt'.")    
 
-  sdataModel(as(object, "SensorArrayModel"), conc=conc, coef=coef, concUnits=concUnits, ...)  
+  sdataModel(as(object, "SensorModel"), conc=conc, coef=coef, concUnits=concUnits, ...)  
 })
 

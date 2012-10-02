@@ -30,8 +30,8 @@ print(Kd)
 plot(s, Ka=Ka, type="inc", affinity=TRUE)
 plot(s, Ka=Ka, type="inc", affinity=TRUE, xlim=c(0, 0.1))
 
-sa <- SensorArray(num=1:17, gases=c(1, 3))
-plot(sa, 'affinity')
+#sa <- SensorArray(num=1:17, gases=c(1, 3))
+#plot(sa, 'affinityMap')
 }
 \seealso{
   \code{\link{SensorArray}}

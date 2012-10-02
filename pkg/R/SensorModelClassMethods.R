@@ -12,12 +12,12 @@ NULL
 #' @rdname pub-SensorModelNames
 #' @keywords SensorModel
 #' @return Character vector of model names.
-#@example R/example/getSensorModelNames.R
+#@example inst/examples/getSensorModelNames.R
 #' @export
 SensorModelNames <- function()
 {
   #return(c("plsr", "plsr-stick","spliner", "spliner-mid"))
-  return(c("plsr", "mvr"))
+  return(c("plsr", "mvr", "broken-stick", "ispline"))
 }
 
 #' Get default constructor parameters of class \code{\link{SensorModel}}.
@@ -25,14 +25,17 @@ SensorModelNames <- function()
 #' @rdname pub-defaultParSensorModel
 #' @keywords SensorModel defaults
 #' @return List of the default parameters.
-#@example R/example/defaultParSensorModel.R
+#@example inst/examples/defaultParSensorModel.R
 #' @export
 defaultParSensorModel <- function()
 {
   par <- list(num=1, gases=1:3, gnames=LETTERS[1:3], concUnits="perc", concUnitsInt=defaultConcUnitsInt(),
-    datasetSensorModel=defaultDataSensorModel(), pck=defaultDataPackage(), 
+    datasetSensorModel=defaultDataSensorModel(), datasetDistr=defaultDataDistr(), pck=defaultDataPackage(), 
     model=defaultDataModel(), coeffNonneg = FALSE, coeffNonnegTransform = "zero",
-    Conc0=NULL, Conc=NULL, dat=NULL)
+    coefsd = NULL,
+    Conc0=NULL, Conc=NULL, dat=NULL,
+    tunit = 1,
+    beta = 2)
   
   return(par)
 }
@@ -40,44 +43,107 @@ defaultParSensorModel <- function()
 ### Constructor of SensorModel class.
 setMethod("initialize", "SensorModel", function(.Object,
   # common for sub-classes
-  num="numeric", gases="numeric", gnames="character", concUnits="character", concUnitsInt="character",
+  nsensors="numeric", num="numeric", gases="numeric", gnames="character", concUnits="character", concUnitsInt="character",
   # specific for class SensorModel
-  datasetSensorModel="character", pck="character", 
+  datasetSensorModel="character", datasetDistr = "character", pck="character", 
+  coefsd,
   model="character", coeffNonneg = "logical", coeffNonnegTransform = "character",
-  Conc0, Conc, dat, ...)
+  Conc0, Conc, dat, 
+  tunit = "numeric", beta = "numeric", ...)
 {   
   # missing
   def.par <- defaultParSensorModel()
   
-  if(missing(num)) num <- def.par$num
+  # missing 'nsensors', 'num'
+  if(missing(num)) {
+    if(missing(nsensors)) num <- def.par$num
+    else {
+      num <- seq(1, min(nsensors, 17))
+      nrep <- as.integer(nsensors / length(num)) + 1
+      num <- rep(num, nrep)[1:nsensors]
+    }
+  }    
+  else {
+    if(!missing(nsensors)) {
+      nrep <- as.integer(nsensors / length(num)) + 1    
+      num <- rep(num, nrep)[1:nsensors]  
+    }
+  }
+  nsensors <- length(num)
+
+  # set 'model' and 'coeffNonneg'/'coeffNonnegTransform'
+  if(missing(model)) model <- def.par$model 
+  # 'coeffNonneg'
+  missing.coeffNonneg <- missing(coeffNonneg)
+  if(missing.coeffNonneg) coeffNonneg.par <- def.par$coeffNonneg
+  else coeffNonneg.par <- coeffNonneg
+  coeffNonneg <- initCoeffNonneg(model, missing.coeffNonneg, coeffNonneg.par)
+  # 'coeffNonnegTransform'  
+  if(missing(coeffNonnegTransform)) coeffNonnegTransform <- def.par$coeffNonnegTransform  
+    
   if(missing(gases)) gases <- def.par$gases
   if(missing(gnames)) gnames <- def.par$gnames
   if(missing(concUnits)) concUnits <- def.par$concUnits
   if(missing(concUnitsInt)) concUnitsInt <- def.par$concUnitsInt
   if(missing(datasetSensorModel)) datasetSensorModel <- def.par$datasetSensorModel
+  if(missing(datasetDistr)) datasetDistr <- def.par$datasetDistr  
   if(missing(pck)) pck <- def.par$pck
-  if(missing(model)) model <- def.par$model
-  if(missing(coeffNonneg)) coeffNonneg <- def.par$coeffNonneg
-  if(missing(coeffNonnegTransform)) coeffNonnegTransform <- def.par$coeffNonnegTransform
+  if(missing(coefsd)) coefsd <- def.par$coefsd  
+
   if(missing(Conc0)) Conc0 <- def.par$Conc0
   if(missing(Conc)) Conc <- def.par$Conc
   if(missing(dat)) dat <- def.par$dat
+
+  if(missing(tunit)) tunit <- def.par$tunit
+  
+  if(missing(beta)) beta <- def.par$beta    
   
   # check 'model'
   is.correct.model <- (model %in% SensorModelNames())
   if(!is.correct.model)
     stop("Error in SensorModel::initialize: name of 'model' is incorrect.")  
      
-  # load data
+   # load data (1) 'datasetSensorModel'
   if(is.null(Conc0) | is.null(dat)) {
-    data(list=datasetSensorModel, package=pck, envir=environment()) # -> 'C', 'dat', 'dat.corrected'
-    if(!(exists("C") & exists("dat") & exists("dat.corrected")))
-      stop("Error in SensorModel::initialize: 'datasetSensorModel' is not loaded; variables 'C', 'dat' and 'dat.corrected' not found.")    
+    #data(list=datasetSensorModel, package=pck, envir=environment()) # -> 'C', 'dat', 'dat.corrected'
+    #if(!(exists("C") & exists("dat") & exists("dat.corrected")))
+    #  stop("Error in SensorModel::initialize: 'datasetSensorModel' is not loaded; variables 'C', 'dat' and 'dat.corrected' not found.")    
+    
+    #print(ls(pos = 3))
+    mdat <- loadUNIMANdata(datasetSensorModel)
+
+    #if(!exists(datasetSensorModel)) # datasetSensorModel supposed to be `UNIMANshort` 
+    #  stop("Error in SensorModel::initialize: dataset ", datasetSensorModel, " is not loaded.")    
+    #eval(parse(text = paste("mdat <-", datasetSensorModel)))
+
+    #if(!exists(datasetSensorModel)) {
+    #  mdat <- NULL
+    #} else {
+    #  eval(parse(text = paste("mdat <-", datasetSensorModel)))
+    #}
+
+    C <- mdat$C
+    dat <- mdat$dat
+    dat.corrected <- mdat$dat.corrected
+    
     Conc0 <- C
     # dat == dat
   }
+  
   if(is.null(Conc)) Conc <- C
   
+  
+  # check 'num' / set up 'idx' / 'sdat'
+  # set 'nsensors'
+  if(sum(num <= 0 | num > ncol(dat)))
+    stop("Error in SensorModel::initialize: 'num' is incorrect.")  
+  idx <- 1:length(num)
+  sdat <- dat[, num]
+  if(is.null(dim(sdat))) sdat <- matrix(sdat, ncol=1) # 1-column case
+  
+  nsensors <- length(num)
+  fnum <- unique(num)
+
   # filter by 'gases'  
   gnames <- gnames[gases]
   ngases <- length(gases)
@@ -86,32 +152,35 @@ setMethod("initialize", "SensorModel", function(.Object,
     g <- gases[i]
     gind[g] <- i
   }
-   
-  if(ncol(Conc0) > ngases) {
-    Conc0 <- Conc0[, gases]
-  }
-  if(is.null(ncol(Conc0))) Conc0 <- matrix(Conc0, ncol=1)
-  colnames(Conc0) <- gnames  
-
-  if(ncol(Conc) > ngases) {
-    Conc <- Conc[, gases]
-  }
-  if(is.null(ncol(Conc))) Conc <- matrix(Conc, ncol=1)  
-  colnames(Conc) <- gnames
   
-  # filter by 'cind'  
-  cind <- which(apply(Conc, 1, sum) > 0)
-  Conc0 <- Conc0[cind, ]
-  Conc <- Conc[cind, ]
-  dat <- dat[cind, ]
-    
-  # check 'num' / create 'sdat'
-  if(num <= 0 | num > ncol(dat))
-    stop("Error in SensorModel::initialize: 'num' is incorrect.")  
-  sdat <- dat[, num] 
+  # transfrom 'Conc' and 'Conc0' from 2D to 3D
+  
+  if(ncol(Conc0) > ngases) Conc0[, gases]
+  Conc0 <- array(Conc0, c(NROW(Conc0), ngases, nsensors))
+  if(ncol(Conc) > ngases) Conc <- Conc[, gases]
+  Conc <- array(Conc, c(NROW(Conc), ngases, nsensors))  
+  
+  if(length(dim(Conc0)) != 3)
+    stop("Error in SensorModel::initialize: 'length(dim(Conc0) != 3'.")  
+  if(length(dim(Conc)) != 3)
+    stop("Error in SensorModel::initialize: 'length(dim(Conc) != 3'.")  
+  
+  # init. sub-classes      
+  sub.classes <- subClasses(class(.Object)) # from 'ChemoSensorArraysClassMethods.R'
+  for(cl in sub.classes) {    
+    obj <- new(cl, 
+      num=num, gases=gases, gnames=gnames, concUnits=concUnits, concUnitsInt=concUnitsInt, 
+      tunit=tunit, ...)
+    for(s in slotNames(obj)) {
+      slot(.Object, s) <- slot(obj, s)
+    }
+  }
     
   # assign
-  .Object@num <- num  
+  .Object@beta <- beta  
+  .Object@num <- num
+  .Object@fnum <- fnum      
+  .Object@idx <- idx    
   .Object@gases <- gases
   .Object@gind <- gind
   .Object@ngases <- ngases
@@ -119,6 +188,9 @@ setMethod("initialize", "SensorModel", function(.Object,
   .Object@concUnits <- concUnits
   .Object@concUnitsInt <- concUnitsInt
 
+  .Object@coeffNonneg <- coeffNonneg
+  .Object@coeffNonnegTransform <- coeffNonnegTransform
+    
   # normalize 'Conc*'
   Conc <- concNorm(.Object, Conc)
   Conc0 <- concNorm(.Object, Conc0)
@@ -133,11 +205,57 @@ setMethod("initialize", "SensorModel", function(.Object,
   #.Object@conc$crit <- initConc(.Object, Conc, "crit")
   #.Object@conc$sat <- initConc(.Object, Conc, "sat", sat.factor=1.2)
   
-  # assign 'model'  
-  .Object@coeffNonneg <- coeffNonneg
-  .Object@coeffNonnegTransform <- coeffNonnegTransform
+  # assign 'coefsd' & load data (2)  
+  if(is.null(coefsd)) {
+    #data(list=datasetDistr, package=pck, envir=environment()) # -> 'UNIMANdistr'
+    #if(!exists("UNIMANdistr"))
+    #  stop("Error in SensorModel::initialize: 'datasetDistr' is not loaded; variable 'UNIMANdistr' not found.")    
+   
+    #if(!exists(datasetDistr)) # datasetDistr supposed to be `UNIMANdistr`
+    #  stop("Error in SensorModel::initialize: dataset", datasetDistr, "is not loaded.")    
+
+    #eval(parse(text = paste("mdat <-", datasetDistr)))
+    
+    mdat <- loadUNIMANdata(datasetDistr)
+        
+    mdat <- mdat[['uniform']][['SensorModel']]
+    if(!(model %in% names(mdat)))
+      stop("Error in SensorModel::initialize: data for 'model' are missed in 'UNIMANdistr'.")    
+    coefsd <- mdat[[model]]
+    
+    ngases0 <- 3
+    ncoef0 <- as.integer(length(coefsd) / ngases0)
+    ind <- as.numeric(sapply(gases, function(i, ncoef0) seq(i, by=ncoef0, length=ncoef0), ncoef0))
+    ind <- sort(ind)
+    coefsd <- coefsd[ind]
+  }
   
-  .Object@dataModel <- SensorDataModel(model, sdat, Conc)
+  coefsd <- matrix(coefsd, nrow=length(coefsd), ncol=17)
+    
+  .Object@coefsd <- coefsd   
+ 
+  # assign 'model'  
+  dataModel <- list()
+  for(i in .Object@idx) {
+    dataModel[[i]] <- SensorDataModel(model, sdat[, i], Conc[, , i], 
+      coeffNonneg=coeffNonneg, coeffNonnegTransform=coeffNonnegTransform)
+
+    # simulate coef.
+    if(length(.Object@fnum) < length(.Object@num)) {
+      coefi <- coef(dataModel[[i]])
+      ncoef <- length(coefi)
+      coefi.sd <- .Object@beta * .Object@coefsd[, .Object@num[i]] # beta
+      
+      coefi.min <- coefi - coefi.sd
+      coefi.min[coefi.min < 0] <- 0
+      coefi.max <- coefi + coefi.sd
+    
+      coefi.sim <- runif(ncoef, min=coefi.min, max=coefi.max)
+    
+      dataModel[[i]]$coefficients <- coefi.sim
+    }
+  }
+  .Object@dataModel <- dataModel
   
   validObject(.Object)
   return(.Object)
@@ -180,11 +298,25 @@ initConc <- function(object, conc, type, sat.factor)
   return(out.conc)
 }
 
-initModelPlsr <- function(X, C, ...)
+#' Derive coeffNonneg parameter.
+#'
+#' @name initCoeffNonneg
+#' @rdname int-initCoeffNonneg
+#' @keywords SensorModel
+initCoeffNonneg <- function(model, missing.coeffNonneg, coeffNonneg.par)
 {
-  model <- initDataModelPlsr(X, C, ...)
+  coeffNonneg.int <- switch(model, 
+    'plsr' = FALSE, 
+    'mvr' = TRUE, 'broken-stick' = TRUE, 'ispline' = TRUE,
+    stop("Error in 'SensorModel::initCoeffNonneg': 'model' is unknown."))
   
-  return(model)
+  if(missing.coeffNonneg) coeffNonneg.par <- coeffNonneg.int
+  
+  if(model == 'plsr' & coeffNonneg.par != coeffNonneg.int)
+    stop("Error in 'SensorModel::initCoeffNonneg': for model (", model, ") coeffNonneg.par (", coeffNonneg.par, 
+    ") != ", " coeffNonneg.int (", coeffNonneg.int, ").")
+  
+  return(coeffNonneg.par)
 }
 
 #----------------------------
@@ -230,8 +362,16 @@ plot.SensorModel.predict <- function(x, y, conc, gases = 1, jitter=FALSE,
 
 plot.SensorModel.response <- function(x, y,  
   lwd = 2, lty = 1,
-  main = paste("Sensor Model: response \n num ", num(x), ", model '", modelName(x), "'", sep=""), ...)
+  main = "Sensor Model: response", ...)
 { 
+  nsensors <- nsensors(x)
+  # main
+  if(missing(main)) {
+    if(nsensors <= 5) main <- paste(main, "\n num ", paste(num(x), collapse=", "), sep='')
+    else main <- paste(main, "\n ", nsensors, " sensors", sep='')
+    main <- paste(main, ", model '", modelName(x), "'", sep='')
+  }
+  
   plotResponse(x, y, lwd = lwd, lty = lty, main=main, ...)
 }
 
@@ -242,7 +382,19 @@ plot.SensorModel.response <- function(x, y,
 ### Method coefficients
 setMethod("coefficients", "SensorModel", function(object, ...)
 {
-  coefficients(object@dataModel)  
+  nsensors <- nsensors(object)
+  ncoef <- ncoef(object)
+  coef <- matrix(NA, nrow=ncoef, ncol=nsensors)
+  for(s in 1:nsensors)
+    coef[, s] <- coef(object@dataModel[[s]])
+    
+  return(coef)
+})
+
+### Method ncoef
+setMethod("ncoef", "SensorModel", function(x)
+{
+  length(coef(x@dataModel[[1]]))
 })
 
 ### Method predict
@@ -251,8 +403,10 @@ setMethod("predict", "SensorModel", function(object, conc, coef="numeric", concU
   if(missing(coef)) coef <- coef(object)
   if(concUnits == "default") concUnits <- concUnits(object)
   
-  if(is.null(ncol(conc))) conc <- matrix(conc, ncol=1) # 1-column case
-  if(ncol(conc) != ngases(object))
+  ngases <- ngases(object)
+
+  if(is.null(dim(conc))) conc <- matrix(conc, ncol=ngases) # numeric vector    
+  if(ncol(conc) != ngases)
     stop("Error in SensorModel::predict: dimension of 'conc' is incorrect.")  
   
   if(concUnits != concUnitsInt(object)) conc <- concNorm(object, conc, concUnits) # concNorm
@@ -264,13 +418,105 @@ setMethod("predict", "SensorModel", function(object, conc, coef="numeric", concU
 #----------------------------
 
 ### Method sdataModel
-setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", concUnits="default", ...)
+setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", concUnits="default", enableDyn = "logical", 
+  nclusters = getOption("cores"), ...)
 {  
   if(missing(coef)) coef <- coef(object)
   if(concUnits == "default") concUnits <- concUnits(object)
-    
+  if(missing(enableDyn)) enableDyn <- enableDyn(object)
+      
   if(concUnitsInt(object) != concUnits)
     stop("Error in SensorModel::sdataModel: 'concUnits' is different from slot 'concUnitsInt'.")    
+
+  if(is.null(nclusters)) nclusters <- 1
+
+  if(nclusters > 1) {q
+    cat(" * Started computing in parallel on", nclusters, "CPU cores (if available) (SensorModel::sdataModel).\n")
+    require(multicore)
+  }
+
+  ngases <- ngases(object)
   
-  predict(object@dataModel, C=conc, B=coef, ...)  
+  if(is.null(dim(conc))) conc <- matrix(conc, ncol=ngases) # numeric vector    
+  
+  nsensors <- nsensors(object)
+  ncoef <- ncoef(object)
+  n <- nrow(conc)
+
+  #enableDyn <- enableDyn(object)
+  out <- ifelse(enableDyn, 'gas', 'sum')
+
+  if(length(dim(conc)) == 2)
+    conc <- array(conc, c(dim(conc), nsensors))
+  
+  # case 1: ssd == 0
+  if(length(dim(coef)) == 2) {
+    if(ncol(coef) != nsensors)
+      stop("Error in SensorModel::sdataModel: 'ncol(coef) != nsensors'.")    
+    if(nrow(coef) != ncoef)
+      stop("Error in SensorModel::sdataModel: 'nrow(coef) != ncoef'.")    
+    
+    sdata <- matrix(NA, nrow=n, ncol=nsensors)
+    
+    run.sdata <- function(i)
+    {
+      conci <- conc[, , i]
+      sdatai <- predict(object@dataModel[[i]], C=conci, B=coef[, i], out = out) 
+      if(enableDyn) {
+        sdata.pulse <- sdata2pulse(object, conci, sdatai)
+        sdata.out <- predict(as(object, "SensorDynamics"), conc=conci, sdata=sdata.pulse, sensors=i)
+        sdata.delta <- sdata.out - sdata.pulse
+
+        sdatai <- sdatai + sdata.delta
+        
+        sdatai <- apply(sdatai, 1, sum)        
+      }
+      
+      sdatai
+    }
+    
+    sdata.out <- mclapply(idx(object), run.sdata, 
+      mc.cores = nclusters, mc.silent = TRUE, mc.cleanup = TRUE)
+  
+    stopifnot(length(sdata.out) == nsensors)
+    for(i in 1:nsensors) {
+      sdata[, i] <- sdata.out[[i]]
+    }
+  # case 2: ssd > 0  
+  } else if (length(dim(coef)) == 3) { 
+    if(dim(coef)[3] != nsensors)
+      stop("Error in SensorModel::sdataModel: dim(coef)[3] != nsensors'.")    
+    if(dim(coef)[2] != ncoef)
+      stop("Error in SensorModel::sdataModel: 'dim(coef)[2] != ncoef'.")    
+    
+    sdata <- matrix(NA, nrow=n, ncol=nsensors)
+
+    run.sdata <- function(i)
+    {    
+      conci <- conc[, , i]
+      sdatai <- predict(object@dataModel[[i]], C=conc[, , i], B=coef[, , i], out = out, ...)  
+      if(enableDyn) {
+        sdata.pulse <- sdata2pulse(object, conci, sdatai)
+        sdata.out <- predict(as(object, "SensorDynamics"), conc=conci, sdata=sdata.pulse, sensors=i)
+        sdata.delta <- sdata.out - sdata.pulse
+        
+        sdatai <- sdatai + sdata.delta
+        
+        sdatai <- apply(sdatai, 1, sum) 
+      }    
+      sdatai
+    }
+
+    sdata.out <- mclapply(idx(object), run.sdata, 
+      mc.cores = nclusters, mc.silent = TRUE, mc.cleanup = TRUE)
+        
+    stopifnot(length(sdata.out) == nsensors)
+    for(i in 1:nsensors) {
+      sdata[, i] <- sdata.out[[i]]
+    }  
+  }
+  else
+    stop("Error in SensorModel::sdataModel: 'coef' dimenstion is unknown.")    
+  
+  return(sdata)
 })

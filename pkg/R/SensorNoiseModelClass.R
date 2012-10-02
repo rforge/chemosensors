@@ -15,7 +15,8 @@ NULL
 #' @rdname int-validSensorNoiseModel
 validSensorNoiseModel <- function(object)
 {
-  if(sum(ssd(object) < 0)) return("'ssd' is negative")    
+  if(sum(ssd(object) < 0)) return("'ssd' is negative")
+  if(nrow(object@sndata) != length(object@snf)) return("slots 'sndata' and 'snf' are of different size.")
   
   return(TRUE)
 }
@@ -58,7 +59,7 @@ validSensorNoiseModel <- function(object)
 #' @rdname www-SensorNoiseModel
 #' @keywords SensorNoiseModel-class
 #' @seealso \code{\link{UNIMANsnoise}}, \code{\link{Sensor}}
-#' @example R/example/SensorNoiseModel-class.R
+#' @example inst/examples/SensorNoiseModel-class.R
 #' @exportClass SensorNoiseModel
 setClass(Class="SensorNoiseModel", 
   representation=representation(
@@ -80,7 +81,7 @@ setClass(Class="SensorNoiseModel",
 setMethod ("print","SensorNoiseModel", function(x, ...)
 {
   cat(" Sensor Noise Model\n")
-  cat(" - num:", paste(num(x), collapse=", "), "\n")
+  cat(" - num", numStr(x), "\n")
   cat(" -", ngases(x), "gases", paste(gnames(x), collapse=", "), "\n")
   cat(" - ssd:", paste(ssd(x), collapse=", "), "\n")
   cat(" - noise type:", type(x), "\n")
@@ -90,7 +91,7 @@ setMethod ("print","SensorNoiseModel", function(x, ...)
 #' @exportMethod show
 setMethod ("show","SensorNoiseModel", function(object)
 {
-  cat(" Sensor Noise Model (num ", paste(num(object), collapse=", "), "), (ssd ", 
+  cat(" Sensor Noise Model (ssd ", 
     paste(ssd(object), collapse=", "), "), ", "noise type '", 
     type(object), "'", "\n", sep='')
 })

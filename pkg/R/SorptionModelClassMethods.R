@@ -18,7 +18,7 @@ defaultSorptionModel <- function()
   par <- list(gases=1:3, gnames=LETTERS[1:3], concUnits="perc", concUnitsSorption=defaultConcUnitsSorption(),
     knum=1,
     datasetSorptionModel=defaultDataSorptionModel(), pck=defaultDataPackage(),
-    srdata=NULL, Qequal=TRUE, Knorm=TRUE, Kmin=1, Kmax=150, Knonlin = 0.33)
+    srdata=NULL, Qequal=TRUE, Knorm=TRUE, Kmin=1, Kmax=150, alpha = 2.25)
   
   return(par)
 }
@@ -30,7 +30,7 @@ setMethod("initialize", "SorptionModel", function(.Object,
   # specific for class SorptionModel
   datasetSorptionModel = "character", pck = "character",
   knum = "numeric", srdata, Qequal="logic", Knorm="logic", 
-  Kmin="numeric", Kmax="numeric", Knonlin = "numeric", ...)
+  Kmin="numeric", Kmax="numeric", alpha = "numeric", ...)
 {   
   # missing
   def.par <- defaultSorptionModel()
@@ -47,22 +47,31 @@ setMethod("initialize", "SorptionModel", function(.Object,
   if(missing(Knorm)) Knorm <- def.par$Knorm
   if(missing(Kmin)) Kmin <- def.par$Kmin
   if(missing(Kmax)) Kmax <- def.par$Kmax  
-  if(missing(Knonlin)) Knonlin <- def.par$Knonlin  
+  if(missing(alpha)) alpha <- def.par$alpha  
   
   if(missing(knum)) knum <- def.par$knum
   idx <- 1:length(knum)
 
-  # process 'Knonlin'
-  Kmax <- Knonlin * Kmax
+  # process 'alpha'
+  Kmax <- alpha * Kmax
   if(Kmax <= Kmin)
-    stop("Error in SorptionModel::initialize: 'Kmax <= Kmin'; check parameter 'Knonlin'.")
+    stop("Error in SorptionModel::initialize: 'Kmax <= Kmin'; check parameter 'alpha'.")
     
   # load data
   if(is.null(srdata)) {
-    data(list=datasetSorptionModel, package=pck, envir=environment()) # -> 'qkc'
-    if(!(exists("qkc")))
-      stop("Error in SorptionModel::initialize: 'datasetSorptionModel' is not loaded; variable 'qkc' is not found.")    
-      srdata <- qkc
+    #data(list=datasetSorptionModel, package=pck, envir=environment()) # -> 'qkc'
+    #if(!(exists("qkc")))
+    #  stop("Error in SorptionModel::initialize: 'datasetSorptionModel' is not loaded; variable 'qkc' is not found.")    
+    
+    #if(!exists(datasetSorptionModel)) # datasetSorptionModel supposed to be `UNIMANsorption`
+    #  stop("Error in SorptionModel::initialize: dataset", datasetSorptionModel, "is not loaded.")    
+    #eval(parse(text = paste("mdat <-", datasetSorptionModel)))
+
+    mdat <- loadUNIMANdata(datasetSorptionModel)
+    
+    qkc <- mdat$qkc
+
+    srdata <- qkc
   }      
   
   # prepare data 'K' and 'Q'
@@ -145,11 +154,11 @@ setMethod("initialize", "SorptionModel", function(.Object,
   .Object@concUnitsSorption <- concUnitsSorption
 
   .Object@knum <- knum
-  .Object@Knonlin <- Knonlin  
+  .Object@alpha <- alpha  
   .Object@srdata <- srdata  
   .Object@sorptionModel <- list(K=K, Q=Q,
     Qequal=Qequal, Knorm=Knorm, Kmin=Kmin, Kmax=Kmax)
-    
+  
   validObject(.Object)
   return(.Object)
 })
@@ -221,7 +230,7 @@ plot.SorptionModel.predict <- function(x, y, n, conc, concUnits="default",
   if(missing(conc)) conc <- concSample(x, "inc", n=n, concUnits=concUnits, ...)
 
   if(missing(main))
-    main <- paste(main, "\n knum ", paste(knum(x), collapse=", "), ", non-linearity ", x@Knonlin, sep="")
+    main <- paste(main, "\n knum ", paste(knum(x), collapse=", "), ", non-linearity ", x@alpha, sep="")
   
   nconc <- predict(x, conc, ...)  
 
@@ -243,7 +252,7 @@ plot.SorptionModel.response <- function(x, y,
   if(sum(gases == 0)) gases <- gases(x)
 
   if(missing(main))
-    main <- paste(main, "\n knum ", paste(knum(x), collapse=", "), ", non-linearity ", x@Knonlin, sep="")
+    main <- paste(main, "\n knum ", paste(knum(x), collapse=", "), ", non-linearity ", x@alpha, sep="")
 
   concUnits(x) <- "norm"
 
@@ -329,9 +338,11 @@ setMethod("concModel", "SorptionModel", function(object, conc, concUnits="defaul
       conc.out[ii, , i] <- conc[ii, ] * object@sorptionModel$Q[, i] * object@sorptionModel$K[, i] / (1 + conc.sum[ii, i])
     }
   }
-
-  if(nsensors == 1) conc.out <-conc.out[, , 1]
+  
+  if(nsensors == 1) conc.out <- conc.out[, , 1]
   if(is.null(ncol(conc.out))) conc.out <- matrix(conc.out, ncol=1) # 1-column case
+  
+  if(n == 1 & nsensors == 1) conc.out <- matrix(conc.out, nrow=1)
     
   return(conc.out)
 })

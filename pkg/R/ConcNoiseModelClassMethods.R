@@ -163,7 +163,8 @@ setMethod("concModel", "ConcNoiseModel", function(object, conc, concUnits="defau
 
   C <- as.matrix(conc)
   n <- nrow(C)
-   
+ 
+  # pre-process 'csd'  
   csd <- scaledNoiseSd(object)
     
   N <- matrix(0, nrow=nrow(C), ncol=ncol(C)) # case 'csd == 0'

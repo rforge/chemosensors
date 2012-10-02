@@ -1,6 +1,6 @@
 # last revision: 23 Jan 2012
 
-#' @include DriftNoiseModelClassMethods.R
+#@include DriftNoiseModelClassMethods.R
 #' @include ChemosensorsClassMethods.R
 NULL
 
@@ -80,7 +80,7 @@ validDriftNoiseModel <- function(object)
 #'
 #' @name DriftNoiseModel
 #' @rdname www-DriftNoiseModel
-#' @example R/example/DriftNoiseModel-class.R
+#' @example inst/examples/DriftNoiseModel-class.R
 #' @keywords DriftNoiseModel-class
 #' @seealso \code{\link{UNIMANdnoise}}, \code{\link{SensorArray}}
 #' @exportClass DriftNoiseModel
@@ -100,14 +100,14 @@ setClass(Class="DriftNoiseModel",
 setMethod ("print","DriftNoiseModel", function(x, ...)
 {
   cat(" Drift Noise Model\n")
-  cat(" - num", num(x), "\n")
+  cat(" - num", numStr(x), "\n")
   print(x@driftModel)
 })
 
 #' @exportMethod show
 setMethod ("show","DriftNoiseModel", function(object)
 {
-  cat(" Drift Noise Model (num ", paste(num(object), collapse=", "), "), ", "common model '", modelName(object), "'", "\n", sep='')
+  cat(" Drift Noise Model (dsd ", dsd(object), "), ", "common model '", modelName(object), "'", "\n", sep='')
 })
 
 #----------------------------

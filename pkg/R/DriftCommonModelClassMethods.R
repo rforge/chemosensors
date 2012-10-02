@@ -107,27 +107,36 @@ predict.DriftCommonModel <- function(object, X, dsd, ...)
   if(!dsd)
     return(X)
 
-  # drift noise 'N'
+  n <- nrow(X)
   ndcomp.str <- ifelse(object$ndcomp == 1, "one", "many")  
+    
+  #  preprocess 'dsd'
+  dsd <- dsd / sqrt(n) # random walk: sigma(n) = sd / sqrt(n)
+  
+  # drift noise 'N'
   varcov <- switch(ndcomp.str,
     "one" = dsd * object$ndvar * diag(1),
     dsd * diag(object$ndvar)) # ~ 86.23% 7.25% and 3.26%
-  N <- rmnorm(n = nrow(X), varcov = varcov)
+
+  N <- rmnorm(n = n, varcov = varcov)
+  N <- apply(N, 2, cumsum)  
   N <- N %*% t(object$dspace[, 1:object$ndcomp])     
-  
+    
   # compute
   centerX <- apply(X, 2, mean)
-  scaleX <- apply(X, 2, sd)
+  scaleX <- apply(X, 2, sd)   
+
+  scaleX.zero <- (sum(scaleX) != 0)
   
   # scale
   if(object$center) X <- as.matrix(sweep(X, 2, centerX, "-"))
-  if(object$scale) X <- as.matrix(sweep(X, 2, scaleX, "/"))  
-  
+  if(object$scale & scaleX.zero) X <- as.matrix(sweep(X, 2, scaleX, "/"))  
+
   # inject drift
   X <- X + N
   
   # un-scale
-  if(object$scale) X <- as.matrix(sweep(X, 2, scaleX, "*"))
+  if(object$scale & scaleX.zero) X <- as.matrix(sweep(X, 2, scaleX, "*"))
   if(object$center) X <- as.matrix(sweep(X, 2, centerX, "+"))
 
   return(X)

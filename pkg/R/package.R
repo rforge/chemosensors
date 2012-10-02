@@ -4,7 +4,7 @@
 #' @name chemosensors
 #' @rdname www-chemosensors
 #' @docType package
-#' @example R/example/chemosensors-package.R
+#' @example inst/examples/chemosensors-package.R
 #' @import methods
 #' @import graphics
 {}

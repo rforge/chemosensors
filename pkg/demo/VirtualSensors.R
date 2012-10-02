@@ -1,40 +1,34 @@
 
-# load UNIMAN data
-data("UNIMANshort", package="chemosensors") #-> 'C', 'dat'
+## part 1: explore the parameter 'beta'
+# - values: 1, 2, 5, 10
 
-# filter for only maximum conc. levels
-C.max <- apply(C, 2, max)
-ind <- which(apply(C, 1, function(x, C.max) sum(x == C.max) > 0, C.max))
+nsensors <- 34
 
-C <- C[ind, ]
-dat <- dat[ind, ]
+plist <- list()
+for(beta in c(1, 2, 5, 10)) {
+  sa <- SensorArray(nsensors = nsensors, beta = beta)
+  plist <- c(plist, list(plot(sa, 'polar', main = paste("beta:", beta), graphics = "ggplot", ret = TRUE)))
+}
 
-print(head(C))
+library(gridExtra) 
+grid.arrange(plist[[1]], plist[[2]], plist[[3]], plist[[4]])
 
-# create 100 sensors (replicas from 17 UNIMAN sensors)
+## part 2: compare two arrays (UNIMAN array of 17 sensors vs. virtual aray of 100 sensors)
+# - beta has the default value (to be 2)
+
+# UNIMAN array of 17 sensors
+sa.uniman <- SensorArray(nsensors=17) 
+
+# 100 sensors (replicas from 17 UNIMAN sensors)
 sa <- SensorArray(nsensors=100) 
-nsd(sa) <- 0 # noise-free mode
-
-sdata <- predict(sa, conc=C)
 
 # plot 
-opar <- par(mfrow=c(2, 2))
+plot(sa.uniman, main = "17 UNIMAN sensors")
 
+plot(sa, main = "100 virtual sensors")
+
+# plot gases A and C
 gases <- c(1, 3)
 
-plotAffinitySpace(y='points', conc=C, sdata=dat, gases=gases, main="17 UNIMAN sensors \n Affinity Space A and C")
-plotAffinitySpace(sa, 'points', conc=C, sdata=sdata, gases=gases, main="100 virtual sensors \n Affinity Space A and C")
-
-plotAffinitySpace(y='density', conc=C, sdata=dat, gases=gases, main="2D Density")
-plotAffinitySpace(sa, 'density', conc=C, sdata=sdata, gases=gases, main="2D Density")
-
-gases <- c(2, 1)
-plotAffinitySpace(y='points', conc=C, sdata=dat, gases=gases, main="Affinity Space A and B")
-plotAffinitySpace(sa, 'points', conc=C, sdata=sdata, gases=gases, main="Affinity Space A and B")
-
-gases <- c(2, 3)
-plotAffinitySpace(y='points', conc=C, sdata=dat, gases=gases, main="Affinity Space B and C")
-plotAffinitySpace(sa, 'points', conc=C, sdata=sdata, gases=gases, main="Affinity Space B and C")
-
-par(opar)
-
+plot(sa.uniman, 'affinitySpace', gases = gases, main = "17 UNIMAN sensors")
+plot(sa, 'affinitySpace', gases = gases, main = "100 virtual sensors")
