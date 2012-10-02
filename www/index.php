@@ -52,8 +52,31 @@ install.packages("chemosensors", dep=TRUE, repos="http://r-forge.r-project.org")
 </pre>
 <p>That will install the latest development version with all dependencies.</p>
 
+<h3>Installation from source</h3>
+<p>If the installation suggested above fails, it is still possible to install the package from source.
+For example, the local source file is 'chemosensors_0.7.1.tar.gz'.</p> 
+
+<p>The user should run two commands inside R.</p>
+
+<pre>
+install.packages("methods", "stats", "pls", "LearnBayes", "quadprog",  
+"plyr", "colorspace", "RColorBrewer", "reshape", "ggplot2", "ppls",  
+"splines", "MASS", "multicore")
+</pre>
+
+<pre>
+install.packages("chemosensors_0.7.1.tar.gz", repos = NULL)
+</pre>
+
+<p>The first line will install all the required dependencies. 
+The second line will install the package 'chemosensors' from local file.
+</p>
+
+<p>Please let us know if you have any problems related to installation or  
+running the software.</p>
+
 <h3>Documetation</h3>
-<p>Help pages in html format are available on the UPC server <a href="http://chemosensors.r-forge.r-project.org/html/">http://chemosensors.r-forge.r-project.org/html/</a>.</p> 
+<p>Help pages in html format are available on <a href="http://chemosensors.r-forge.r-project.org/html/">http://chemosensors.r-forge.r-project.org/html/</a>. Thanks to <a href="https://github.com/hadley/devtools">devtools</a> and <a href="https://github.com/hadley/staticdocs">staticdocs</a>.</p> 
 
 <h3>Examples</h3>
 <p>You might prefer to start with demos of the package. To see the list of available demos type in R:</p>
