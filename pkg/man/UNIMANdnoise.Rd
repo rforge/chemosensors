@@ -28,7 +28,7 @@
 }
 \examples{
 
-data(UNIMANdnoise, package="chemosensors")
+data(UNIMANdnoise)
 
 str(UNIMANdnoise)
 

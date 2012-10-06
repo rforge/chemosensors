@@ -9,14 +9,14 @@
 
 sa <- SensorArray(model="plsr", enableSorption=FALSE, num=1:17)
 
-data(UNIMANshort, package="chemosensors") # 'C', 'dat'
-conc <- C
-X <- dat
+data(UNIMANshort)
+conc <- UNIMANshort$C
+X <- UNIMANshort$dat
 
 # -0- short UNIMAN dataset (200 samples)
 mod <- prcomp(X, center=TRUE, scale=FALSE)
-col <- ccol(sa, conc=C, concUnits="perc")
-scoreplot(mod, pch=20, col=col)
+#col <- ccol(sa, conc=C, concUnits="perc")
+#scoreplot(mod, pch=20, col=col)
 
 # -1- default csd (0.1), default ssd (0.1), dsd = 0
 plot(sa, "prediction", conc=conc, mod=mod)

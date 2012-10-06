@@ -475,9 +475,14 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
       sdatai
     }
     
-    sdata.out <- mclapply(idx(object), run.sdata, 
-      mc.cores = nclusters, mc.silent = TRUE, mc.cleanup = TRUE)
-  
+    if(nclusters == 1) {
+      sdata.out <- sapply(idx(object), run.sdata, simplify = FALSE)
+    }
+    else {
+      sdata.out <- multicore::mclapply(idx(object), run.sdata, 
+        mc.cores = nclusters, mc.silent = TRUE, mc.cleanup = TRUE)
+    }
+    
     stopifnot(length(sdata.out) == nsensors)
     for(i in 1:nsensors) {
       sdata[, i] <- sdata.out[[i]]
@@ -507,9 +512,14 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
       sdatai
     }
 
-    sdata.out <- mclapply(idx(object), run.sdata, 
-      mc.cores = nclusters, mc.silent = TRUE, mc.cleanup = TRUE)
-        
+    if(nclusters == 1) {
+      sdata.out <- sapply(idx(object), run.sdata, simplify = FALSE)
+    }
+    else {
+      sdata.out <- multicore::mclapply(idx(object), run.sdata, 
+        mc.cores = nclusters, mc.silent = TRUE, mc.cleanup = TRUE)
+    }
+          
     stopifnot(length(sdata.out) == nsensors)
     for(i in 1:nsensors) {
       sdata[, i] <- sdata.out[[i]]

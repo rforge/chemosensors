@@ -92,8 +92,8 @@ dn <- DriftNoiseModel() # default model
 
 plot(dn, "noise", main="plot(dn, 'noise')") # default plot type, i.e. 'plot(dn)' does the same plotting
 
-data(UNIMANshort, package="chemosensors")
-X <- dat[, num(dn)]
+data(UNIMANshort)
+X <- UNIMANshort$dat[, num(dn)]
 plot(dn, "pc", X, main="plot(dn, 'pc', X)")
 
 }

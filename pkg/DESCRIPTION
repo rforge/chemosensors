@@ -4,17 +4,15 @@ Date: 2012-09-06
 Title: Tool for synthetic experiments in machine olfaction
 Author: Andrey Ziyatdinov and Alexandre Perera-Lluna
 Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
-Description: 
-    This package introduces a software tool for the design 
-    of synthetic experiments in machine olfaction.
-    The generator of gas sensor signals can be used in applications related to 
-    test and benchmarking of signal processing methods, 
-    neuromorphic simulations in machine olfaction and educational tools.
-    A so-called virtual sensor array features 
-    unlimited number of sensors, support of multicomponent gas mixtures 
-    and full parametric control of the noise in the system.
-    The artificial (virtual) sensor array is inspired from a reference database 
-    of seventeen polymeric sensors with concentration profiles for three analytes.
+Description: This package introduces a software tool for the design of
+    synthetic experiments in machine olfaction. The generator of gas sensor
+    signals can be used in applications related to test and benchmarking of
+    signal processing methods, neuromorphic simulations in machine olfaction
+    and educational tools. A so-called virtual sensor array features unlimited
+    number of sensors, support of multicomponent gas mixtures and full
+    parametric control of the noise in the system. The artificial (virtual)
+    sensor array is inspired from a reference database of seventeen polymeric
+    sensors with concentration profiles for three analytes.
 License: GPL (>= 3)
 URL: http://chemosensors.r-forge.r-project.org/
 LazyData: yes

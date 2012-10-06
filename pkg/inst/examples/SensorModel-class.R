@@ -19,7 +19,7 @@ sm <- SensorModel(num=7, model="plsr", gases=c(1, 3))
 
 print(sm)
 
-plot(sm, uniman=TRUE) # add UNIMAN reference data (the model was build from)
+#plot(sm, uniman=TRUE) # add UNIMAN reference data (the model was build from)
 
 # method plot
 #  - plot types 'y': response, predict

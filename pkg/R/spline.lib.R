@@ -441,8 +441,10 @@ fitSplineBasis <- function(bs, x, y)
 }
 
 #' @S3method predict SplineBasis
-predict.SplineBasis <- function(bs, x, beta)
+predict.SplineBasis <- function(object, x, beta)
 {
+  bs <- object
+  
   # matricies
   X <- getSplineDesign(bs, x)
   y <- X %*% beta
