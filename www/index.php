@@ -122,18 +122,16 @@ plot(sa, "prediction", conc=conc)
 
 <p>
 <ul>
-  <li>R-Forge project page:
-  <a href="http://r-forge.r-project.org/projects/chemosensors/">http://r-forge.r-project.org/projects/chemosensors/</a>.</li>
+  <li><a href="http://r-forge.r-project.org/projects/chemosensors/">R-Forge project page</a>.</li>
   <ul>
-    <li>Instructions to access the source code (subversion repository):
-      <a href="https://r-forge.r-project.org/scm/?group_id=1327">https://r-forge.r-project.org/scm/?group_id=1327</a>.</li>
-    <li>Browse the source code (subversion repository):
-      <a href="https://r-forge.r-project.org/scm/viewvc.php/?root=chemosensors">https://r-forge.r-project.org/scm/viewvc.php/?root=chemosensors</a>.</li>
-    <li>Build status of the package:
-      <a href="https://r-forge.r-project.org/R/?group_id=1327">https://r-forge.r-project.org/R/?group_id=1327</a>.</li>
+    <li><a href="https://r-forge.r-project.org/scm/?group_id=1327">Instructions</a> 
+      to access the source code (subversion repository).</li>
+    <li><a href="https://r-forge.r-project.org/scm/viewvc.php/?root=chemosensors">Browse</a>
+      the source code (subversion repository).</li>
+    <li><a href="https://r-forge.r-project.org/R/?group_id=1327">Build status</a> of the package.</li>
   </ul>
-  <li>Section "Synthetic Datasets" at the UPC site for Neurochem project:
-    <a href="http://neurochem.sisbio.recerca.upc.edu/?page_id=86">http://neurochem.sisbio.recerca.upc.edu/?page_id=86</a>.</li>
+  <li>Section <a href="http://neurochem.sisbio.recerca.upc.edu/?page_id=86">Synthetic Datasets</a> 
+    at the UPC site for Neurochem project.</li>
 </ul>
 </p>
 
