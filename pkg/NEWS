@@ -1,3 +1,7 @@
+chemosensors 0.7.2
+==================
+* Modified DESCRIPTION file as required to build the package on r-forge. 
+
 chemosensors 0.7.1
 ==================
 
@@ -7,8 +11,6 @@ chemosensors 0.7.1
   `UNIMANdistr` by loading dataset `UNIMANdistr.RData` by command `data(UNIMANdistr)`.
   Updated datasets: `UNIMANdnoise.RData`, `UNIMANsorption.RData`, `UNIMANshort.RData`,
   `UNIMANsnoise.RData` and `UNIMANtransient.RData`.
-* Added support of parallel computing via R package `multicore`.
-* Added new demo `NeuromorphicSim`.
 
 chemosensors 0.6.1
 ==================
