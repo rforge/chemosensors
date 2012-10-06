@@ -122,19 +122,18 @@ plot(sa, "prediction", conc=conc)
 
 <p>
 <ul>
-  <li><a href="http://r-forge.r-project.org/projects/chemosensors/">http://r-forge.r-project.org/projects/chemosensors/</a>: 
-  The project summary page you can find on development page on the R-Forge website.</li>
+  <li>R-Forge project page:
+  <a href="http://r-forge.r-project.org/projects/chemosensors/">http://r-forge.r-project.org/projects/chemosensors/</a>.</li>
   <ul>
-    <li><a href="https://r-forge.r-project.org/scm/?group_id=1327">https://r-forge.r-project.org/scm/?group_id=1327</a>:
-    Instructions to access the source code (subversion repository).</li>
-    <li><a href="https://r-forge.r-project.org/scm/viewvc.php/?root=chemosensors">https://r-forge.r-project.org/scm/viewvc.php/?root=chemosensors</a>:
-    Browse the source code (subversion repository).</li>
-    <li><a href="https://r-forge.r-project.org/R/?group_id=1327">https://r-forge.r-project.org/R/?group_id=1327</a>:
-    Check build status of the package.</li>
+    <li>Instructions to access the source code (subversion repository):
+      <a href="https://r-forge.r-project.org/scm/?group_id=1327">https://r-forge.r-project.org/scm/?group_id=1327</a>.</li>
+    <li>Browse the source code (subversion repository):
+      <a href="https://r-forge.r-project.org/scm/viewvc.php/?root=chemosensors">https://r-forge.r-project.org/scm/viewvc.php/?root=chemosensors</a>.</li>
+    <li>Build status of the package:
+      <a href="https://r-forge.r-project.org/R/?group_id=1327">https://r-forge.r-project.org/R/?group_id=1327</a>.</li>
   </ul>
-  <li><a href="http://neurochem.sisbio.recerca.upc.edu/?page_id=86">http://neurochem.sisbio.recerca.upc.edu/?page_id=86</a>:
-  Section "Synthetic Datasets" at the UPC site for Neurochem project 
-  is another source of additional information.</li>
+  <li>Section "Synthetic Datasets" at the UPC site for Neurochem project:
+    <a href="http://neurochem.sisbio.recerca.upc.edu/?page_id=86">http://neurochem.sisbio.recerca.upc.edu/?page_id=86</a>.</li>
 </ul>
 </p>
 
