@@ -120,9 +120,23 @@ plot(sa, "prediction", conc=conc)
 
 <h3>References</h3>
 
-<p>The project summary page you can find on <a href="http://r-forge.r-project.org/projects/chemosensors/">development page</a> on the R-Forge website.</p>
-
-<p><a href="http://neurochem.sisbio.recerca.upc.edu/?page_id=86">The UPC site for Neurochem project</a> is another source of additional information.</p>
+<p>
+<ul>
+  <li><a href="http://r-forge.r-project.org/projects/chemosensors/">: 
+  The project summary page you can find on development page on the R-Forge website.</li>
+  <ul>
+    <li><a href="https://r-forge.r-project.org/scm/?group_id=1327"></a>:
+    Instructions to access the source code (subversion repository).</li>
+    <li><a href="https://r-forge.r-project.org/scm/viewvc.php/?root=chemosensors"></a>:
+    Browse the source code (subversion repository).</li>
+    <li><a href="https://r-forge.r-project.org/R/?group_id=1327"></a>:
+    Check build status of the package.</li>
+  </ul>
+  <li><a href="http://neurochem.sisbio.recerca.upc.edu/?page_id=86">:</li>
+  Section "Synthetic Datasets" at the UPC site for Neurochem project 
+  is another source of additional information.
+</ul>
+</p>
 
 <h3>Contacts</h3>
 <p>Alexandre Perera<br>
