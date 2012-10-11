@@ -28,21 +28,3 @@
   \tabular{rl}{ \code{predict} \tab Depicts a temporal
   signal of the model. \cr }
 }
-\examples{
-# sensor dynamics: default initialization
-sdyn <- SensorDynamics()
-
-show(sdyn)
-print(sdyn)
-
-plot(sdyn)
-
-# SensorDynamics as a part of SensorModel
-sm <- SensorModel(tunit=60)
-sdyn <- as(sm, "SensorDynamics")
-}
-\seealso{
-  \code{\link{UNIMANtransient}}
-}
-\keyword{SensorDynamics}
-
