@@ -1,0 +1,20 @@
+citHeader("To cite the 'chemosensors' package in publications use:")
+
+citEntry(
+  entry="article",
+  title = "A software tool for large-scale synthetic experiments based on polymeric sensor arrays",
+  author = personList(
+    as.person("Andrey Ziyatdinov"),
+    as.person("Eduard Fernandez Diaz"),
+    as.person("Amjad N. Chaudry"),
+    as.person("Santiago Marco"),
+    as.person("Krishna C. Persaud"),            
+    as.person("Alexandre Perera i Lluna")),
+  journal = "Sensors and Actuators B: Chemical",
+  year = "2012",
+  textVersion =  paste("A. Ziyatdinov et al.,",
+    "A software tool for large-scale synthetic experiments based on polymeric sensor arrays,",
+    "SAB, 2012")
+)
+
+citFooter("This work was funded from the FP7 European project NEUROChem (http://neurochem.sisbio.recerca.upc.edu/).")

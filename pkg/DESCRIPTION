@@ -1,8 +1,9 @@
 Package: chemosensors
+Type: Package
+Title: A tool for the design of synthetic experiments in machine olfaction.
 Version: 0.7.2
-Date: 2012-09-06
-Title: Tool for synthetic experiments in machine olfaction
-Author: Andrey Ziyatdinov and Alexandre Perera-Lluna
+Date: 2012-10-25
+Author: Alexandre Perera-Lluna and Andrey Ziyatdinov
 Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
 Description: This package introduces a software tool for the design of
     synthetic experiments in machine olfaction. The generator of gas sensor
