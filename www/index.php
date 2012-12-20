@@ -15,14 +15,28 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en   ">
 
-  <head>
+<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta content="R package chemosensors, machine olfaction, synthetic datasets, benchmarks, data generation tool" name="keywords" />
 
 	<title><?php echo $group_name; ?></title>
 	<!-- <link href="http://<?php echo $themeroot; ?>styles/estilo1.css" rel="stylesheet" type="text/css" /> -->
 	<link rel="stylesheet" type="text/css" href="R.css">	
-  </head>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-19538738-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
 
 <body>
 
