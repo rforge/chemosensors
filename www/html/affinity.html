@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>affinity. chemosensors 0.7.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Method affinity.</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Method <code>affinity</code> evalates the affinity of sensors.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The affinity coefficients are computed per analyte, and
+  express strength of a given sensor in response to the
+  given analyte. We use the definition of receptor/ligand
+  binding affinity from biochemistry here. The analog of
+  the dissociation constant <code>Kd</code> ic computed from the
+  sensibility curve, and the affinicty coefficient is given
+  by formula <code>Ka = 1/Kd</code>.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class="comment"># create a sensor</span>
+<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">1</span><span class="keyword">)</span>
+
+<span class="comment"># compute affinities</span>
+<span class="symbol">Ka</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='affinity.html'>affinity</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span>
+<span class="symbol">Kd</span> <span class="assignement">&lt;-</span> <span class="number">1</span> <span class="keyword">/</span> <span class="symbol">Ka</span>
+
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">Ka</span><span class="keyword">)</span></div>
+<div class='output'>          [,1]
+[1,]  59.80000
+[2,] 149.50000
+[3,]  99.66667
+</div>
+<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">Kd</span><span class="keyword">)</span></div>
+<div class='output'>            [,1]
+[1,] 0.016722408
+[2,] 0.006688963
+[3,] 0.010033445
+</div>
+<div class='input'>
+<span class="comment"># plot sensor response at conc. range of type 'inc' (see 'concSample' for more details)</span>
+<span class="comment">#  - add lines related to computation of affinities</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="argument">Ka</span><span class="argument">=</span><span class="symbol">Ka</span><span class="keyword">,</span> <span class="argument">type</span><span class="argument">=</span><span class="string">"inc"</span><span class="keyword">,</span> <span class="argument">affinity</span><span class="argument">=</span><span class="number">TRUE</span><span class="keyword">)</span></div>
+<p><img src='affinity-6.png' alt='' width='400' height='400' /></p>
+<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="argument">Ka</span><span class="argument">=</span><span class="symbol">Ka</span><span class="keyword">,</span> <span class="argument">type</span><span class="argument">=</span><span class="string">"inc"</span><span class="keyword">,</span> <span class="argument">affinity</span><span class="argument">=</span><span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">xlim</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0</span><span class="keyword">,</span> <span class="number">0.1</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<strong class='warning'>Warning message:
+Removed 270 rows containing missing values (geom_path).</strong>
+<p><img src='affinity-9.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+#sa <- SensorArray(num=1:17, gases=c(1, 3))
+#plot(sa, 'affinityMap')
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>affinity</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  <code>SensorArray</code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

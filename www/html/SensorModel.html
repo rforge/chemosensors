@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>SensorModel. chemosensors 0.7.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Class SensorModel.</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Class <code><a href='SensorModel.html'>SensorModel</a></code> predicts a sensor signal
+  in response to an input concentration matrix by means of
+  a regression model stored in slot <code>dataModel</code>.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The model explicitely assumes that the sensor response to
+  a mixture of analytes is a sum of responses to the
+  individual analyte components. Linear models <code>mvr</code>
+  and <code>plsr</code> follow this assumtion in their nature.</p>
+  
+      <p>Slots of the class: <table><tr><td> <code>num</code> </td>
+<td> Sensor
+  number (<code>1:17</code>). The default value is <code>1</code>. </td>
+</tr><tr><td>
+  <code>gases</code> </td>
+<td> Gas indices. </td>
+</tr><tr><td> <code>ngases</code> </td>
+<td> The
+  number of gases. </td>
+</tr><tr><td> <code>gnames</code> </td>
+<td> Names of gases.
+  </td>
+</tr><tr><td> <code>concUnits</code> </td>
+<td> Concentration units external to
+  the model, values given in an input concentration matrix.
+  </td>
+</tr><tr><td> <code>concUnitsInt</code> </td>
+<td> Concentration units internal
+  for the model, values used numerically to build
+  regression models. </td>
+</tr><tr><td> <code>dataModel</code> </td>
+<td> Data model
+  of class <code>SensorDataModel</code> performs a
+  regression (free of the routine on units convertion,
+  etc). </td>
+</tr><tr><td> <code>coeffNonneg</code> </td>
+<td> Logical whether model
+  coefficients must be non-negative. By default,
+  <code>FALSE</code>. </td>
+</tr><tr><td> <code>coeffNonnegTransform</code> </td>
+<td> Name
+  of transformation to convert negative model coefficients
+  to non-negative values. </td>
+</tr><tr><td> <code>beta</code> </td>
+<td> (parameter
+  of sensor diversity) A scaling coefficient of how
+  different coefficients of <code>SensorDataModel</code>
+  will be in comparision with those coefficients of the
+  UNIMAN sensors.  The default value is <code>2</code>. </td>
+</tr></table></p>
+  
+      <p>Methods of the class: <table><tr><td> <code>predict</code> </td>
+<td>
+  Predicts a sensor model response to an input
+  concentration matrix. </td>
+</tr><tr><td> <code>coef</code> </td>
+<td> Extracts the
+  coefficients of a regression model stored in slot
+  <code>dataModel</code>. </td>
+</tr></table></p>
+  
+      <p>The <code>plot</code> method has two types (parameter
+  <code>y</code>): <table><tr><td> <code>response</code> </td>
+<td> (default)
+  Shows the sensitivity curves per gas in normalized
+  concentration units. </td>
+</tr><tr><td> <code>predict</code> </td>
+<td> Depicts
+  input (parameter <code>conc</code>) and ouput of the model for
+  a specified gas (parameter <code>gases</code>). </td>
+</tr></table></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class="comment"># sensor model: default initialization</span>
+<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SensorModel.html'>SensorModel</a></span><span class="keyword">(</span><span class="keyword">)</span>
+
+<span class="comment"># get information about the model</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/show'>show</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span></div>
+<div class='output'> Sensor Model (num 1), beta 2, data model 'ispline'
+</div>
+<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span></div>
+<div class='output'> Sensor Model
+ - num 1 
+ - beta 2 
+ - 3 gases A, B, C 
+ - (first) data model
+ - method: ispline (type: spline)
+ - sensor model: coeffNonneg TRUE
+   -- coefficients (first): 7.5816, 2.5812, 0 ... 0 
+</div>
+<div class='input'>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/coef'>coef</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span><span class="keyword">)</span> <span class="comment"># sensitivity coefficients</span></div>
+<div class='output'>          [,1]
+ [1,] 7.581598
+ [2,] 2.581216
+ [3,] 0.000000
+ [4,] 7.194504
+ [5,] 0.946807
+ [6,] 0.000000
+ [7,] 7.869399
+ [8,] 1.551513
+ [9,] 0.000000
+</div>
+<div class='input'>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span></div>
+<p><img src='SensorModel-8.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="comment"># get available model names</span>
+<span class="symbol">model.names</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorModelNames</span><span class="keyword">(</span><span class="keyword">)</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">model.names</span><span class="keyword">)</span></div>
+<div class='output'>[1] "plsr"         "mvr"          "broken-stick" "ispline"     
+</div>
+<div class='input'>
+<span class="comment"># sensor model: custom parameters</span>
+<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SensorModel.html'>SensorModel</a></span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">7</span><span class="keyword">,</span> <span class="argument">model</span><span class="argument">=</span><span class="string">"plsr"</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span></div>
+<div class='output'> Sensor Model
+ - num 7 
+ - beta 2 
+ - 2 gases A, C 
+ - (first) data model
+ - method: plsr (type: mvr)
+ - ncomp: 2 
+ - sensor model: coeffNonneg FALSE
+   -- coefficients (first): 0.186, 0.0116 
+</div>
+<div class='input'>
+<span class="comment">#plot(sm, uniman=TRUE) # add UNIMAN reference data (the model was build from)</span>
+
+<span class="comment"># method plot</span>
+<span class="comment">#  - plot types 'y': response, predict</span>
+<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SensorModel.html'>SensorModel</a></span><span class="keyword">(</span><span class="keyword">)</span> <span class="comment"># default sensor model</span>
+
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="string">"response"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(sm, 'response')"</span><span class="keyword">)</span> <span class="comment"># default plot type, i.e. 'plot(sm)' does the same plotting</span></div>
+<p><img src='SensorModel-14.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="functioncall">concSample</span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="string">"range"</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">n</span><span class="argument">=</span><span class="number">10</span><span class="keyword">)</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="string">"predict"</span><span class="keyword">,</span> <span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(sm, 'predict', conc, gases=1)"</span><span class="keyword">)</span></div>
+<p><img src='SensorModel-16.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>SensorModel</li>
+    </ul>
+    <ul>
+      <li>SensorModel</li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  <code><a href='UNIMANshort.html'>UNIMANshort</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

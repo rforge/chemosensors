@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>demo-SensorNoise. chemosensors 0.7.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Demo SensorNoise.</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Demo SensorNoise.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment"># sensor array</span>
+<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">tunit</span> <span class="argument">=</span> <span class="number">60</span><span class="keyword">,</span> <span class="argument">num</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">2</span><span class="keyword">,</span>
+  <span class="argument">csd</span> <span class="argument">=</span> <span class="number">2</span><span class="keyword">,</span> <span class="argument">ssd</span> <span class="argument">=</span> <span class="number">5</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">)</span>
+
+<span class="comment"># concentration input</span>
+<span class="symbol">sc</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Scenario.html'>Scenario</a></span><span class="keyword">(</span><span class="argument">T</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="string">"B"</span><span class="keyword">,</span> <span class="string">"C"</span><span class="keyword">,</span> <span class="string">"B, C"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">tunit</span> <span class="argument">=</span> <span class="functioncall">tunit</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="functioncall">getConc</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span>
+
+<span class="comment"># replicas of `sa`</span>
+<span class="symbol">sa1</span> <span class="assignement">&lt;-</span> <span class="symbol">sa</span>
+<span class="functioncall">dsd</span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0</span>
+
+<span class="symbol">sa2</span> <span class="assignement">&lt;-</span> <span class="symbol">sa</span>
+<span class="functioncall">ssd</span><span class="keyword">(</span><span class="symbol">sa2</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0</span>
+<span class="functioncall">dsd</span><span class="keyword">(</span><span class="symbol">sa2</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0</span>
+
+<span class="symbol">sa3</span> <span class="assignement">&lt;-</span> <span class="symbol">sa</span>
+<span class="functioncall">csd</span><span class="keyword">(</span><span class="symbol">sa3</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0</span>
+<span class="functioncall">ssd</span><span class="keyword">(</span><span class="symbol">sa3</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0</span>
+<span class="functioncall">dsd</span><span class="keyword">(</span><span class="symbol">sa3</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0</span>
+
+<span class="comment"># sensor array data</span>
+<span class="symbol">sdata0</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/predict'>predict</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="argument">conc</span> <span class="argument">=</span> <span class="symbol">conc</span><span class="keyword">)</span>
+<span class="symbol">sdata1</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/predict'>predict</a></span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">,</span> <span class="argument">conc</span> <span class="argument">=</span> <span class="symbol">conc</span><span class="keyword">)</span>
+<span class="symbol">sdata2</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/predict'>predict</a></span><span class="keyword">(</span><span class="symbol">sa2</span><span class="keyword">,</span> <span class="argument">conc</span> <span class="argument">=</span> <span class="symbol">conc</span><span class="keyword">)</span>
+<span class="symbol">sdata3</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/predict'>predict</a></span><span class="keyword">(</span><span class="symbol">sa3</span><span class="keyword">,</span> <span class="argument">conc</span> <span class="argument">=</span> <span class="symbol">conc</span><span class="keyword">)</span>
+
+<span class="comment"># plot conc. matrix</span>
+<span class="symbol">mf</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"sample"</span><span class="keyword">,</span> <span class="string">"gas"</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="symbol">p1</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/ggplot'>ggplot</a></span><span class="keyword">(</span><span class="symbol">mf</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/aes'>aes</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="symbol">sample</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="symbol">value</span><span class="keyword">)</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/geom_line'>geom_line</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/aes'>aes</a></span><span class="keyword">(</span><span class="argument">color</span> <span class="argument">=</span> <span class="symbol">gas</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="symbol">p1</span></div>
+<p><img src='demo-SensorNoise-2.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="comment"># plot sensor array data</span>
+<span class="symbol">mf0</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">sdata0</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"sample"</span><span class="keyword">,</span> <span class="string">"sensor"</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="symbol">mf1</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">sdata1</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"sample"</span><span class="keyword">,</span> <span class="string">"sensor"</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="symbol">mf2</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">sdata2</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"sample"</span><span class="keyword">,</span> <span class="string">"sensor"</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="symbol">mf3</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">sdata3</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"sample"</span><span class="keyword">,</span> <span class="string">"sensor"</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="symbol">mf</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/cbind'>rbind</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></span><span class="keyword">(</span><span class="symbol">mf0</span><span class="keyword">,</span> <span class="argument">array</span> <span class="argument">=</span> <span class="string">"default"</span><span class="keyword">)</span><span class="keyword">,</span>
+ <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></span><span class="keyword">(</span><span class="symbol">mf1</span><span class="keyword">,</span> <span class="argument">array</span> <span class="argument">=</span> <span class="string">"csd/ssd"</span><span class="keyword">)</span><span class="keyword">,</span>
+ <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></span><span class="keyword">(</span><span class="symbol">mf2</span><span class="keyword">,</span> <span class="argument">array</span> <span class="argument">=</span> <span class="string">"csd"</span><span class="keyword">)</span><span class="keyword">,</span>
+ <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/data.frame'>data.frame</a></span><span class="keyword">(</span><span class="symbol">mf3</span><span class="keyword">,</span> <span class="argument">array</span> <span class="argument">=</span> <span class="string">"noise-free"</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="symbol">p3</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/ggplot'>ggplot</a></span><span class="keyword">(</span><span class="symbol">mf</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/aes'>aes</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="symbol">sample</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="symbol">value</span><span class="keyword">)</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/geom_line'>geom_line</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/aes'>aes</a></span><span class="keyword">(</span><span class="argument">color</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/factor'>as.factor</a></span><span class="keyword">(</span><span class="symbol">sensor</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span> <span class="keyword">+</span>
+  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/facet_grid'>facet_grid</a></span><span class="keyword">(</span><span class="symbol">array</span> <span class="keyword">~</span> <span class="symbol">.</span><span class="keyword">)</span>
+<span class="symbol">p3</span></div>
+<p><img src='demo-SensorNoise-4.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>demo-SensorNoise</li>
+    </ul>
+    <ul>
+      <li>datasets</li><li>demo</li>
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

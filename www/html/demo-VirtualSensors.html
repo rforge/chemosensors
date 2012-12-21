@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>demo-VirtualSensors. chemosensors 0.7.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Demo VirtualSensors.</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Demo VirtualSensors.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class="comment">## part 1: explore the parameter 'beta'</span>
+<span class="comment"># - values: 1, 2, 5, 10</span>
+
+<span class="symbol">nsensors</span> <span class="assignement">&lt;-</span> <span class="number">34</span>
+
+<span class="symbol">plist</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="keyword">)</span>
+<span class="keyword">for</span><span class="keyword">(</span><span class="symbol">beta</span> <span class="keyword">in</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">2</span><span class="keyword">,</span> <span class="number">5</span><span class="keyword">,</span> <span class="number">10</span><span class="keyword">)</span><span class="keyword">)</span> <span class="keyword">{</span>
+  <span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">nsensors</span> <span class="argument">=</span> <span class="symbol">nsensors</span><span class="keyword">,</span> <span class="argument">beta</span> <span class="argument">=</span> <span class="symbol">beta</span><span class="keyword">)</span>
+  <span class="symbol">plist</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="symbol">plist</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="string">'polar'</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"beta:"</span><span class="keyword">,</span> <span class="symbol">beta</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">graphics</span> <span class="argument">=</span> <span class="string">"ggplot"</span><span class="keyword">,</span> <span class="argument">ret</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="keyword">}</span>
+
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/library'>library</a></span><span class="keyword">(</span><span class="symbol">gridExtra</span><span class="keyword">)</span></div>
+<strong class='message'>Loading required package: grid</strong>
+<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/gridExtra/arrangeGrob'>grid.arrange</a></span><span class="keyword">(</span><span class="symbol">plist</span><span class="keyword">[[</span><span class="number">1</span><span class="keyword">]</span><span class="keyword">]</span><span class="keyword">,</span> <span class="symbol">plist</span><span class="keyword">[[</span><span class="number">2</span><span class="keyword">]</span><span class="keyword">]</span><span class="keyword">,</span> <span class="symbol">plist</span><span class="keyword">[[</span><span class="number">3</span><span class="keyword">]</span><span class="keyword">]</span><span class="keyword">,</span> <span class="symbol">plist</span><span class="keyword">[[</span><span class="number">4</span><span class="keyword">]</span><span class="keyword">]</span><span class="keyword">)</span></div>
+<p><img src='demo-VirtualSensors-4.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="comment">## part 2: compare two arrays (UNIMAN array of 17 sensors vs. virtual aray of 100 sensors)</span>
+<span class="comment"># - beta has the default value (to be 2)</span>
+
+<span class="comment"># UNIMAN array of 17 sensors</span>
+<span class="symbol">sa.uniman</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">nsensors</span><span class="argument">=</span><span class="number">17</span><span class="keyword">)</span>
+
+<span class="comment"># 100 sensors (replicas from 17 UNIMAN sensors)</span>
+<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">nsensors</span><span class="argument">=</span><span class="number">100</span><span class="keyword">)</span>
+
+<span class="comment"># plot </span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa.uniman</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"17 UNIMAN sensors"</span><span class="keyword">)</span></div>
+<p><img src='demo-VirtualSensors-6.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"100 virtual sensors"</span><span class="keyword">)</span></div>
+<p><img src='demo-VirtualSensors-8.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="comment"># plot gases A and C</span>
+<span class="symbol">gases</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span>
+
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa.uniman</span><span class="keyword">,</span> <span class="string">'affinitySpace'</span><span class="keyword">,</span> <span class="argument">gases</span> <span class="argument">=</span> <span class="symbol">gases</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"17 UNIMAN sensors"</span><span class="keyword">)</span></div>
+<p><img src='demo-VirtualSensors-10.png' alt='' width='400' height='400' /></p>
+<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="string">'affinitySpace'</span><span class="keyword">,</span> <span class="argument">gases</span> <span class="argument">=</span> <span class="symbol">gases</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"100 virtual sensors"</span><span class="keyword">)</span></div>
+<p><img src='demo-VirtualSensors-12.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>demo-VirtualSensors</li>
+    </ul>
+    <ul>
+      <li>datasets</li><li>demo</li>
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

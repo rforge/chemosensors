@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>demo-SensorAffinity. chemosensors 0.7.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Demo SensorAffinity.</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Demo SensorAffinity.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment"># define a representative set of gases A, C and AC </span>
+<span class="comment"># - appropriate to test sensor affinities across two species A and C</span>
+<span class="symbol">set</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A 0.01"</span><span class="keyword">,</span> <span class="string">"A 0.05"</span><span class="keyword">,</span> <span class="string">"C 0.1"</span><span class="keyword">,</span> <span class="string">"C 1"</span><span class="keyword">,</span> <span class="string">"A 0.01, C 0.1"</span><span class="keyword">,</span> <span class="string">"A 0.05, C 1"</span><span class="keyword">)</span>
+
+<span class="comment"># 0) check UNIMAN sensors and their sorption affinities</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/data'>data</a></span><span class="keyword">(</span><span class="symbol">UNIMANsorption</span><span class="keyword">)</span></div>
+<strong class='warning'>Warning message:
+data set ‘UNIMANsorption’ not found</strong>
+<div class='input'>
+<span class="symbol">df</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/as.data.frame'>as.data.frame</a></span><span class="keyword">(</span><span class="symbol">UNIMANsorption</span><span class="keyword">$</span><span class="symbol">qkc</span><span class="keyword">[</span><span class="keyword">,</span> <span class="keyword">,</span> <span class="string">"K"</span><span class="keyword">]</span><span class="keyword">)</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/head'>head</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">)</span></div>
+<div class='output'>         A        B         C
+1 53.64473 46.02505 117.11543
+2 62.88488 46.75066 146.01511
+3 50.67575 44.31645 111.97059
+4 80.66829 33.66036  65.54146
+5 50.28884 42.04818 104.33481
+6 90.60876 39.36334 126.07980
+</div>
+<div class='input'>
+<span class="symbol">df</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/plyr/mutate'>mutate</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">,</span>
+  <span class="argument">sensor</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/nrow'>nrow</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">sensor.group</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/ifelse'>ifelse</a></span><span class="keyword">(</span><span class="symbol">A</span> <span class="keyword">&gt;</span> <span class="symbol">C</span><span class="keyword">,</span> <span class="string">"More affinity to A"</span><span class="keyword">,</span> <span class="string">"More affinity to C"</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="symbol">mf</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">K</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"sensor"</span><span class="keyword">,</span> <span class="string">"gas"</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<strong class='error'>Error in melt(K, varnames = c("sensor", "gas")): object 'K' not found</strong>
+<div class='input'>
+<span class="symbol">p</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/ggplot'>ggplot</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/aes'>aes</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/reorder.factor'>reorder</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/factor'>factor</a></span><span class="keyword">(</span><span class="symbol">sensor</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">A</span> <span class="keyword">-</span> <span class="symbol">C</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="symbol">A</span> <span class="keyword">-</span> <span class="symbol">C</span><span class="keyword">,</span> <span class="argument">fill</span> <span class="argument">=</span> <span class="symbol">sensor.group</span><span class="keyword">)</span><span class="keyword">)</span> <span class="keyword">+</span>
+  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/geom_bar'>geom_bar</a></span><span class="keyword">(</span><span class="argument">position</span> <span class="argument">=</span> <span class="string">"identity"</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/coord_flip'>coord_flip</a></span><span class="keyword">(</span><span class="keyword">)</span> <span class="keyword">+</span>
+  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>xlab</a></span><span class="keyword">(</span><span class="string">"sensor"</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>ylab</a></span><span class="keyword">(</span><span class="string">"Difference in K between A and C"</span><span class="keyword">)</span>
+<span class="symbol">p</span></div>
+<p><img src='demo-SensorAffinity-8.png' alt='' width='400' height='400' /></p>
+<div class='input'><span class="comment"># in result:</span>
+<span class="comment"># - sensors with affinities A &gt; C: 17, 13, 14, ...</span>
+<span class="comment"># - sensors with affinities C &gt; A: 2, 1, 3, ...</span>
+
+<span class="comment"># 1) sensors with affinities A &gt; C</span>
+<span class="comment"># - set drift noise level 'dsd' to zero, in order to see more a class-relevant information, than drift</span>
+<span class="symbol">sa1</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">num</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span>
+
+<span class="comment"># look at the level of signal in reponse to pure analytes and to a mixture</span>
+<span class="comment"># - it is important, as </span>
+<span class="comment">#  1) PCA mostly captures a variation in the absolute level of signals</span>
+<span class="comment">#  2) accroding to the models for data geenration, mixture response is </span>
+<span class="comment">#     a sum of responses to pure analytes (mixture is composed of),</span>
+<span class="comment">#     thus, absolute values of signals matter.</span>
+<span class="symbol">p0</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotSignal</span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="symbol">set</span><span class="keyword">)</span>
+<span class="symbol">p0</span></div>
+<p><img src='demo-SensorAffinity-10.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="symbol">p1</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/rep'>rep</a></span><span class="keyword">(</span><span class="symbol">set</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">air</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"sensors of affinities A &gt; C"</span><span class="keyword">)</span>
+<span class="symbol">p1</span></div>
+<p><img src='demo-SensorAffinity-12.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="comment"># 2) sensors with affinities A &lt; C</span>
+<span class="symbol">sa2</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">num</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">13</span><span class="keyword">,</span> <span class="number">14</span><span class="keyword">,</span> <span class="number">17</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span>
+
+<span class="symbol">p2</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa2</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/rep'>rep</a></span><span class="keyword">(</span><span class="symbol">set</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">air</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"sensors of affinities A &lt; C"</span><span class="keyword">)</span>
+<span class="symbol">p2</span></div>
+<p><img src='demo-SensorAffinity-14.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="comment"># 3) all available 17 types of sensors</span>
+<span class="symbol">sa3</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">num</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">17</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span>
+
+<span class="symbol">p3</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa3</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/rep'>rep</a></span><span class="keyword">(</span><span class="symbol">set</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">air</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"all types of affinities"</span><span class="keyword">)</span>
+<span class="symbol">p3</span></div>
+<p><img src='demo-SensorAffinity-16.png' alt='' width='400' height='400' /></p>
+<div class='input'></div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>demo-SensorAffinity</li>
+    </ul>
+    <ul>
+      <li>datasets</li><li>demo</li>
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

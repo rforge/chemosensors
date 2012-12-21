@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>demo-Mixtures. chemosensors 0.7.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Demo Mixtures.</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Demo Mixtures.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment">### Expreiment #1: test all combinations of mixtures for three analytes A, B and C</span>
+
+<span class="symbol">set1</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A 0.05"</span><span class="keyword">,</span> <span class="string">"B 0.05"</span><span class="keyword">,</span> <span class="string">"C 1"</span><span class="keyword">,</span> <span class="comment"># pure analytes</span>
+  <span class="string">"A 0.05, B 0.05"</span><span class="keyword">,</span> <span class="string">"A 0.05, C 1"</span><span class="keyword">,</span> <span class="string">"B 0.05, C 1"</span><span class="keyword">,</span> <span class="comment"># binary mixtures</span>
+  <span class="string">"A 0.05, B 0.05, C 1"</span><span class="keyword">)</span> <span class="comment"># a ternary mixture</span>
+
+<span class="comment"># data model 'plsr' leads to a visually nice distribution of gas classes via PCA scoreplot</span>
+<span class="symbol">sa1</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">model</span> <span class="argument">=</span> <span class="string">"plsr"</span><span class="keyword">,</span> <span class="argument">num</span> <span class="argument">=</span> <span class="number">3</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span>
+
+<span class="comment"># look at the level of signal in reponse to pure analytes and mixtures</span>
+<span class="comment"># - the highest and the lowest levels of signal correspond to two pure analytes, </span>
+<span class="comment">#   A and B, respectively (that will result in a nice triangle-bounded distribution of PCA scores)</span>
+<span class="symbol">p1</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotSignal</span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="symbol">set1</span><span class="keyword">)</span>
+<span class="symbol">p1</span></div>
+<p><img src='demo-Mixtures-2.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="comment"># If air samples are included, (in most cases) PCA shows the signal magnitudes </span>
+<span class="comment"># across gas classes in respect to air-level (zero-level) </span>
+<span class="symbol">p2</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/rep'>rep</a></span><span class="keyword">(</span><span class="symbol">set1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="symbol">p2</span></div>
+<p><img src='demo-Mixtures-4.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="symbol">p3</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/rep'>rep</a></span><span class="keyword">(</span><span class="symbol">set1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">air</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+<span class="symbol">p3</span></div>
+<p><img src='demo-Mixtures-6.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="comment">### Experiment #2: two analytes A and C, and their binary mixture AC </span>
+<span class="comment">#   at differenct concentration levels</span>
+
+<span class="symbol">set2</span> <span class="assignement">&lt;-</span>  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A 0.01"</span><span class="keyword">,</span> <span class="string">"A 0.05"</span><span class="keyword">,</span> <span class="string">"C 0.1"</span><span class="keyword">,</span> <span class="string">"C 1"</span><span class="keyword">,</span> <span class="string">"A 0.01, C 0.1"</span><span class="keyword">,</span> <span class="string">"A 0.05, C  1"</span><span class="keyword">)</span>
+
+<span class="comment"># default data model 'ispline'</span>
+<span class="symbol">sa2</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">num</span> <span class="argument">=</span> <span class="number">3</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span>
+
+<span class="symbol">p4</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotSignal</span><span class="keyword">(</span><span class="symbol">sa2</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="symbol">set2</span><span class="keyword">)</span>
+<span class="symbol">p4</span></div>
+<p><img src='demo-Mixtures-8.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="symbol">p5</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa2</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/rep'>rep</a></span><span class="keyword">(</span><span class="symbol">set2</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">air</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+<span class="symbol">p5</span></div>
+<p><img src='demo-Mixtures-10.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>demo-Mixtures</li>
+    </ul>
+    <ul>
+      <li>datasets</li><li>demo</li>
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

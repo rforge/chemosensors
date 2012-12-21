@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>UNIMANsnoise. chemosensors 0.7.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Dataset UNIMANsnoise.</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>The dataset contains the statistics on degradation in the
+  individual performance of UNIMAN sensor in terms of
+  standard deviation of sensitivity coefficients computed
+  over the long-term UNIMAN dataset.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The datasets has one variable <code>UNIMANsnoise</code> of the
+  class <code>list</code> to store another list of coefficients
+  <code>Bsd</code>. The sd values themselves are stored in a
+  matrix of 3 rows and 17 columns under two categories:</p>
+  
+      <p><ul>
+<li>The class name: <code>SensorModel</code> and
+  <code>Sensor</code>. </li>
+<li>The model name: <code>plsr</code>,
+  <code>mvr</code>, <code>broken-stick</code> and <code>plsr</code>. </li>
+</ul></p>
+  
+      <p>Thus, in order to access to the sd coefficients of 17
+  UNIMAN sensors for class <code>Sensor</code> and model
+  <code>plsr</code>, the command looks like
+  <code>UNIMANsnoise$Bsd$Sensor$plsr</code>.</p>
+  
+      <p>Notes.</p>
+  
+      <p><ul>
+<li>A possible way to compare the sd
+  coefficients (which UNIMAN sensors are more noisy) is to
+  normalize them across gases and compare the resulted
+  normalized values (see Example section).  Indeed, it is
+  not absolutely fair, as the sensitivity coefficient
+  values (sd values are derived from) are different along
+  sensors, and larger values tend to show larger sd. </li>
+</ul></p>
+  
+      <p></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/data'>data</a></span><span class="keyword">(</span><span class="symbol">UNIMANsnoise</span><span class="keyword">)</span></div>
+<strong class='warning'>Warning message:
+data set ‘UNIMANsnoise’ not found</strong>
+<div class='input'>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/str'>str</a></span><span class="keyword">(</span><span class="symbol">UNIMANsnoise</span><span class="keyword">,</span> <span class="argument">max.level</span> <span class="argument">=</span> <span class="number">2</span><span class="keyword">)</span></div>
+<div class='output'>List of 1
+ $ Bsd:List of 2
+  ..$ SensorModel:List of 4
+  ..$ Sensor     :List of 4
+</div>
+<div class='input'>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/str'>str</a></span><span class="keyword">(</span><span class="symbol">UNIMANsnoise</span><span class="keyword">$</span><span class="symbol">Bsd</span><span class="keyword">$</span><span class="symbol">Sensor</span><span class="keyword">,</span> <span class="argument">max.level</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">)</span></div>
+<div class='output'>List of 4
+ $ plsr        : num [1:3, 1:17] 0.04712 0.03075 0.00291 0.0363 0.02512 ...
+ $ mvr         : num [1:3, 1:17] 0.04712 0.03075 0.00291 0.0363 0.02512 ...
+ $ broken-stick: num [1:3, 1:17] 0.0831 0.01804 0.00212 0.06764 0.01457 ...
+ $ ispline     : num [1:9, 1:17] 0.1816 0.1297 0.4216 0.0365 0.0272 ...
+</div>
+<div class='input'>
+<span class="comment"># SD parameters for a particular data model 'plsr'</span>
+<span class="symbol">Bsd</span> <span class="assignement">&lt;-</span> <span class="symbol">UNIMANsnoise</span><span class="keyword">$</span><span class="symbol">Bsd</span><span class="keyword">$</span><span class="symbol">Sensor</span><span class="keyword">$</span><span class="symbol">plsr</span>
+
+<span class="comment"># plot #1</span>
+<span class="symbol">df</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">Bsd</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"gas"</span><span class="keyword">,</span> <span class="string">"sensor"</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="symbol">df</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/plyr/mutate'>mutate</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">,</span>
+  <span class="argument">gas</span> <span class="argument">=</span> <span class="symbol">LETTERS</span><span class="keyword">[</span><span class="symbol">gas</span><span class="keyword">]</span><span class="keyword">,</span>
+  <span class="argument">sensor</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/factor'>factor</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"S"</span><span class="keyword">,</span> <span class="symbol">sensor</span><span class="keyword">,</span> <span class="argument">sep</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">levels</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"S"</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">17</span><span class="keyword">,</span> <span class="argument">sep</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="symbol">p1</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/qplot'>qplot</a></span><span class="keyword">(</span><span class="symbol">sensor</span><span class="keyword">,</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">df</span><span class="keyword">,</span> <span class="argument">geom</span> <span class="argument">=</span> <span class="string">"bar"</span><span class="keyword">)</span> <span class="keyword">+</span>
+  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/facet_grid'>facet_grid</a></span><span class="keyword">(</span><span class="symbol">gas</span> <span class="keyword">~</span> <span class="symbol">.</span><span class="keyword">,</span> <span class="argument">scales</span> <span class="argument">=</span> <span class="string">"free_y"</span><span class="keyword">)</span> <span class="keyword">+</span>
+  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>labs</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="string">"sensor"</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="string">"sd parameter"</span><span class="keyword">,</span> <span class="argument">title</span> <span class="argument">=</span> <span class="string">"Sensor Noise in data model 'plsr'"</span><span class="keyword">)</span>
+<span class="symbol">p1</span></div>
+<p><img src='UNIMANsnoise-8.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+
+<span class="comment"># plot #2</span>
+<span class="symbol">Bsd.norm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/t'>t</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/apply'>apply</a></span><span class="keyword">(</span><span class="symbol">Bsd</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">,</span> <span class="keyword">function</span><span class="keyword">(</span><span class="formalargs">x</span><span class="keyword">)</span> <span class="symbol">x</span> <span class="keyword">/</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Extremes'>max</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="symbol">df</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">Bsd.norm</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"gas"</span><span class="keyword">,</span> <span class="string">"sensor"</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="symbol">df</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/plyr/mutate'>mutate</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">,</span>
+  <span class="argument">gas</span> <span class="argument">=</span> <span class="symbol">LETTERS</span><span class="keyword">[</span><span class="symbol">gas</span><span class="keyword">]</span><span class="keyword">,</span>
+  <span class="argument">sensor</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/factor'>factor</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"S"</span><span class="keyword">,</span> <span class="symbol">sensor</span><span class="keyword">,</span> <span class="argument">sep</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">levels</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"S"</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">17</span><span class="keyword">,</span> <span class="argument">sep</span> <span class="argument">=</span> <span class="string">""</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span>
+
+<span class="symbol">p2</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/ggplot'>ggplot</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/aes'>aes</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="symbol">sensor</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">fill</span> <span class="argument">=</span> <span class="symbol">gas</span><span class="keyword">)</span><span class="keyword">)</span> <span class="keyword">+</span>
+  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/geom_bar'>geom_bar</a></span><span class="keyword">(</span><span class="argument">position</span> <span class="argument">=</span> <span class="string">"stack"</span><span class="keyword">)</span> <span class="keyword">+</span>
+  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>labs</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="string">"sensor"</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="string">"sd parameter (normalized acroos gases)"</span><span class="keyword">)</span>
+<span class="symbol">p2</span></div>
+<p><img src='UNIMANsnoise-10.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="comment"># plot PCA plots for sensors different in the noise level</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Random'>set.seed</a></span><span class="keyword">(</span><span class="number">10</span><span class="keyword">)</span>
+<span class="symbol">sa1</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">model</span> <span class="argument">=</span> <span class="string">"plsr"</span><span class="keyword">,</span> <span class="argument">num</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">4</span><span class="keyword">,</span> <span class="number">7</span><span class="keyword">,</span> <span class="number">14</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">csd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">,</span> <span class="argument">ssd</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span>
+
+<span class="symbol">p3</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/rep'>rep</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="string">"B"</span><span class="keyword">,</span> <span class="string">"C"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="number">10</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">air</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>labs</a></span><span class="keyword">(</span><span class="argument">title</span> <span class="argument">=</span> <span class="string">"Less noisy sensors"</span><span class="keyword">)</span>
+<span class="symbol">p3</span></div>
+<p><img src='UNIMANsnoise-12.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+<span class="symbol">sa2</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">model</span> <span class="argument">=</span> <span class="string">"plsr"</span><span class="keyword">,</span> <span class="argument">num</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">5</span><span class="keyword">,</span> <span class="number">17</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">csd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">,</span> <span class="argument">ssd</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span>
+
+<span class="symbol">p4</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa2</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/rep'>rep</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="string">"B"</span><span class="keyword">,</span> <span class="string">"C"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="number">10</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">air</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>labs</a></span><span class="keyword">(</span><span class="argument">title</span> <span class="argument">=</span> <span class="string">"More noisy sensors"</span><span class="keyword">)</span>
+<span class="symbol">p4</span></div>
+<p><img src='UNIMANsnoise-14.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>UNIMANsnoise</li>
+    </ul>
+    <ul>
+      <li>data</li><li>datasets</li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  <code>SensorNoiseClass</code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
