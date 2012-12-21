@@ -1,54 +1,45 @@
+# sensor array
+sa <- SensorArray(tunit = 60, num = 1:2,
+  csd = 2, ssd = 5, dsd = 1)
 
-### parameters
-num <- 1:17
-sind <- 1
-gases <- 1
+# concentration input
+sc <- Scenario(T = c("A", "B", "C", "B, C"), tunit = tunit(sa))
+conc <- getConc(sc)
 
-csd <- 0.1
-ssd <- 0.1
-dsd <- 0.1
+# replicas of `sa`
+sa1 <- sa
+dsd(sa1) <- 0
 
-n <- 100
-n0 <- 10
+sa2 <- sa
+ssd(sa2) <- 0
+dsd(sa2) <- 0
 
-enableSorption <- TRUE
+sa3 <- sa
+csd(sa3) <- 0
+ssd(sa3) <- 0
+dsd(sa3) <- 0
 
-### 3 arrays
-sa1 <- SensorArray(num=num, enableSorption=enableSorption, csd=csd, ssd=0, dsd=0)
-sa2 <- SensorArray(num=num, enableSorption=enableSorption, csd=0, ssd=ssd, dsd=0)
-sa3 <- SensorArray(num=num, enableSorption=enableSorption, csd=0, ssd=0, dsd=dsd)
+# sensor array data
+sdata0 <- predict(sa, conc = conc)
+sdata1 <- predict(sa1, conc = conc)
+sdata2 <- predict(sa2, conc = conc)
+sdata3 <- predict(sa3, conc = conc)
 
-### concentration matrix
-conc <- concSample(sa1, "const", gases=gases, n=n)
+# plot conc. matrix
+mf <- melt(conc, varnames = c("sample", "gas"))
+p1 <- ggplot(mf, aes(x = sample, y = value)) + geom_line(aes(color = gas))
+p1
 
-conc0 <- mean(conc[, gases])
-cdat <- c(rep(0, n0), rep(conc0, n), rep(0, n0))
-
-### generate data
-sdata1 <- predict(sa1, conc)
-sdata2 <- predict(sa2, conc)
-sdata3 <- predict(sa3, conc)
-
-### plot data
-dat <- cbind(sdata1[, sind], sdata2[, sind], sdata3[, sind])
-ylim <- range(as.numeric(dat))
-xlim <- c(-n0, n+n0)
-
-main <- paste("Sensor", sind, "Signal:", c("csd", "ssd", "dsd"), c(csd, ssd, dsd))
-
-opar <- par(mfrow=c(4, 1), bty="n", mar=c(3, 3, 1, 1), oma=c(2, 2, 2, 2))
-
-plot(cdat, t='l', ylim=c(-0.2 * conc0, 1.2 * conc0), axes=FALSE, 
-  main=paste("Gas", LETTERS[gases], "Pulse"))
-axis(2, at=c(0, conc0), labels=c(0, conc0), las=2, tick=TRUE)
-
-for(i in 1:ncol(dat)) {
-  plot(dat[, i], t='l', ylim=ylim, xlim=xlim, axes=FALSE, 
-    main=main[i], ylab="", xlab="")
-  axis(2, at=ylim, labels=round(ylim, 2), las=2, tick=TRUE)
-}
-
-xt <- seq(0, n, by=100)
-axis(1, at=xt, labels=xt, tick=TRUE)
-
-par(opar)
+# plot sensor array data
+mf0 <- melt(sdata0, varnames = c("sample", "sensor"))
+mf1 <- melt(sdata1, varnames = c("sample", "sensor"))
+mf2 <- melt(sdata2, varnames = c("sample", "sensor"))
+mf3 <- melt(sdata3, varnames = c("sample", "sensor"))
+mf <- rbind(data.frame(mf0, array = "default"), 
+ data.frame(mf1, array = "csd/ssd"), 
+ data.frame(mf2, array = "csd"),
+ data.frame(mf3, array = "noise-free"))
+   
+p3 <- ggplot(mf, aes(x = sample, y = value)) + geom_line(aes(color = as.factor(sensor))) +
+  facet_grid(array ~ .)
+p3

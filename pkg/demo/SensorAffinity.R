@@ -1,21 +1,52 @@
+# define a representative set of gases A, C and AC 
+# - appropriate to test sensor affinities across two species A and C
+set <- c("A 0.01", "A 0.05", "C 0.1", "C 1", "A 0.01, C 0.1", "A 0.05, C 1")
 
-# concentration matrix of 3 gas classes: A, C and AC
-conc <- matrix(0, 30, 3)
-conc[1:10, 1] <- 0.05 #  A
-conc[11:20, 3] <- 1 # C
-conc[21:30, 1] <- 0.05 # AC
-conc[21:30, 3] <- 1 # AC
+# 0) check UNIMAN sensors and their sorption affinities
+data(UNIMANsorption)
 
-conc <- conc[sample(1:nrow(conc)), ]
+df <- as.data.frame(UNIMANsorption$qkc[, , "K"])
+head(df)
 
-# two sensor arrays composed of different sensors
-sa1 <- SensorArray(num=1:5, dsd=0) # sensors with affinity A > C
-sa2 <- SensorArray(num=c(13, 14, 17), dsd=0) # sensors with affinity A < C
+df <- mutate(df,
+  sensor = 1:nrow(df),
+  sensor.group = ifelse(A > C, "More affinity to A", "More affinity to C"))
 
-# PCA scoreplots of sensors array data in response to the concentration matrix
-plot(sa1, "prediction", conc=conc, leg="top", main=paste("num", numStr(sa1), "\n affinity A > C"))
-plot(sa2, "prediction", conc=conc, leg="top", main=paste("num", numStr(sa2), "\n affinity A < C"))
+mf <- melt(K, varnames = c("sensor", "gas"))
 
-# 3rd array composed of all 17 UNIMAN types
-sa3 <- SensorArray(num=1:17, dsd=0)
-plot(sa3, "prediction", conc=conc, leg="top", main=paste("num", numStr(sa3), "\n affinity from all UNIMAN sensor types"))
+p <- ggplot(df, aes(reorder(x = factor(sensor), A - C), y = A - C, fill = sensor.group)) + 
+  geom_bar(position = "identity") + coord_flip() +
+  xlab("sensor") + ylab("Difference in K between A and C")
+p
+# in result:
+# - sensors with affinities A > C: 17, 13, 14, ...
+# - sensors with affinities C > A: 2, 1, 3, ...
+
+# 1) sensors with affinities A > C
+# - set drift noise level 'dsd' to zero, in order to see more a class-relevant information, than drift
+sa1 <- SensorArray(num = 1:3, dsd = 0)
+
+# look at the level of signal in reponse to pure analytes and to a mixture
+# - it is important, as 
+#  1) PCA mostly captures a variation in the absolute level of signals
+#  2) accroding to the models for data geenration, mixture response is 
+#     a sum of responses to pure analytes (mixture is composed of),
+#     thus, absolute values of signals matter.
+p0 <- plotSignal(sa1, set = set)
+p0
+
+p1 <- plotPCA(sa1, set = rep(set, 3), air = FALSE, main = "sensors of affinities A > C")
+p1
+
+# 2) sensors with affinities A < C
+sa2 <- SensorArray(num = c(13, 14, 17), dsd = 0) 
+
+p2 <- plotPCA(sa2, set = rep(set, 3), air = FALSE, main = "sensors of affinities A < C")
+p2
+
+# 3) all available 17 types of sensors
+sa3 <- SensorArray(num = 1:17, dsd = 0)
+
+p3 <- plotPCA(sa3, set = rep(set, 3), air = FALSE, main = "all types of affinities") 
+p3
+

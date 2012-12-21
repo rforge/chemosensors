@@ -81,7 +81,7 @@ qplot(X1, value, data = melt(sdata), geom = "line") + facet_wrap(~ X2) +
 
 # plot just few sensors
 qplot(X1, value, data = melt(sdata[, 1:2]), geom = "line") + facet_wrap(~ X2) + 
-  xlab("Time, a.u.") + ylab("Sensor Signal, a.u.") + opts(title = "First two sensors")
+  labs(x = "Time, a.u.", y = "Sensor Signal, a.u.", title = "First two sensors")
 
 # re-generate sensor data as noise-free
 sa0 <- sa
@@ -93,4 +93,4 @@ sa0
 sdata0 <- predict(sa0, conc0, nclusters = 2) 
 
 qplot(X1, value, data = melt(sdata0), geom = "line") + facet_wrap(~ X2) + 
-  xlab("Time, a.u.") + ylab("Sensor Signal, a.u.") + opts(title = "Noise-free array")
+  labs(x = "Time, a.u.", y = "Sensor Signal, a.u.", title = "Noise-free array")

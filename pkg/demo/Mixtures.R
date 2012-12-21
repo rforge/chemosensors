@@ -1,39 +1,36 @@
+### Expreiment #1: test all combinations of mixtures for three analytes A, B and C
 
-### experiment #1: all type of mixtures
-#  - three pure analytes
-#  - three binary mixtures
-#  - one ternary mixture
-# NOTE: data model of type 'mvr' is prefered
+set1 <- c("A 0.05", "B 0.05", "C 1", # pure analytes
+  "A 0.05, B 0.05", "A 0.05, C 1", "B 0.05, C 1", # binary mixtures
+  "A 0.05, B 0.05, C 1") # a ternary mixture
 
-n <- 10
-sc <- Scenario()
-add(sc) <- list("A", 0.05, n)
-add(sc) <- list("B", 0.05, n)
-add(sc) <- list("C", 1, n)
-add(sc) <- list(c("A", "B"), c(0.05, 0.05), n)
-add(sc) <- list(c("A", "C"), c(0.05, 1), n)
-add(sc) <- list(c("B", "C"), c(0.05, 1), n)
-add(sc) <- list(c("A", "B", "C"), c(0.05, 0.05, 0.5), n)
+# data model 'plsr' leads to a visually nice distribution of gas classes via PCA scoreplot
+sa1 <- SensorArray(model = "plsr", num = 3:5, dsd = 0)
 
-conc <- getConc(sc)
+# look at the level of signal in reponse to pure analytes and mixtures
+# - the highest and the lowest levels of signal correspond to two pure analytes, 
+#   A and B, respectively (that will result in a nice triangle-bounded distribution of PCA scores)
+p1 <- plotSignal(sa1, set = set1)
+p1
 
-sa <- SensorArray(model="mvr", num=1:5, csd=0.1, ssd=0.1, dsd=0)
-sdata <- predict(sa, conc) # generate the data
-plot(sa, 'pca', conc=conc, sdata=sdata, leg="top") # plot
+# If air samples are included, (in most cases) PCA shows the signal magnitudes 
+# across gas classes in respect to air-level (zero-level) 
+p2 <- plotPCA(sa1, set = rep(set1, 3))
+p2 
 
-### experiment #2: analytes A and C + their binary mixture
+p3 <- plotPCA(sa1, set = rep(set1, 3), air = FALSE)
+p3 
 
-n <- 10
-sc <- Scenario()
-add(sc) <- list("A", 0.01, n)
-add(sc) <- list("A", 0.05, n)
-add(sc) <- list("C", 0.1, n)
-add(sc) <- list("C", 1, n)
-add(sc) <- list(c("A", "C"), c(0.01, 0.1), n)
-add(sc) <- list(c("A", "C"), c(0.05, 1), n)
+### Experiment #2: two analytes A and C, and their binary mixture AC 
+#   at differenct concentration levels
 
-conc <- getConc(sc)
+set2 <-  c("A 0.01", "A 0.05", "C 0.1", "C 1", "A 0.01, C 0.1", "A 0.05, C  1")
 
-sa <- SensorArray(num=1:5, csd=0.1, ssd=0.1, dsd=0) # default data model: 'ispline'
-sdata <- predict(sa, conc) # generate the data
-plotPCA(sa, conc=conc, sdata=sdata, leg="top") # plot
+# default data model 'ispline'
+sa2 <- SensorArray(num = 3:5, dsd = 0)
+
+p4 <- plotSignal(sa2, set = set2)
+p4
+
+p5 <- plotPCA(sa2, set = rep(set2, 3), air = FALSE)
+p5

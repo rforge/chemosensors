@@ -1,3 +1,12 @@
+chemosensors 0.7.4
+==================
+* Most of plot method have been rewritten in a ggplot2 manner.
+* Fixed the demo `SensorAffinity`, particularly, the set of gas classes must 
+  contain more gas clases.
+* Class `Scenario` rewritten. Not the class object doesn't store a data.frame 
+  of concentration matrix. That means slot `df` is depreciated. Instead, method
+  `sdata.frame` constructs the data.frame based on new slots `T`, `nT`, `V` and `nV`.
+
 chemosensors 0.7.3
 ==================
 * Added CITATION file.
