@@ -463,13 +463,16 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
       conci <- conc[, , i]
       sdatai <- predict(object@dataModel[[i]], C=conci, B=coef[, i], out = out) 
       if(enableDyn) {
+        # v1
         sdata.pulse <- sdata2pulse(object, conci, sdatai)
-        sdata.out <- predict(as(object, "SensorDynamics"), conc=conci, sdata=sdata.pulse, sensors=i)
+        sdata.out <- predict(as(object, "SensorDynamics"), conc = conci, sdata = sdata.pulse, sensors = i)[, , 1]
         sdata.delta <- sdata.out - sdata.pulse
-
         sdatai <- sdatai + sdata.delta
-        
         sdatai <- apply(sdatai, 1, sum)        
+
+        # v2
+        #sdatai <- predict(as(object, "SensorDynamics"), conc = conci, sdata = sdatai, sensors = i)
+        #sdatai <- apply(sdatai, 1, sum)
       }
       
       sdatai
@@ -501,13 +504,16 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
       conci <- conc[, , i]
       sdatai <- predict(object@dataModel[[i]], C=conc[, , i], B=coef[, , i], out = out, ...)  
       if(enableDyn) {
+        # v1
         sdata.pulse <- sdata2pulse(object, conci, sdatai)
-        sdata.out <- predict(as(object, "SensorDynamics"), conc=conci, sdata=sdata.pulse, sensors=i)
+        sdata.out <- predict(as(object, "SensorDynamics"), conc = conci, sdata = sdata.pulse, sensors = i)[, , 1]
         sdata.delta <- sdata.out - sdata.pulse
-        
         sdatai <- sdatai + sdata.delta
-        
-        sdatai <- apply(sdatai, 1, sum) 
+        sdatai <- apply(sdatai, 1, sum)        
+
+        # v2
+        #sdatai <- predict(as(object, "SensorDynamics"), conc = conci, sdata = sdatai, sensors = i)
+        #sdatai <- apply(sdatai, 1, sum)
       }    
       sdatai
     }

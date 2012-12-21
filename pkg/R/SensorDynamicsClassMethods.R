@@ -117,29 +117,45 @@ plot.SensorDynamics.predict <- function(x, y,
   conc, sdata, sind,
   n = 1, concUnits = "default",
   col, lty = c(3, 1), lwd = 2,
-  main = "Sensor Dynamics", xlab = "Samples", ylab="Sensor Signal", ...)
+  main = "Sensor Dynamics", xlab = "Sample", ylab = "Model Output", ret = TRUE,...)
 {
   if(concUnits == "default") concUnits <- concUnits(x)
 
   nsensors <- nsensors(x)
   ngases <- ngases(x)
-
-  if(missing(conc)) conc <- concSampleDyn(x, n=n, concUnits=concUnits, ...)
+  gnames <- gnames(x)
+  tunit <- tunit(x)
+  
+  if(missing(conc)) conc <- concSampleDyn(x, n = n, concUnits=concUnits, ...)
   if(missing(sdata)) sdata <- array(conc, c(dim(conc), nsensors))
-  if(missing(sind)) sind <- 1
+  if(missing(sind)) sind <- 1:nsensors
       
   if(missing(col)) col <- gcol(x)
   if(missing(main)) main <- paste(main, ": tunit ", tunit(x), ", sensor ", sind, sep="")  
 
   nsdata <- predict(x, conc, sdata, sensors=sind, ...)  
 
-  lty <- rep(lty, each=ngases)
-  yp <- sdata[, , sind]
-  nyp <- nsdata
+  df1 <- data.frame(melt(sdata, varnames = c("sample", "gas", "sensor")), data = "input")
+  df2 <- data.frame(melt(nsdata, varnames = c("sample", "gas", "sensor")), data = "output")  
+  df <- rbind(df1, df2)
   
-  matplot(cbind(yp, nyp), t='l', col=col, lwd = lwd, lty = lty,
-    bty='n',
-    main=main, xlab = xlab, ylab = ylab)  
+  df <- mutate(df, 
+    gas = as.factor(gnames[gas]),
+    sensor = as.factor(paste("Sensor", sensor)),
+    id = paste(gas, data))
+  
+  p <- ggplot(df, aes(sample, value)) + 
+    geom_line(aes(group = id, color = gas, linetype = data)) + 
+    facet_grid(sensor ~ .) +
+    labs(x = xlab, y = ylab, title = main) 
+
+  if(ret) {
+    return(p)
+  } 
+  else {
+    if(!is.null(p)) print(p)
+    return(invisible())
+  }    
 }
 
 
@@ -173,6 +189,8 @@ setMethod("predict", "SensorDynamics", function(object, conc, sdata, sensors, ..
   n <- nrow(conc)
   tconst <- tconst(object)
   
+  tunit <- tunit(object)
+  
   if(nsensors == 1) { # case of single sensor
     if(length(dim(sdata)) == 2) sdata <- array(sdata, c(dim(sdata), 1)) 
     else if(length(dim(sdata)) == 3) sdata <- array(sdata[, , sensors], c(dim(sdata)[1:2], 1)) 
@@ -184,23 +202,90 @@ setMethod("predict", "SensorDynamics", function(object, conc, sdata, sensors, ..
   if(dim(sdata)[3] != nsensors) stop("Error in SensorDynamics::predict: 'dim(sdata)[3] != nsensors'.")    
   if(sum(dim(sdata)[-3] == dim(conc)) != 2) stop("Error in SensorDynamics::predict: 'conc' and 'sdata' are not compatible in 1-2 dimensions.")    
   
+  ### check if 'conc' can be devided into pulses
+  # minimal length
+  length.ok <- (n >= tunit * 2)
+  if(!length.ok) 
+    stop("Error in SensorDynamics::predict: concentration matrix 'conc' is incorrect:\n",
+      " - #samples must be at least equal to  '2 * tunits' (", 2 * tunit, ").", sep = "")
+  conc.ok <- length.ok
+
+  # multiples
+  multiple.ok <- (n %% (2 * tunit)) == 0
+  if(!multiple.ok) 
+    stop("Error in SensorDynamics::predict: concentration matrix 'conc' is incorrect:\n",
+      " - #samples must be multiple of '2 * tunits' (", 2 * tunit, ").", sep = "")
+  conc.ok <- conc.ok & multiple.ok
+  
+  # pulses' length
+  pulse.ok <- FALSE
+  if(conc.ok) {
+    gasin <- seq(1, n, by = 2 * tunit)
+    gasout <- seq(tunit, n, by = 2 * tunit)
+    airin <- seq(tunit + 1, n, by = 2 * tunit)
+    airout <- seq(2 * tunit, n, by = 2 * tunit)
+
+    np <- length(gasin)
+    pulse.ok <- (length(gasout) == np) & (length(airin) == np) & (length(airout) == np)
+  }
+  if(!pulse.ok) 
+    stop("Error in SensorDynamics::predict: concentration matrix 'conc' is incorrect:\n",
+      " * pulse must be composed of two parts (gas and air).\n", sep = "")
+  conc.ok <- conc.ok & pulse.ok
+  
+  # labels
+  label.ok <- FALSE
+  if(conc.ok) {
+    conc.df <- conc2df(object, conc)
+    # gas phase of the pulse is either (1) gas or (2) air
+    gas.ind <- data.frame(start = gasin, end = gasout)
+    gas.ok <- all(apply(gas.ind, 1, function(x) 
+      all(conc.df$tpoint[seq(x[1]+1, x[2]-1)] == "gas") | 
+      all(conc.df$tpoint[seq(x[1]+1, x[2]-1)] == "air")))
+    # air phase of the pulse is air
+    air.ind <- data.frame(start = airin, end = airout)
+    air.ok <- all(apply(air.ind, 1, function(x) 
+      all(conc.df$tpoint[seq(x[1]+1, x[2]-1)] == "air")))
+    label.ok <- gas.ok & air.ok
+  }
+  if(!label.ok)
+    stop("Error in SensorDynamics::predict: concentration matrix 'conc' is incorrect:\n",
+      " * pulse must be composed of two parts (gas and air).\n", sep = "")
+  conc.ok <- conc.ok & label.ok
+  
+  ### check 'sdata'
+  sdata.min <- min(sdata)
+  if(sdata.min < 0)
+    stop("Error in SensorDynamics::predict: sensor data matrix 'sdata' is incorrect:\n",
+      " * sensor data must be non-negative (minimum of sensor data is ", sdata.min, ").\n", sep = "")  
+  
+  ### start filtering
   nsdata <- array(0, dim(sdata)) # new 'sdata' 
-  for(si in 1:nsensors) {
-    s <- sensors[si]
-    for(i in 1:ngases) {
+  for(i in 1:ngases) {
+    for(si in 1:nsensors) {
+      s <- sensors[si]
+    
       tconsti <- tconst[i, , s]
       sdatai <- as.numeric(sdata[, i, si])
-      # filter
-      nsdatai <- filter(x=sdatai, filter=c(0, tconsti), method="recursive")
-      # normalize
-      nsdatai.max <- max(nsdatai)
-      if(nsdatai.max)  nsdatai <- nsdatai * (max(sdatai) / nsdatai.max)
       
-      nsdata[, i, si] <- nsdatai
+      for(k in 1:np) {
+        ind <- seq(gasin[k], airout[k])
+        sdataik <- sdatai[ind]
+        
+        # filter
+        nsdataik <- filter(x = sdataik, filter = c(0, tconsti), method = "recursive")
+        # normalize
+        nsdataik.max <- max(nsdataik)
+        if(nsdataik.max) {
+          nsdataik <- nsdataik * (max(sdataik) / nsdataik.max)
+        }
+        
+        nsdata[ind, i, si] <- nsdataik
+      }
     }
   }
   
-  if(nsensors == 1) nsdata <- nsdata[, , 1]
+  #if(nsensors == 1) nsdata <- nsdata[, , 1]
 
   return(nsdata)
 })

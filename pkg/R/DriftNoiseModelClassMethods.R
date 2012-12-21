@@ -42,7 +42,9 @@ setMethod("initialize", "DriftNoiseModel", function(.Object,
   # specific for class DriftNoiseModel
   datasetDriftNoiseModel = "character", pck = "character", 
   dsd = "numeric", ndcomp = "numeric", ndvar,  
-  dmodel = "character", ...)
+  dmodel = "character", 
+  # additional
+  nsd = "numeric", ...)  
 {   
   # missing
   def.par <- defaultParDriftNoiseModel()
@@ -54,7 +56,9 @@ setMethod("initialize", "DriftNoiseModel", function(.Object,
   if(missing(ndcomp)) ndcomp <- def.par$ndcomp  
   if(missing(ndvar)) ndvar <- def.par$ndvar      
   if(missing(dmodel)) dmodel <- def.par$dmodel
-  
+
+  if(!missing(nsd)) dsd <- nsd
+    
   # check parameter 'ndcomp'
   if(length(num) < ndcomp) {
     stop("Error in DriftNoiseModel::initialize: 'ndcomp' is incosistent with 'num'.")  

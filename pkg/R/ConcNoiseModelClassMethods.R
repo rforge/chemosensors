@@ -26,7 +26,9 @@ setMethod("initialize", "ConcNoiseModel", function(.Object,
   # common for sub-classes
   gases="numeric", gnames="character", concUnits="character", concUnitsInt="character",
   # specific for class ConcNoiseModel
-  csd = "numeric", cntype = "character", cnlogf = "numeric", ...)
+  csd = "numeric", cntype = "character", cnlogf = "numeric", 
+  # additional
+  nsd = "numeric", ...)
 {   
   # missing
   def.par <- defaultParConcNoiseModel()
@@ -40,6 +42,8 @@ setMethod("initialize", "ConcNoiseModel", function(.Object,
   if(missing(cntype)) cntype <- def.par$cntype
   if(missing(cnlogf)) cnlogf <- def.par$cnlogf
          
+  if(!missing(nsd)) csd <- nsd
+           
   # filter by 'gases'
   ngases <- length(gases)
   if(length(gnames) != ngases) gnames <- gnames[gases]

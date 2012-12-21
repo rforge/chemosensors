@@ -28,7 +28,7 @@ ConcUnitsStr <- function(units)
   unitsStr <- switch(units,
     "perc" = "vol. %",
     "perc 1e-2" = "1e-2 vol. %",
-    "norm" = "n. u.",
+    "norm" = "n.u.",
     stop("Error in concUnitsStr: 'units' is unknown."))
 
   return(unitsStr)
@@ -72,6 +72,9 @@ defaultDataSorptionModel <- function() return("UNIMANsorption")
 #' @export
 defaultDataDriftNoiseModel <- function() return("UNIMANdnoise")
 
+#----------------------------
+# Export Methods
+#----------------------------
 
 #----------------------------
 # Get/Set Methods
@@ -479,7 +482,7 @@ setMethod("plotPolar", "ANY", function(x, y, polar = TRUE, geom = "line",
     df3 <- subset(df2, gas == df2$gas[1])
     p <- p + scale_x_continuous(breaks = df3$sensor, labels = df3$S)
    
-    p <- p +  labs(x = xlab, y = ylab) + opts(title = main)
+    p <- p +  labs(x = xlab, y = ylab, title = main)
     
     if(polar) {
       p <- p + coord_polar()
@@ -692,8 +695,7 @@ setMethod("plotResponse", "ANY", function(x, y, concUnits = "norm",
     
     p <- qplot(conc, sdata, data = dm, geom = "line", group = id, color = gas) +
       scale_colour_manual(values = gcol(x)) + 
-      labs(x = xlab, y = ylab) + 
-      opts(title = main)
+      labs(x = xlab, y = ylab, title = main)
     
     if(!is.null(xlim)) p <- p + xlim(xlim[1], xlim[2])
     if(!is.null(ylim)) p <- p + ylim(ylim[1], ylim[2])
@@ -745,93 +747,77 @@ setMethod("plotResponse", "ANY", function(x, y, concUnits = "norm",
 })
 
 ### Method plotPCA
-setMethod("plotPCA", "ANY", function(x, y, conc, sdata, mod, concUnits = "default",
-  center=TRUE, scale=TRUE, pc=1:2, 
-  leg="none",
-  pch=20, col, 
-  main = "Model Response: PCA", xlab, ylab, xlim = NULL, ylim = NULL,
-  graphics = "ggplot", ret = FALSE, ...)
+setMethod("plotPCA", "ANY", function(x, y, conc, set, sdata,
+  mod, center = TRUE, scale = TRUE, pc = 1:2,
+  air = TRUE, 
+  concUnits = "default", 
+  main = "PCA scoreplot", xlab, ylab, 
+  ret = TRUE, ...)
 {
-  # check par. 'graphics'
-  match.arg(graphics, c("base", "ggplot"))
-
-
-  if(concUnits == "default") concUnits <- concUnits(x)
-  if(missing(conc))
-    stop("Error in ANY::plotPCA: 'conc' is missing.")
-
+  
+  if(concUnits == "default") concUnits <- defaultConcUnits()
+        
+  gind <- gind(x)
   nsensors <- nsensors(x)
-  if(nsensors == 1)
-    stop("Error in ANY::plotPCA: 'nsensors == 1'.")  
+  ngases <- ngases(x)
+  gnames <- gnames(x)
   
- 
-  # sdata  
-  if(missing(sdata)) sdata <- predict(x, conc, concUnits=concUnits)
+  tunit <- tunit(x)
+  
+  # conc
+  if(missing(conc)) {
+    sc <- Scenario(T = set, tunit = tunit, concUnits = concUnits)
+    conc <- getConc(sc)
+  }
 
-  # ind 
-  conc.sum <- apply(conc, 1, sum)
-  ind <- which(conc.sum > 0)
-  stopifnot(length(ind) > 1)
+  # sdata
+  if(missing(sdata)) sdata <- predict(x, conc, concUnits = concUnits)
+  stopifnot(nrow(sdata) == nrow(conc))
+  stopifnot(ncol(sdata) == nsensors)
   
-  conc <- conc[ind, ]
-  sdata <- sdata[ind, ]
+  # filter off air
+  if(!air) { 
+    ind <- apply(conc, 1, sum) == 0
+    if(length(ind)) {
+      conc <- conc[!ind, , drop = FALSE]
+      sdata <- sdata[!ind, , drop = FALSE]
+    }
+  }
+
+  # model
+  if(missing(mod)) mod <- prcomp(sdata, center = center, scale = scale)
   
-  # PCA model
-  if(missing(mod)) mod <- prcomp(sdata, center=center, scale=scale)
-  
-  # PCA scores
+  # scores
   X <- sdata
   if(mod$center[1]) X <- as.matrix(sweep(X, 2, mod$center))
   if(mod$scale[1])  X <- as.matrix(sweep(X, 2, mod$scale, "/"))
-
+  
   scores <- X %*% mod$rotation[, pc]
   
   # plot parameters
   if(missing(xlab)) xlab <- paste("PC", pc[1], " (", round(100*capturedVar(sdata, pc[1], mod), 2), ")%", sep="") 
   if(missing(ylab)) ylab <- paste("PC", pc[2], " (", round(100*capturedVar(sdata, pc[2], mod), 2), ")%", sep="")   
-  
-  if(missing(col)) col <- conc2col(x, conc=conc)
-  
+
   # plot
-  if(graphics == "base") {
-    plot(scores, t="n",
-      main=main, xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim, ...)  
-    abline(h = 0, col = "grey")
-    abline(v = 0, col = "grey")    
-    points(scores, pch=pch, col=col, ...)
-    
-    # legend
-    if(leg != "none") {
-      lab <- conc2lab(x, conc)
-      legend(leg, legend=unique(lab), col=unique(col), pch=pch, bt="n")
-    }
-  }
-  else if(graphics == "ggplot") {
-    require(ggplot2)
-    
-    df <- as.data.frame(scores)
-    colnames(df) <- c("PCx", "PCy")
-    df$lab <- conc2lab(x, conc)
+  cf <- conc2df(x, conc)
 
-    ind <- which(!duplicated(df$lab))  
-    ind <- ind[order(df$lab[ind])] # reorder by value in 'df$lab'
-    col <- conc2col(x, conc = conc[ind, ])
+  df <- as.data.frame(scores)
+  colnames(df) <- c("PCx", "PCy")
+
+  df <- cbind(df, cf)
   
-    p <- qplot(PCx, PCy, data = df, geom = 'point', color = lab) + 
-      scale_colour_manual(values = col) + 
-      labs(x = xlab, y = ylab) + 
-      opts(title = main)
+  p <- qplot(PCx, PCy, data = df, geom = 'point', color = lab) + 
+    labs(title = main, x = xlab, y = ylab)
     
-    if(ret) {
-      return(p)
-    } 
-    else {
-      print(p)
-      return(invisible())
-    }
-  }
-
+  if(ret) {
+    return(p)
+  } 
+  else {
+    print(p)
+    return(invisible())
+  } 
 })
+
 
 ### Method plotTimeline
 setMethod("plotTimeline", "ANY", function(x, y, conc, sdata, concUnits = "default",
@@ -1053,7 +1039,7 @@ setMethod("plotAffinitySpace", "ANY", function(x, y, type = 'points',
     else
       stop("Error in ANY::plotPolar: 'geom' is incorrect.")  
 
-    p <- p +  labs(x = xlab, y = ylab) + opts(title = main)
+    p <- p +  labs(x = xlab, y = ylab, title = main)
 
     if(ret) {
       return(p)
@@ -1183,6 +1169,49 @@ setMethod("plotMixture", "ANY", function(x, y, n = 20, concUnits = "default",
   }
 })
 
+### Method plotSignal
+setMethod("plotSignal", "ANY", function(x, y, conc, set,
+  concUnits = "default", 
+  main = "Model Response to Concentration", 
+  ret = TRUE, ...)
+{
+  
+  if(concUnits == "default") concUnits <- defaultConcUnits()
+        
+  gind <- gind(x)
+  nsensors <- nsensors(x)
+  ngases <- ngases(x)
+  gnames <- gnames(x)
+  
+  tunit <- tunit(x)
+  
+  # conc
+  if(missing(conc)) {
+    sc <- Scenario(T = set, tunit = tunit, concUnits = concUnits)
+    conc <- getConc(sc)
+  }
+  
+  # sdata
+  sdata <- predict(x, conc, concUnits = concUnits)
+  
+  # plot
+  cf <- melt(conc, varnames = c("sample", "data")) # Concentration Frame
+  sf <- melt(sdata, varnames = c("sample", "data")) # Sensor data Frame
+  
+  df <- rbind(data.frame(cf, matrix = "conc"), data.frame(sf, matrix = "sdata"))
+  
+  p <- ggplot(df, aes(x = sample, y = value)) + geom_line(aes(color = as.factor(data))) +
+    facet_grid(matrix ~ ., scales = "free_y") + 
+    labs(title = main)
+  
+  if(ret) {
+    return(p)
+  } 
+  else {
+    print(p)
+    return(invisible())
+  } 
+})
 #----------------------------
 # Color Methods
 #----------------------------

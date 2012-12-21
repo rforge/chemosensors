@@ -4,7 +4,6 @@
 #' @rdname www-demo-SensorArrayNoise
 #' @docType data
 #' @keywords demo
-#' @usage demo(SensorArrayNoise, package = "chemosensors")
 #' @example demo/SensorArrayNoise.R
 NULL
 
@@ -14,7 +13,6 @@ NULL
 #' @rdname www-demo-SensorAffinity
 #' @docType data
 #' @keywords demo
-#' @usage demo(SensorAffinity, package = "chemosensors")
 #' @example demo/SensorAffinity.R
 NULL
 
@@ -24,7 +22,6 @@ NULL
 #' @rdname www-demo-SensorNoise
 #' @docType data
 #' @keywords demo
-#' @usage demo(SensorNoise, package = "chemosensors")
 #' @example demo/SensorNoise.R
 NULL
 
@@ -34,7 +31,6 @@ NULL
 #' @rdname www-demo-VirtualSensors
 #' @docType data
 #' @keywords demo
-#' @usage demo(VirtualSensors, package = "chemosensors")
 #' @example demo/VirtualSensors.R
 NULL
 
@@ -44,7 +40,6 @@ NULL
 #' @rdname www-demo-Mixtures
 #' @docType data
 #' @keywords demo
-#' @usage demo(Mixtures, package = "chemosensors")
 #' @example demo/Mixtures.R
 NULL
 
@@ -54,7 +49,6 @@ NULL
 #' @rdname www-demo-BinaryMixtures
 #' @docType data
 #' @keywords demo
-#' @usage demo(BinaryMixtures, package = "chemosensors")
 #' @example demo/BinaryMixtures.R
 NULL
 
@@ -85,6 +79,5 @@ NULL
 #' @rdname www-demo-NeuromorphicSim
 #' @docType data
 #' @keywords demo
-#' @usage demo(NeuromorphicSim, package = "chemosensors")
 #' @example demo/NeuromorphicSim.R
 NULL

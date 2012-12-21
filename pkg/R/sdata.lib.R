@@ -16,16 +16,22 @@ setMethod("sdata2pulse", "ANY", function(object, conc, sdata, ...)
   nsensors <- nsensors(object)
   n <- nrow(conc)
   
-  nsdata <- matrix(0, nrow=n, ncol=ngases)
+  tunit <- tunit(object)
+  
+  nsdata <- matrix(0, nrow=n, ncol = ngases)
   for(i in 1:ngases) {
     conci <- conc
     conci[, -i] <- 0
+  
+    dfi <- conc2df(object, conci)
+    tpointi <- dfi$tpoint
     
-    tpointi <- cmatrix2tpoint(object, conci)
     ind.gasin <- which(tpointi == "gasin")
     ind.gasout <- which(tpointi == "gasout")
     if(length(ind.gasin) != length(ind.gasout))
-      stop("Error in ANY::sdata2pulse: 'tpoint' are incorrect.")    
+      stop("Error in ANY::sdata2pulse: incorrect format of concentration matrix 'conc'.\n",
+        "Ppoints 'gasin' and 'gas.out' have different length.\n",
+        "Check the concentration matrix 'conc' for gas #", i, ".", sep = "")    
     
     nk <- length(ind.gasin)
     if(nk) { # if nk > 0
@@ -35,7 +41,7 @@ setMethod("sdata2pulse", "ANY", function(object, conc, sdata, ...)
     }
   }
   
-  return(sdata)
+  return(nsdata)
 })
 
 

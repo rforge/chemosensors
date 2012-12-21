@@ -43,11 +43,25 @@ NULL
 #' The dataset contains the statistics on degradation in the individual performance of UNIMAN sensor
 #' in terms of standard deviation of sensitivity coefficients computed over the long-term UNIMAN dataset. 
 #'
-#' The datasets has one variable \code{Bsd} of the class \code{list}. The sd values themselves are stored
+#' The datasets has one variable \code{UNIMANsnoise} of the class \code{list} 
+#' to store another list of coefficients \code{Bsd}. The sd values themselves are stored
 #' in a matrix of 3 rows and 17 columns under two categories:
-#' \tabular{rl}{
-#'   \code{class} \tab The class name: \code{SensorModel} and \code{Sensor}. \cr
-#'   \code{model} \tab The model name: \code{mvr} and \code{plsr}. \cr
+#'
+#' \itemize{
+#'  \item{The class name: \code{SensorModel} and \code{Sensor}.}
+#'  \item{The model name: \code{plsr}, \code{mvr}, \code{broken-stick} and \code{plsr}.}
+#' }
+#'
+#' Thus, in order to access to the sd coefficients of 17 UNIMAN sensors for class \code{Sensor} and model \code{plsr},
+#' the command looks like \code{UNIMANsnoise$Bsd$Sensor$plsr}.
+#'
+#' Notes.
+#'
+#' \itemize{
+#'  \item{A possible way to compare the sd coefficients (which UNIMAN sensors are more noisy)
+#'    is to normalize them across gases and compare the resulted normalized values (see Example section).
+#'    Indeed, it is not absolutely fair, as the sensitivity coefficient values (sd values are derived from) 
+#'    are different along sensors, and larger values tend to show larger sd.}
 #' }
 #'
 #' @name UNIMANsnoise
@@ -89,7 +103,6 @@ NULL
 #' The dataset contains the statistics on modeling the Langmuir isotherm 
 #' on 17 UNIMAN sensors and 3 pure analytes at different concentration levels.
 #'
-#'
 #' Indeed, the isotherm extends the Langmuir isotherm for a single gas under
 #' a simplified assumption that molecules of the analytes in mixture 
 #' do not interact with each other. Such property allows us to
@@ -101,9 +114,11 @@ NULL
 #' The resulted coefficients of determination \code{R2} of the models are not below than
 #' 0.973 for analyte C, and slightly worse for analytes A and B giving the minimum value 0.779.
 #'
-#' The datasets has the only variable \code{qkc} of the class \code{array} of three dimensions. 
+#' The datasets has the only variable \code{UNIMANsorption} of class list,
+#' that in turn stores the variable \code{qkc} of the class \code{array} of three dimensions. 
 #' The first dimension encodes a sensor, and the second encodes a gas.
 #' The third dimension represent four parameters extracted from the Langmuir model:
+#'
 #' \tabular{rl}{
 #'   \code{K} \tab Sorption affinity in terms of the Langmuir isotherm. \cr
 #'   \code{Q} \tab Sorption capacity in terms of the Langmuir isotherm (not used in \code{\link{SorptionModel}}). \cr

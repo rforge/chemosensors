@@ -28,7 +28,9 @@ setMethod("initialize", "SensorNoiseModel", function(.Object,
   num="numeric", gases="numeric", gnames="character", concUnits="character", concUnitsInt="character",
   # specific for class SensorNoiseModel
   datasetSensorNoiseModel = "character", pck = "character",
-  ssd = "numeric", sntype = "character", snf = "numeric", sndata, ...)
+  ssd = "numeric", sntype = "character", snf = "numeric", sndata, 
+  # additional
+  nsd = "numeric", ...)  
 {   
   # missing
   def.par <- defaultSensorNoiseModel()
@@ -48,6 +50,8 @@ setMethod("initialize", "SensorNoiseModel", function(.Object,
   if(missing(snf)) snf <- def.par$snf
   if(missing(sndata)) sndata <- def.par$sndata
   
+  if(!missing(nsd)) ssd <- nsd
+    
   # load data
   if(is.null(sndata)) {
     #data(list=datasetSensorNoiseModel, package=pck, envir=environment()) # -> 'Bsd'

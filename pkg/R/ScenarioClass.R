@@ -57,12 +57,14 @@ validScenario <- function(object)
 #' @exportClass Scenario
 setClass(Class="Scenario", 
   representation=representation(
+    name = "character",
     # class-specific slots
+    T = "character", nT = "numeric", V = "character", nV = "numeric",
     df = "data.frame", # colnames: cmatrix, time, set, lab
     tunit = "numeric", 
     # class-common slots
     gases = "numeric", gind = "numeric", ngases = "numeric", gnames="character", 
-    concUnits="character", concUnitsInt="character"),  
+    concUnits = "character", concUnitsInt="character"),  
   validity=validScenario
 )
 
@@ -73,7 +75,9 @@ setClass(Class="Scenario",
 #' @exportMethod print
 setMethod ("print", "Scenario", function(x, ...)
 {
-  cat(" Scenario\n")
+  cat(" Scenario")
+  if(x@name != "undefined") cat(" `", x@name,"`\n", sep = '')
+  else cat("\n")
   cat(" -", nsamples(x), "samples\n")  
   cat(" -", ngases(x), "gases", paste(gnames(x), collapse=", "), "\n")
   cat(" - tunit:", tunit(x), "\n")
@@ -82,7 +86,9 @@ setMethod ("print", "Scenario", function(x, ...)
 #' @exportMethod show
 setMethod ("show", "Scenario", function(object)
 {
-  cat(" Scenario (", nsamples(object), " samples x ", ngases(object), " gases ", paste(gnames(object), collapse=", "), ")\n", sep='')
+  cat(" Scenario")
+  if(object@name != "undefined") cat(" `", object@name,"`", sep = '')
+  cat(" (", nsamples(object), " samples x ", ngases(object), " gases ", paste(gnames(object), collapse=", "), ")\n", sep='')
 })
 
 
@@ -96,7 +102,7 @@ setMethod ("show", "Scenario", function(object)
 
 setMethod("tunit", "Scenario", function(x) x@tunit)
 setMethod("nsamples", "Scenario", function(x) nrow(x@df))
-setMethod("cmatrix", "Scenario", function(x) subset(x@df, select=gnames(x)))
+setMethod("cmatrix", "Scenario", function(x, ...) subset(sdata.frame(x, ...), select = gnames(x)))
 
 #----------------------------
 # Model Methods

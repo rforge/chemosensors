@@ -41,6 +41,12 @@ subClasses <- function(class)
 #----------------------------
 
 #----------------------------
+# Export Methods
+#----------------------------
+#' @exportMethod sdata.frame
+setGeneric("sdata.frame", function(x, ...) standardGeneric("sdata.frame"))
+
+#----------------------------
 # Get/Set Methods
 #----------------------------
 #' @exportMethod num
@@ -140,7 +146,7 @@ setGeneric("tunit", function(x) standardGeneric("tunit"))
 #' @exportMethod nsamples
 setGeneric("nsamples", function(x) standardGeneric("nsamples"))
 #' @exportMethod cmatrix
-setGeneric("cmatrix", function(x) standardGeneric("cmatrix"))
+setGeneric("cmatrix", function(x, ...) standardGeneric("cmatrix"))
 #' @exportMethod add<-
 setGeneric("add<-", function(object, ...) standardGeneric("add<-"))
 
@@ -243,6 +249,9 @@ setGeneric("plotAffinitySpace", function(x, y, conc, sdata, ...) standardGeneric
 #' @exportMethod plotMixture
 setGeneric("plotMixture", function(x, y, ...) standardGeneric("plotMixture")) 
 
+#' @exportMethod plotSignal
+setGeneric("plotSignal", function(x, y, ...) standardGeneric("plotSignal")) 
+
 #' @exportMethod ccol
 setGeneric("ccol", function(object, ...) standardGeneric("ccol")) 
 
@@ -296,6 +305,16 @@ setGeneric("conc2gcol", function(object, ...) standardGeneric("conc2gcol"))
 
 #' @exportMethod conc2tpoint
 setGeneric("conc2tpoint", function(object, ...) standardGeneric("conc2tpoint"))
+
+#' @exportMethod lab2df
+setGeneric("lab2df", function(object, ...) standardGeneric("lab2df"))
+
+#' @exportMethod label2df
+setGeneric("label2df", function(object, ...) standardGeneric("label2df"))
+
+#' @exportMethod set2lab
+setGeneric("set2lab", function(object, ...) standardGeneric("set2lab"))
+
 
 #----------------------------
 # Sdata Methods
