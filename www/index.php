@@ -86,6 +86,18 @@ install.packages("chemosensors_0.7.1.tar.gz", repos = NULL)
 The second line will install the package 'chemosensors' from local file.
 </p>
 
+<p>
+In the case you don't have the local file of the package sourse, you can get it 
+from R-Forge svn repository and then install.
+Commands in Linux are the following.
+</p>
+
+<pre>
+svn checkout svn://scm.r-forge.r-project.org/svnroot/chemosensors/pkg
+sudo R CMD INSTALL pkg/
+</pre>
+
+
 <p>Please let us know if you have any problems related to installation or  
 running the software.</p>
 
