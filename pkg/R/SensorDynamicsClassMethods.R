@@ -202,57 +202,19 @@ setMethod("predict", "SensorDynamics", function(object, conc, sdata, sensors, ..
   if(dim(sdata)[3] != nsensors) stop("Error in SensorDynamics::predict: 'dim(sdata)[3] != nsensors'.")    
   if(sum(dim(sdata)[-3] == dim(conc)) != 2) stop("Error in SensorDynamics::predict: 'conc' and 'sdata' are not compatible in 1-2 dimensions.")    
   
-  ### check if 'conc' can be devided into pulses
-  # minimal length
-  length.ok <- (n >= tunit * 2)
-  if(!length.ok) 
+  conc.ok <- checkConc(object, conc)
+  if(!conc.ok) 
     stop("Error in SensorDynamics::predict: concentration matrix 'conc' is incorrect:\n",
-      " - #samples must be at least equal to  '2 * tunits' (", 2 * tunit, ").", sep = "")
-  conc.ok <- length.ok
+      " - it must be composed of pulses (gas and air) of 'tunit' (", tunit, ").", sep = "")
 
-  # multiples
-  multiple.ok <- (n %% (2 * tunit)) == 0
-  if(!multiple.ok) 
-    stop("Error in SensorDynamics::predict: concentration matrix 'conc' is incorrect:\n",
-      " - #samples must be multiple of '2 * tunits' (", 2 * tunit, ").", sep = "")
-  conc.ok <- conc.ok & multiple.ok
-  
-  # pulses' length
-  pulse.ok <- FALSE
-  if(conc.ok) {
-    gasin <- seq(1, n, by = 2 * tunit)
-    gasout <- seq(tunit, n, by = 2 * tunit)
-    airin <- seq(tunit + 1, n, by = 2 * tunit)
-    airout <- seq(2 * tunit, n, by = 2 * tunit)
+  n <- nrow(conc)
+  gasin <- seq(1, n, by = 2 * tunit)
+  gasout <- seq(tunit, n, by = 2 * tunit)
+  airin <- seq(tunit + 1, n, by = 2 * tunit)
+  airout <- seq(2 * tunit, n, by = 2 * tunit)
 
-    np <- length(gasin)
-    pulse.ok <- (length(gasout) == np) & (length(airin) == np) & (length(airout) == np)
-  }
-  if(!pulse.ok) 
-    stop("Error in SensorDynamics::predict: concentration matrix 'conc' is incorrect:\n",
-      " * pulse must be composed of two parts (gas and air).\n", sep = "")
-  conc.ok <- conc.ok & pulse.ok
-  
-  # labels
-  label.ok <- FALSE
-  if(conc.ok) {
-    conc.df <- conc2df(object, conc)
-    # gas phase of the pulse is either (1) gas or (2) air
-    gas.ind <- data.frame(start = gasin, end = gasout)
-    gas.ok <- all(apply(gas.ind, 1, function(x) 
-      all(conc.df$tpoint[seq(x[1]+1, x[2]-1)] == "gas") | 
-      all(conc.df$tpoint[seq(x[1]+1, x[2]-1)] == "air")))
-    # air phase of the pulse is air
-    air.ind <- data.frame(start = airin, end = airout)
-    air.ok <- all(apply(air.ind, 1, function(x) 
-      all(conc.df$tpoint[seq(x[1]+1, x[2]-1)] == "air")))
-    label.ok <- gas.ok & air.ok
-  }
-  if(!label.ok)
-    stop("Error in SensorDynamics::predict: concentration matrix 'conc' is incorrect:\n",
-      " * pulse must be composed of two parts (gas and air).\n", sep = "")
-  conc.ok <- conc.ok & label.ok
-  
+  np <- length(gasin)
+      
   ### check 'sdata'
   sdata.min <- min(sdata)
   if(sdata.min < 0)

@@ -12,8 +12,6 @@ df <- mutate(df,
   sensor = 1:nrow(df),
   sensor.group = ifelse(A > C, "More affinity to A", "More affinity to C"))
 
-mf <- melt(K, varnames = c("sensor", "gas"))
-
 p <- ggplot(df, aes(reorder(x = factor(sensor), A - C), y = A - C, fill = sensor.group)) + 
   geom_bar(position = "identity") + coord_flip() +
   xlab("sensor") + ylab("Difference in K between A and C")
@@ -24,7 +22,7 @@ p
 
 # 1) sensors with affinities A > C
 # - set drift noise level 'dsd' to zero, in order to see more a class-relevant information, than drift
-sa1 <- SensorArray(num = 1:3, dsd = 0)
+sa1 <- SensorArray(num = c(13, 14, 17), dsd = 0)
 
 # look at the level of signal in reponse to pure analytes and to a mixture
 # - it is important, as 
@@ -39,7 +37,7 @@ p1 <- plotPCA(sa1, set = rep(set, 3), air = FALSE, main = "sensors of affinities
 p1
 
 # 2) sensors with affinities A < C
-sa2 <- SensorArray(num = c(13, 14, 17), dsd = 0) 
+sa2 <- SensorArray(num = 1:3, dsd = 0) 
 
 p2 <- plotPCA(sa2, set = rep(set, 3), air = FALSE, main = "sensors of affinities A < C")
 p2

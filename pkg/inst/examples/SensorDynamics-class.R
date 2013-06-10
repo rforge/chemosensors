@@ -5,7 +5,7 @@ sdyn # equivalent to: show(sdyn)
 
 print(sdyn)
 
-plot(sdyn)
+#plot(sdyn)
 
 ### SensorDynamics as a part of SensorModel
 sm <- SensorModel(tunit = 60)

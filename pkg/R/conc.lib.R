@@ -3,18 +3,151 @@
 NULL
 
 #----------------------------
+# Extract Methods
+#----------------------------
+setMethod("extractConc", "ANY", function(object, conc, set, scenario, n,
+  cf, df, 
+  concUnits = "default", ...)
+{
+  if(concUnits == "default") concUnits <- defaultConcUnits()
+  if(missing(n)) n <- 1
+  
+  tunit <- tunit(object)
+  
+  if(!missing(conc)) { # conc
+    conc <- conc
+  }
+  else if(!missing(cf)) { # cf
+    stopifnot(all(gnames(object) %in% names(cf)))
+    conc <- subset(cf, select = gnames(object), drop = FALSE)
+    conc <- as.matrix(conc)
+  }
+  else if(!missing(df)) { # df
+    stopifnot(all(gnames(object) %in% names(df)))
+    conc <- subset(df, select = gnames(object), drop = FALSE)
+    conc <- as.matrix(conc)
+  }
+  else if(!missing(set)) { # set
+    sc <- Scenario(T = set, nT = n, tunit = tunit, concUnits = concUnits)
+    conc <- getConc(sc)
+  }  
+  else if(!missing(scenario)) {
+    conc <- getConc(scenario)
+  }
+  else {  # all parameters are missing => use function `defaultSet`
+    set <- defaultSet()
+    sc <- Scenario(T = set, nT = n, tunit = tunit, concUnits = concUnits)
+    conc <- getConc(sc)
+  }
+  
+  return(conc)
+})
+
+#----------------------------
+# Check Methods
+#----------------------------
+
+### Method checkConc
+# Function checks if 'conc' can be devided into pulses
+setMethod("checkConc", "ANY", function(object, conc, ...)
+{
+  n <- nrow(conc)
+  tunit <- tunit(object)
+  
+  # minimal length
+  length.ok <- (n >= tunit * 2)
+  if(!length.ok) 
+    warning("Warning in checkConc: concentration matrix 'conc' is incorrect:\n",
+      " - (minimal length) #samples must be at least equal to  '2 * tunits' (", 2 * tunit, ").", sep = "")
+  conc.ok <- length.ok
+
+  # multiples
+  multiple.ok <- (n %% (2 * tunit)) == 0
+  if(!multiple.ok) 
+    warning("Warning in checkConc: concentration matrix 'conc' is incorrect:\n",
+      " - (multiples) #samples must be multiple of '2 * tunits' (", 2 * tunit, ").", sep = "")
+  conc.ok <- conc.ok & multiple.ok
+  
+  # pulses' length
+  pulse.ok <- FALSE
+  if(conc.ok) {
+    airin <- getTPoint(object, conc, "airin")
+    airout <- getTPoint(object, conc, "airout")
+    gasin <- getTPoint(object, conc, "gasin")
+    gasout <- getTPoint(object, conc, "gasout")
+
+    np <- length(gasin)
+    pulse.ok <- (length(gasout) == np) & (length(airin) == np) & (length(airout) == np)
+  }
+  if(!pulse.ok) 
+    warning("Warning in checkConc: concentration matrix 'conc' is incorrect:\n",
+      " * (pulses' length) pulse must be composed of two parts (gas and air).\n", sep = "")
+  conc.ok <- conc.ok & pulse.ok
+  
+  # labels
+  label.ok <- FALSE
+  if(conc.ok) {
+    conc.df <- conc2df(object, conc)
+    # gas phase of the pulse is either (1) gas or (2) air
+    gas.ind <- data.frame(start = gasin, end = gasout)
+    
+    tunit.one <- with(gas.ind, all(start == end))
+    gas.ok <- ifelse(tunit.one,
+      all(apply(gas.ind, 1, function(x) conc.df$tpoint[x[1]] == "gasin")),
+      all(apply(gas.ind, 1, function(x) 
+        all(conc.df$tpoint[seq(x[1]+1, x[2]-1)] == "gas") | 
+        all(conc.df$tpoint[seq(x[1]+1, x[2]-1)] == "air"))))
+        
+    # air phase of the pulse is air
+    air.ind <- data.frame(start = airin, end = airout)
+    tunit.one <- with(air.ind, all(start == end))
+    air.ok <- ifelse(tunit.one,
+      all(apply(air.ind, 1, function(x) conc.df$tpoint[x[1]] == "airin")),      
+      all(apply(air.ind, 1, function(x) all(conc.df$tpoint[seq(x[1]+1, x[2]-1)] == "air"))))
+      
+    label.ok <- gas.ok & air.ok
+  }
+  if(!label.ok)
+    warning("Warning in checkConc: concentration matrix 'conc' is incorrect:\n",
+      " * (labels) pulse must be composed of two parts (gas and air).\n", sep = "")
+  conc.ok <- conc.ok & label.ok
+  
+  return(conc.ok)
+})
+
+#----------------------------
 # Conc Methods
 #----------------------------
 
-### Method conc2dat
+#' Method conc2df
+#'
+#' Method conc2df converts a concetration matrix into a data frame.
+#'
+#' The input parameters are an object, e.g. \code{SensorArray}, and a concentration matrix.
+#' The output data frame has the following columns:
+#'
+#' \tabular{rl}{
+#'   \code{A}, \code{B}, ... \tab Gas concentrations (column names equal to gas names of the object). \cr
+#'   \code{glab} \tab Gas labels, e.g. \code{A} or \code{Air}. \cr
+#'   \code{lab} \tab Gas+Concetratoin labels, e.g. \code{A 0.01}. \cr
+#'   \code{tpoint} \tab Time point labels to encode the gas pulses, e.g. \code{gasin}.
+#' }
+#' 
+#' @name conc2df
+#' @rdname www-conc2df
+#' @example inst/examples/conc2df-method.R
+#' @exportMethod conc2df
 setMethod("conc2df", "ANY", function(object, conc, ...)
 {  
   if(missing(conc))
     stop("Error in ANY::conc2df: 'conc' is missing.")
     
+  ngases <- ngases(object)
+  ngases <- ifelse(!is.na(ngases), ngases, ncol(conc))
+  stopifnot(ngases == ncol(conc)) 
+  
   gases <- gases(object)
   gnames <- gnames(object)
-  ngases <- ngases(object) 
   gind <- gind(object)
   
   if(ngases != ncol(conc))
@@ -143,6 +276,10 @@ setMethod("conc2col", "ANY", function(object, conc, pal, ...)
 })
 
 
+#----------------------------
+# TPoint Methods
+#----------------------------
+
 ### Method conc2tpoint
 # "airin"  "air"    "airout" "gasin"  "gas"    "gasout"
 setMethod("conc2tpoint", "ANY", function(object, conc, ...)
@@ -185,6 +322,24 @@ setMethod("conc2tpoint", "ANY", function(object, conc, ...)
   return(as.character(tpoint))
 })
 
+### Method getTPoint
+setMethod("getTPoint", "ANY", function(object, conc, tpoint, ...)
+{
+  stopifnot(!missing(conc))
+  stopifnot(!missing(tpoint))  
+  
+  tunit <- tunit(object)
+  n <- nrow(conc)
+  
+  out <- switch(tpoint,
+    "airin" = seq(1, n, by = 2 * tunit),
+    "airout" = seq(tunit, n, by = 2 * tunit),
+    "gasin" = seq(tunit + 1, n, by = 2 * tunit),
+    "gasout" = seq(2 * tunit, n, by = 2 * tunit),
+    stop("Error in ANY::getTPoint: switch."))
+
+  return(out)
+})
 
 
 

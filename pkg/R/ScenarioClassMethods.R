@@ -17,19 +17,21 @@ defaultParScenario <- function()
 {
   par <- list(name = "undefined", gases=1:3, gnames=LETTERS[1:3], 
     concUnits=defaultConcUnits(), concUnitsInt=defaultConcUnits(),
-    tunit = 1)
+    tunit = 1, randomize = FALSE, seed = as.numeric(NA))
   
   return(par)
 }
 
 ### Constructor of Scenario class.
 setMethod("initialize", "Scenario", function(.Object,
-  name = "character",
-  # common for sub-classes
-  gases="numeric", gnames="character", concUnits="character", concUnitsInt="character",
   # specific for class Scenario
-  tunit = "numeric", 
-  T = "character", nT = "numeric", V = "character", nV = "numeric", ...)
+  T, nT, V, nV,
+  tunit, randomize,
+  name,
+  # common for sub-classes
+  gases, gnames, concUnits, concUnitsInt, 
+  seed,
+  ...)
 {   
   # missing
   def.par <- defaultParScenario()
@@ -39,8 +41,10 @@ setMethod("initialize", "Scenario", function(.Object,
   if(missing(gnames)) gnames <- def.par$gnames
   if(missing(concUnits)) concUnits <- def.par$concUnits
   if(missing(concUnitsInt)) concUnitsInt <- def.par$concUnitsInt
-
+  if(missing(seed)) seed <- def.par$seed
+  
   if(missing(tunit)) tunit <- def.par$tunit
+  if(missing(randomize)) randomize <- def.par$randomize
          
   if(missing(T)) T <- character(0)
   if(missing(nT)) nT <- rep(1, length(T))
@@ -77,9 +81,11 @@ setMethod("initialize", "Scenario", function(.Object,
   .Object@nV <- nV
   
   .Object@tunit <- tunit
+  .Object@randomize <- randomize
+  .Object@seed <- seed  
 
-  .Object@df <- data.frame()
-  
+  .Object <- randomize(.Object)
+
   validObject(.Object)
   return(.Object)
 })
@@ -88,6 +94,45 @@ setMethod("initialize", "Scenario", function(.Object,
 Scenario <- function(...)
 {
   new("Scenario", ...)
+}
+
+randomize <- function(object)
+{
+  stopifnot(length(object@T) == length(object@nT))
+  stopifnot(length(object@V) == length(object@nV))
+  
+  T <- object@T
+  nT <- object@nT
+  V <- object@V
+  nV <- object@nV
+  randomize <- object@randomize
+  
+  # `T`
+  T <- rep(T, nT)
+  if(randomize) {
+    if(!is.na(object@seed)) 
+      set.seed(object@seed)
+    T <- sample(T)
+  }
+
+  nT <- rep(1, length(T))
+  
+  # `V`
+  V <- rep(V, nV)
+  if(randomize) {
+    if(!is.na(object@seed)) 
+      set.seed(object@seed)
+    V <- sample(V)
+  }
+    
+  nV <- rep(1, length(V))
+  
+  object@T <- T
+  object@nT <- nT
+  object@V <- V
+  object@nV <- nV
+  
+  return(object)
 }
 
 #----------------------------
@@ -256,7 +301,7 @@ setMethod("label2df", "Scenario", function(object, value, nsamples = 0, step = F
 
   # check par.
   if(sum(cval > 2.0 * cval.max)) 
-    stop("Error in Scenario::label2df: second entry (conc. level) ", paste(cval, collapse=", "), 
+    warning("warning in Scenario::label2df: second entry (conc. level) ", paste(cval, collapse=", "), 
     " is greater than the 2 maximum levels ", paste(2.0 * cval.max, collapse=", "), "", " for gas ", paste(gname, collapse=", "), " at conc. units '", 
     concUnitsInt, "'.", sep="")
       
@@ -267,7 +312,10 @@ setMethod("label2df", "Scenario", function(object, value, nsamples = 0, step = F
   conc0 <- matrix(0, nrow = tunit, ncol = ngases)
   conci <- matrix(conc.row, nrow = tunit, ncol = ngases, byrow=TRUE) 
   
-  conci <- rbind(conci, conc0) # gas/air or response/cleaning phases
+  # v1
+  #conci <- rbind(conci, conc0) # gas/air or response/cleaning phases
+  #v2
+  conci <- rbind(conc0, conci) # air/gas or cleaning/response phases
   df <- conc2df(object, conci) # columns: gas names, glab, lab, tpoint
   
   # replicate by 'n'
@@ -316,15 +364,24 @@ setMethod("concSample", "Scenario", function(object, n = 1, ...)
 })
 
 ### Method getConc
-setMethod("getConc", "Scenario", function(object, ...)
+setMethod("getConc", "Scenario", function(object, set, ...)
 {
-  conc <- cmatrix(object)
+  df <- sdata.frame(object)
+  
+  if(!missing(set)) {
+    if(set == "T") conc <- subset(df, set == "T", select = gnames(object))
+    else if(set == "V") conc <- subset(df, set == "V", select = gnames(object))
+    else 
+      stop("Error in Scenario::getConc: parameter 'set' is not recognized.")
+  }
+  else {
+    conc <- subset(df, select = gnames(object))    
+  }
+  
   n <- nrow(conc)
   if(n == 0) 
     stop("Error in Scenario::getConc: conc. matrix is empty (used 'add' method).")
      
-  #conc <- conc[sample(1:nrow(conc)), ]
-  
   return(as.matrix(conc))
 })
 
@@ -334,7 +391,7 @@ setMethod("getConc", "Scenario", function(object, ...)
 #' @export
 plotScenario <- function(...) plot.Scenario.class(...)
 
-setMethod("plot", "Scenario", function (x, y, ret = FALSE, ...) 
+setMethod("plot", "Scenario", function (x, y, ret = TRUE, ...) 
 {
   # missing
   if(missing(y)) y <- "class"

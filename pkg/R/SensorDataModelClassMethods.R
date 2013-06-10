@@ -543,7 +543,7 @@ predict.SensorDataModel.spline <- function(object, C, B, out = 'sum', ...)
           Ck <- Ci[k]
           
           bs <- object$transform[[k]]
-          X[i, k] <- predict(bs, Ck, Bk)          
+          X[i, k] <- predict(bs, Ck, Bk)
         }
       }
       else
@@ -564,7 +564,7 @@ predict.SensorDataModel.spline <- function(object, C, B, out = 'sum', ...)
   }
   else
     stop("Error in 'predict.SensorDataModel.spline': 'out' is unknown.")
-  
+
   return(X)
 }
 #----------------------------

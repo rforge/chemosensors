@@ -211,10 +211,17 @@ setMethod("initialize", "SensorArray", function(.Object,
 })
 
 #' @export
-SensorArray <- function(...)
-{
-  new("SensorArray", ...)
-}
+SensorArray <- function(...) new("SensorArray", ...) 
+
+#SensorArray <- function(num, nsensors, model, gases, gnames, concUnits, csd, ssd, dsd, ...) #
+#{
+#  SensorArray.new <- function(...) new("SensorArray", ...)
+#  
+#  args <- as.list(match.call())
+#  args <- args[-1] # remove 1st element
+#  
+#  do.call(SensorArray.new, args)
+#}
 
 #' Wrapper to Class Sensor.
 #'
@@ -230,6 +237,29 @@ Sensor <- function(num = 1, ...)
     stop("Error in 'Sensor': 'num' is a vector.")
   new("SensorArray", num=num, ...)
 }
+
+
+#----------------------------
+# Convert Methods
+#----------------------------
+
+setMethod("getSensor", "SensorArray", function(object, index) 
+{
+  stopifnot(index %in% object@idx)
+  
+  sensor <- object
+  sensor@idx <- 1
+  sensor@num <- sensor@num[index]
+  sensor@fnum <- sensor@fnum[index]      
+  sensor@dataModel <- sensor@dataModel[index]
+  sensor@knum <- sensor@knum[index]
+  sensor@srdata <- sensor@srdata[index, , , drop = FALSE]
+
+  sensor@sorptionModel$K <- sensor@sorptionModel$K[, index, drop = FALSE]
+  sensor@sorptionModel$Q <- sensor@sorptionModel$Q[, index, drop = FALSE]
+  
+  return(sensor)
+})
 
 
 #----------------------------
@@ -353,10 +383,11 @@ setMethod("predict", "SensorArray", function(object, conc, coef="numeric", concU
 
   if(concUnits != concUnitsInt(object)) conc <- concNorm(object, conc, concUnits) # concNorm
   conc <- concModel(object, conc=conc, concUnits=concUnitsInt(object), ...)  # concModel
+  
   if(ssd(object)) {
     coef <- predict(as(object, "SensorNoiseModel"), coef=coef, n=n, ...) # SensorArray noise   
     if(nsensors == 1) coef <- array(coef, c(dim(coef), 1))
-    
+
     sdata <- sdataModel(object, conc=conc, coef=coef, concUnits=concUnitsInt(object), ...)
   }
   else {
@@ -367,7 +398,7 @@ setMethod("predict", "SensorArray", function(object, conc, coef="numeric", concU
     sdata <- predict(as(object, "DriftNoiseModel"), sdata=sdata, ...) # Drift Noise Model
   }
   
-  colnames(sdata) <- paste("S", idx(object), ", num ", num(object), sep = "")
+  colnames(sdata) <- snames(object)
     
   return(sdata)
 })

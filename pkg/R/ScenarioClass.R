@@ -60,11 +60,12 @@ setClass(Class="Scenario",
     name = "character",
     # class-specific slots
     T = "character", nT = "numeric", V = "character", nV = "numeric",
-    df = "data.frame", # colnames: cmatrix, time, set, lab
+    randomize = "logical",
     tunit = "numeric", 
     # class-common slots
     gases = "numeric", gind = "numeric", ngases = "numeric", gnames="character", 
-    concUnits = "character", concUnitsInt="character"),  
+    concUnits = "character", concUnitsInt="character",
+    seed = "numeric"),  
   validity=validScenario
 )
 
@@ -86,9 +87,30 @@ setMethod ("print", "Scenario", function(x, ...)
 #' @exportMethod show
 setMethod ("show", "Scenario", function(object)
 {
+  # local functions
+  set_to_str <- function(set, n)
+  {
+    if(length(n) == 0 | length(n) == 1 & n[1] == 0) { return("empty") }
+    
+    df <- data.frame(label = rep(set, n)) # training frame
+    sf <- ddply(df, "label", summarise, num = length(label))
+    paste(paste(sf$label, ' (', sf$num, ')', sep = ''), collapse = ', ') # looks like [1] "A (2), B (3)"
+  }
+
+  randomize.str <- ifelse(object@randomize, "TRUE", "FALSE")
+
+  # print header string
   cat(" Scenario")
   if(object@name != "undefined") cat(" `", object@name,"`", sep = '')
-  cat(" (", nsamples(object), " samples x ", ngases(object), " gases ", paste(gnames(object), collapse=", "), ")\n", sep='')
+  cat(" of ", nsamples(object), " samples, tunit ", object@tunit,", randomize ", randomize.str, "\n", sep = '')
+
+  # print gases
+  cat(" - gases ", paste(gnames(object), collapse=", "), "\n", sep='')
+    
+  # print T/V stat
+  cat(" - Training Set:", set_to_str(object@T, object@nT), "\n")
+  cat(" - Validation Set:", set_to_str(object@V, object@nV), "\n")  
+
 })
 
 
@@ -101,7 +123,7 @@ setMethod ("show", "Scenario", function(object)
 #----------------------------
 
 setMethod("tunit", "Scenario", function(x) x@tunit)
-setMethod("nsamples", "Scenario", function(x) nrow(x@df))
+setMethod("nsamples", "Scenario", function(x) sum(x@nT) + sum(x@nV))
 setMethod("cmatrix", "Scenario", function(x, ...) subset(sdata.frame(x, ...), select = gnames(x)))
 
 #----------------------------

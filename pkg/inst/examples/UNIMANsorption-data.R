@@ -72,5 +72,10 @@ p8 <- ggplot(df, aes(reorder(x = factor(sensor), A - C), y = A - C, fill = senso
   xlab("sensor") + ylab("Difference in K between A and C")
 p8
 
+### UNIMAN affinities K in polar plot
+mf <- melt(UNIMANsorption$qkc[, , "K"], varnames = c("sensor", "gas"))
+
+p9 <- qplot(sensor, value, color = gas, data = mf, geom = "line") + coord_polar()
+p9
 
 

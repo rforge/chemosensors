@@ -47,8 +47,15 @@ subClasses <- function(class)
 setGeneric("sdata.frame", function(x, ...) standardGeneric("sdata.frame"))
 
 #----------------------------
+# Convert Methods
+#----------------------------
+#' @exportMethod getSensor
+setGeneric("getSensor", function(object, index) standardGeneric("getSensor"))
+
+#----------------------------
 # Get/Set Methods
 #----------------------------
+
 #' @exportMethod num
 setGeneric("num", function(x) standardGeneric("num"))
 #' @exportMethod numStr
@@ -73,6 +80,8 @@ setGeneric("coefStr", function(object, ...) standardGeneric("coefStr"))
 
 #' @exportMethod nsensors
 setGeneric("nsensors", function(x) standardGeneric("nsensors"))
+#' @exportMethod snames
+setGeneric("snames", function(x, ...) standardGeneric("snames"))
 
 #' @exportMethod concUnits
 setGeneric("concUnits", function(x) standardGeneric("concUnits"))
@@ -163,6 +172,13 @@ setGeneric("enableDyn", function(x) standardGeneric("enableDyn"))
 setGeneric("enableDyn<-", function(object, value) standardGeneric("enableDyn<-"))
 
 #----------------------------
+# Compute Methods
+#----------------------------
+
+#' @exportMethod computeAffinity
+setGeneric("computeAffinity", function(object, method, norm = "none", ...) standardGeneric("computeAffinity"))
+
+#----------------------------
 # Model Methods
 #----------------------------
 
@@ -202,6 +218,11 @@ setGeneric("coefSample", function(object, ...) standardGeneric("coefSample"))
 #' @exportMethod getConc
 setGeneric("getConc", function(object, ...) standardGeneric("getConc"))
 
+#' @exportMethod extractConc
+setGeneric("extractConc", function(object, conc, set, scenario, n, cf, df, concUnits = "default", ...) standardGeneric("extractConc"))
+
+#' @exportMethod extractSdata
+setGeneric("extractSdata", function(object, conc, sdata, sf, df, concUnits = "default", ...) standardGeneric("extractSdata"))
 
 #----------------------------
 # Noise Methods
@@ -225,8 +246,16 @@ setGeneric("plotPolarGases", function(x, y, ...) standardGeneric("plotPolarGases
 #' @exportMethod plotResponse
 setGeneric("plotResponse", function(x, y, ...) standardGeneric("plotResponse")) 
 
+#' @exportMethod plotResponseOld
+setGeneric("plotResponseOld", function(x, y, ...) standardGeneric("plotResponseOld")) 
+
+#' @exportMethod plotBox
+setGeneric("plotBox", function(x, y, conc, sdata, set, scenario, ...) standardGeneric("plotBox")) 
+
 #' @exportMethod plotPCA
-setGeneric("plotPCA", function(x, y, ...) standardGeneric("plotPCA")) 
+setGeneric("plotPCA", function(x, y, conc, sdata, set, scenario,
+  feature = "transient", air = TRUE, 
+  mod, center = TRUE, scale = TRUE, pc = 1:2, ...) standardGeneric("plotPCA")) 
 
 #' @exportMethod plotTimeline
 setGeneric("plotTimeline", function(x, y, ...) standardGeneric("plotTimeline")) 
@@ -288,6 +317,15 @@ setGeneric("affinity", function(object, ...) standardGeneric("affinity"))
 # Conc Methods
 #----------------------------
 
+#' @exportMethod checkConc
+setGeneric("checkConc", function(object, conc, ...) standardGeneric("checkConc"))
+
+#' @exportMethod sdata2feature
+setGeneric("sdata2feature", function(object, conc, sdata, ...) standardGeneric("sdata2feature"))
+
+#' @exportMethod sdata2df
+setGeneric("sdata2df", function(object, sdata, ...) standardGeneric("sdata2df"))
+
 #' @exportMethod conc2df
 setGeneric("conc2df", function(object, conc, ...) standardGeneric("conc2df"))
 
@@ -302,6 +340,9 @@ setGeneric("conc2col", function(object, ...) standardGeneric("conc2col"))
 
 #' @exportMethod conc2gcol
 setGeneric("conc2gcol", function(object, ...) standardGeneric("conc2gcol"))
+
+#' @exportMethod getTPoint
+setGeneric("getTPoint", function(object, conc, ...) standardGeneric("getTPoint")) 
 
 #' @exportMethod conc2tpoint
 setGeneric("conc2tpoint", function(object, ...) standardGeneric("conc2tpoint"))

@@ -17,7 +17,7 @@ defaultSensorNoiseModel <- function()
 {
   par <- list(num=1, gases=1:3, gnames=LETTERS[1:3], concUnits="perc", concUnitsInt=defaultConcUnitsInt(),
     datasetSensorNoiseModel=defaultDataSensorNoiseModel(), pck=defaultDataPackage(), 
-    ssd = 0.1, sntype = "randomWalk",  snf = c(1, 1, 0.2), sndata=NULL)
+    ssd = 0.1, sntype = "randomWalk",  snf = c(1, 1, 1), sndata=NULL)
   
   return(par)
 }
@@ -269,7 +269,8 @@ setMethod("coefnames", "SensorNoiseModel", function(x)
 setMethod("scaledNoiseSd", "SensorNoiseModel", function(object, ...)
 {
   scaledSd <- switch(type(object),
-    randomWalk = 3 * ssd(object),
+    #randomWalk = 3 * ssd(object), # 0.7.4
+    randomWalk = 3 * ssd(object), # 0.7.5
     stop("Error in SensorNoiseModel::scaledNoiseSd: 'type' is unknown."))
 
   return(scaledSd)
@@ -289,45 +290,61 @@ setMethod ("predict", "SensorNoiseModel", function(object, coef, n, ...)
                 
   ncoef <- ncoef(object)  
   nsensors <- nsensors(object)  
-  nsensors.str <- ifelse(nsensors == 1, "one", "many")
   
   # pre-process 'ssd'
   ssd <- scaledNoiseSd(object)  
   ssd <- ssd / sqrt(n) # random walk: sigma(n) = sd / sqrt(n)
-  
-  B <- switch(nsensors.str,
-    one = array(coef, c(ncoef, n)),
-    many= array(coef, c(ncoef, nsensors, n)))    
-  
+
   if(ssd) {
-    # add noise  
     Bsd <- object@sndata
     Bsd <- ssd * Bsd * object@snf # scale by factor 
 
-    if(type(object) == "randomWalk") {
-     N <- switch(nsensors.str,
-        one = aaply(Bsd, 1, function(x, n) rnorm(n, sd=x), n),
-        many = aaply(Bsd, c(1, 2), function(x, n) rnorm(n, sd=x), n))
-
-      N <- switch(nsensors.str,
-        one = aaply(N, 1, cumsum),
-        many = aaply(N, c(1, 2), cumsum)) 
-         
-      B <- B + N
-    }
-    else
-      stop("Error in SensorNoiseModel::predict: 'type' is unknown.")        
+    N <- switch(type(object),
+      "randomWalk" = {
+        apply(Bsd, 1:2, function(x, n) {
+          rnorm(n, sd = x)
+        }, n)
+      },
+      stop("Error in SensorNoiseModel::predict: 'type' is unknown."))
   }
-
-  # transpose 'B'  
-  B <- switch(nsensors.str,
-    one = t(B),
-    many = aaply(B, 3, function(x) x))
-
-  # names
-  dimnames(B) <- switch(nsensors.str,
-    one = list("1"=list(), "2"=coefnames(object)),
-    many = list("1"=list(), "2"=coefnames(object), "3"=dimnames(object@sndata)[[2]]))
+  
+  B.list <- llply(1:nsensors, function(i) {
+    # all matricies here 
+    # - matrix of coefficients `B`;
+    # - matricies of noise in coefficients `N.step` and `N.stepsum`;
+    # have dimensions of #rows = n, #cols = ncoef
+    coefi <- coef[, i]
+    B <- matrix(coefi, nrow = n, ncol = ncoef, byrow = TRUE)
+    
+    if(ssd) {
+      Bsd <- object@sndata
+      Bsd <- ssd * Bsd * object@snf # scale by factor 
+      
+      N.step <-  N[, , i] # noise at each sample from 1 to n
+      N.stepsum <- apply(N.step, 2, cumsum) # random-walk noise 
+      
+      B <- B + N.stepsum
+    }
+    
+    B
+  })
+  
+  # output array `B` of three dimensions
+  # - dim 1: number of samples `n`
+  # - dim 2: number of coefficients `ncoef`
+  # - dim 3: number of sensors `nsensors`
+  B <- array(NA, c(n, ncoef, nsensors))
+  
+  for(i in 1:nsensors) {
+    B[, , i] <- B.list[[i]]
+  }
+  
+  dimnames(B) <- list("1" = list(), "2"= coefnames(object), "3" = dimnames(object@sndata)[[2]])
+  
+  ### output
+  if(nsensors == 1) {
+    B <- B[, , 1, drop = TRUE]
+  }
 
   return(B)
 })

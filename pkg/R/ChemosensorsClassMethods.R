@@ -50,6 +50,11 @@ defaultConcUnits <- function() return("perc")
 #' @export
 defaultConcUnitsSorption <- function() return("norm")
 
+#' @export defaultSet
+defaultSet <- function() return(c("A 0.01", "A 0.02", "A 0.05",
+  "B 0.01", "B 0.02", "B 0.05",
+  "C 0.1", "C 1"))
+
 #----------------------------
 # Defaults (Datasets)
 #----------------------------
@@ -77,6 +82,10 @@ defaultDataDriftNoiseModel <- function() return("UNIMANdnoise")
 #----------------------------
 
 #----------------------------
+# Convert Methods
+#----------------------------
+
+#----------------------------
 # Get/Set Methods
 #----------------------------
 
@@ -93,7 +102,7 @@ setMethod("idx", "ANY", function(x) x@idx)
 
 setMethod("gases", "ANY", function(x) x@gases)
 setMethod("gind", "ANY", function(x) x@gind)
-setMethod("ngases", "ANY", function(x) x@ngases)
+setMethod("ngases", "ANY", function(x) ifelse("ngases" %in% slotNames(x), x@ngases, NA))
 setMethod("gnames", "ANY", function(x) x@gnames)
 
 setMethod("gases", "missing", function(x) 1:3)
@@ -101,7 +110,17 @@ setMethod("gind", "missing", function(x) 1:3)
 setMethod("ngases", "missing", function(x) 3)
 setMethod("gnames", "missing", function(x) LETTERS[1:3])
 
-setMethod("nsensors", "ANY", function(x) length(x@num))
+setMethod("nsensors", "ANY", function(x) ifelse("num" %in% slotNames(x), length(x@num), NA))
+setMethod("snames", "ANY", function(x, sensor.names = "short", ...) {
+  match.arg(sensor.names, c("short", "long"))
+  
+  if("num" %in% slotNames(x) & "idx" %in% slotNames(x))
+    return(switch(sensor.names,
+      "long" = paste("S", x@idx, ", num ", x@num, sep = ""), # looks like: "S1, num 1", ...
+      "short" = paste("S", x@idx, sep = ""))) 
+  else
+    return(NA)
+})
 
 setMethod("concUnits", "ANY", function(x) x@concUnits)
 setMethod("concUnitsInt", "ANY", function(x) x@concUnitsInt)
@@ -111,6 +130,45 @@ setReplaceMethod("concUnits", "ANY", function(object, value)
   object@concUnits <- value
   validObject(object)
   return (object)
+})
+
+#----------------------------
+# Export Methods
+#----------------------------
+#' Method sdata.frame
+#'
+#' Method sdata.frame converts a concetration matrix and 
+#' (optionally) a sensor data matrix into a data frame.
+#'
+#' The input parameters are an object, e.g. \code{SensorArray}, a concentration matrix,
+#' and (optionally) a sensor data matrix.
+#' The output data frame has the following columns:
+#'
+#' \tabular{rl}{
+#'   \code{S1}, \code{S2}, ... \tab Sensor signals. \cr
+#'   \code{A}, \code{B}, ... \tab Gas concentrations (column names equal to gas names of the object). \cr
+#'   \code{glab} \tab Gas labels, e.g. \code{A} or \code{Air}. \cr
+#'   \code{lab} \tab Gas+Concetratoin labels, e.g. \code{A 0.01}. \cr
+#'   \code{tpoint} \tab Time point labels to encode the gas pulses, e.g. \code{gasin}.
+#' }
+#' 
+#' @name sdata.frame
+#' @rdname www-sdata.frame
+#' @example inst/examples/sdata.frame-method.R
+#' @exportMethod sdata.frame
+setMethod("sdata.frame", "ANY", function(x, feature, df, ...) 
+{ 
+  stopifnot(!missing(x))
+  stopifnot(!missing(feature))
+  
+  if(missing(df)) {
+    of <- sdata2feature(x, feature = feature, ...)
+  } 
+  else {
+    of <- sdata2feature.df(x, feature = feature, df = df, ...)
+  }
+  
+  return(of)
 })
 
 #----------------------------
@@ -134,6 +192,10 @@ setMethod("coefStr", "ANY", function(object, sensor = 1, ...)
   return(coefStr)
   
 })
+
+#----------------------------
+# Compute Methods
+#----------------------------
 
 #----------------------------
 # Model Methods
@@ -405,7 +467,7 @@ setReplaceMethod("nsd", "ANY", function(object, value)
 ### Method plotPolar
 setMethod("plotPolar", "ANY", function(x, y, polar = TRUE, geom = "line",
   main = "Model Response: Polar plot", xlab = "Sensor", ylab = "Sensor Signal", xlim = NULL, ylim = NULL,
-  graphics = "ggplot", ret = FALSE, ...)
+  graphics = "ggplot", ret = TRUE, ...)
 {
   # check par. 'graphics'
   match.arg(graphics, c("ggplot"))
@@ -596,7 +658,7 @@ setMethod("plotPolarGases", "ANY", function(x, y, polar = TRUE, geom = "line",
 })
 
 ### Method plotResponse
-setMethod("plotResponse", "ANY", function(x, y, concUnits = "norm", 
+setMethod("plotResponseOld", "ANY", function(x, y, concUnits = "norm", 
   jitter, 
   gases = 0, type = "inc", n = 100, 
   uniman = FALSE, affinity=FALSE, datasetSensorModel, pck, 
@@ -745,79 +807,6 @@ setMethod("plotResponse", "ANY", function(x, y, concUnits = "norm",
     }
   }
 })
-
-### Method plotPCA
-setMethod("plotPCA", "ANY", function(x, y, conc, set, sdata,
-  mod, center = TRUE, scale = TRUE, pc = 1:2,
-  air = TRUE, 
-  concUnits = "default", 
-  main = "PCA scoreplot", xlab, ylab, 
-  ret = TRUE, ...)
-{
-  
-  if(concUnits == "default") concUnits <- defaultConcUnits()
-        
-  gind <- gind(x)
-  nsensors <- nsensors(x)
-  ngases <- ngases(x)
-  gnames <- gnames(x)
-  
-  tunit <- tunit(x)
-  
-  # conc
-  if(missing(conc)) {
-    sc <- Scenario(T = set, tunit = tunit, concUnits = concUnits)
-    conc <- getConc(sc)
-  }
-
-  # sdata
-  if(missing(sdata)) sdata <- predict(x, conc, concUnits = concUnits)
-  stopifnot(nrow(sdata) == nrow(conc))
-  stopifnot(ncol(sdata) == nsensors)
-  
-  # filter off air
-  if(!air) { 
-    ind <- apply(conc, 1, sum) == 0
-    if(length(ind)) {
-      conc <- conc[!ind, , drop = FALSE]
-      sdata <- sdata[!ind, , drop = FALSE]
-    }
-  }
-
-  # model
-  if(missing(mod)) mod <- prcomp(sdata, center = center, scale = scale)
-  
-  # scores
-  X <- sdata
-  if(mod$center[1]) X <- as.matrix(sweep(X, 2, mod$center))
-  if(mod$scale[1])  X <- as.matrix(sweep(X, 2, mod$scale, "/"))
-  
-  scores <- X %*% mod$rotation[, pc]
-  
-  # plot parameters
-  if(missing(xlab)) xlab <- paste("PC", pc[1], " (", round(100*capturedVar(sdata, pc[1], mod), 2), ")%", sep="") 
-  if(missing(ylab)) ylab <- paste("PC", pc[2], " (", round(100*capturedVar(sdata, pc[2], mod), 2), ")%", sep="")   
-
-  # plot
-  cf <- conc2df(x, conc)
-
-  df <- as.data.frame(scores)
-  colnames(df) <- c("PCx", "PCy")
-
-  df <- cbind(df, cf)
-  
-  p <- qplot(PCx, PCy, data = df, geom = 'point', color = lab) + 
-    labs(title = main, x = xlab, y = ylab)
-    
-  if(ret) {
-    return(p)
-  } 
-  else {
-    print(p)
-    return(invisible())
-  } 
-})
-
 
 ### Method plotTimeline
 setMethod("plotTimeline", "ANY", function(x, y, conc, sdata, concUnits = "default",

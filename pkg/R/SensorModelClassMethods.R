@@ -503,6 +503,7 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
     {    
       conci <- conc[, , i]
       sdatai <- predict(object@dataModel[[i]], C=conc[, , i], B=coef[, , i], out = out, ...)  
+      
       if(enableDyn) {
         # v1
         sdata.pulse <- sdata2pulse(object, conci, sdatai)
@@ -515,6 +516,7 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
         #sdatai <- predict(as(object, "SensorDynamics"), conc = conci, sdata = sdatai, sensors = i)
         #sdatai <- apply(sdatai, 1, sum)
       }    
+      
       sdatai
     }
 
