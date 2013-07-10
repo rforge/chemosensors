@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>demo-Mixtures. chemosensors 0.7.4</title>
+<title>demo-Mixtures. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -48,46 +48,51 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment">### Expreiment #1: test all combinations of mixtures for three analytes A, B and C</span>
+    <pre class="examples"><div class='input'>### Expreiment #1: test all combinations of mixtures for three analytes A, B and C
 
-<span class="symbol">set1</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A 0.05"</span><span class="keyword">,</span> <span class="string">"B 0.05"</span><span class="keyword">,</span> <span class="string">"C 1"</span><span class="keyword">,</span> <span class="comment"># pure analytes</span>
-  <span class="string">"A 0.05, B 0.05"</span><span class="keyword">,</span> <span class="string">"A 0.05, C 1"</span><span class="keyword">,</span> <span class="string">"B 0.05, C 1"</span><span class="keyword">,</span> <span class="comment"># binary mixtures</span>
-  <span class="string">"A 0.05, B 0.05, C 1"</span><span class="keyword">)</span> <span class="comment"># a ternary mixture</span>
+set1 <- c("A 0.05", "B 0.05", "C 1", # pure analytes
+  "A 0.05, B 0.05", "A 0.05, C 1", "B 0.05, C 1", # binary mixtures
+  "A 0.05, B 0.05, C 1") # a ternary mixture
 
-<span class="comment"># data model 'plsr' leads to a visually nice distribution of gas classes via PCA scoreplot</span>
-<span class="symbol">sa1</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">model</span> <span class="argument">=</span> <span class="string">"plsr"</span><span class="keyword">,</span> <span class="argument">num</span> <span class="argument">=</span> <span class="number">3</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span>
+# data model 'plsr' leads to a visually nice distribution of gas classes via PCA scoreplot
+sa1 <- SensorArray(model = "plsr", num = 3:5, dsd = 0)
 
-<span class="comment"># look at the level of signal in reponse to pure analytes and mixtures</span>
-<span class="comment"># - the highest and the lowest levels of signal correspond to two pure analytes, </span>
-<span class="comment">#   A and B, respectively (that will result in a nice triangle-bounded distribution of PCA scores)</span>
-<span class="symbol">p1</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotSignal</span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="symbol">set1</span><span class="keyword">)</span>
-<span class="symbol">p1</span></div>
+# look at the level of signal in reponse to pure analytes and mixtures
+# - the highest and the lowest levels of signal correspond to two pure analytes, 
+#   A and B, respectively (that will result in a nice triangle-bounded distribution of PCA scores)
+p1 <- plotSignal(sa1, set = set1)
+p1
+</div>
 <p><img src='demo-Mixtures-2.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># If air samples are included, (in most cases) PCA shows the signal magnitudes </span>
-<span class="comment"># across gas classes in respect to air-level (zero-level) </span>
-<span class="symbol">p2</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/rep'>rep</a></span><span class="keyword">(</span><span class="symbol">set1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span>
-<span class="symbol">p2</span></div>
+# If air samples are included, (in most cases) PCA shows the signal magnitudes 
+# across gas classes in respect to air-level (zero-level) 
+p2 <- plotPCA(sa1, set = rep(set1, 3))
+p2 
+</div>
 <p><img src='demo-Mixtures-4.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">p3</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa1</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/rep'>rep</a></span><span class="keyword">(</span><span class="symbol">set1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">air</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
-<span class="symbol">p3</span></div>
+p3 <- plotPCA(sa1, set = rep(set1, 3), air = FALSE)
+p3 
+</div>
 <p><img src='demo-Mixtures-6.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">### Experiment #2: two analytes A and C, and their binary mixture AC </span>
-<span class="comment">#   at differenct concentration levels</span>
+### Experiment #2: two analytes A and C, and their binary mixture AC 
+#   at differenct concentration levels
 
-<span class="symbol">set2</span> <span class="assignement">&lt;-</span>  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A 0.01"</span><span class="keyword">,</span> <span class="string">"A 0.05"</span><span class="keyword">,</span> <span class="string">"C 0.1"</span><span class="keyword">,</span> <span class="string">"C 1"</span><span class="keyword">,</span> <span class="string">"A 0.01, C 0.1"</span><span class="keyword">,</span> <span class="string">"A 0.05, C  1"</span><span class="keyword">)</span>
+set2 <-  c("A 0.01", "A 0.05", "C 0.1", "C 1", "A 0.01, C 0.1", "A 0.05, C  1")
 
-<span class="comment"># default data model 'ispline'</span>
-<span class="symbol">sa2</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">num</span> <span class="argument">=</span> <span class="number">3</span><span class="keyword">:</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span>
+# default data model 'ispline'
+sa2 <- SensorArray(num = 3:5, dsd = 0)
 
-<span class="symbol">p4</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotSignal</span><span class="keyword">(</span><span class="symbol">sa2</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="symbol">set2</span><span class="keyword">)</span>
-<span class="symbol">p4</span></div>
+p4 <- plotSignal(sa2, set = set2)
+p4
+</div>
 <p><img src='demo-Mixtures-8.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">p5</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa2</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/rep'>rep</a></span><span class="keyword">(</span><span class="symbol">set2</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">air</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
-<span class="symbol">p5</span></div>
+p5 <- plotPCA(sa2, set = rep(set2, 3), air = FALSE)
+p5
+</div>
 <p><img src='demo-Mixtures-10.png' alt='' width='400' height='400' /></p></pre>
   </div>
   <div class="span4">

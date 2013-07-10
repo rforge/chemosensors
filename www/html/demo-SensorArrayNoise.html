@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>demo-SensorArrayNoise. chemosensors 0.7.4</title>
+<title>demo-SensorArrayNoise. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -48,39 +48,40 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Random'>set.seed</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">)</span>
+    <pre class="examples"><div class='input'>set.seed(1)
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/data'>data</a></span><span class="keyword">(</span><span class="symbol">UNIMANshort</span><span class="keyword">)</span></div>
-<strong class='warning'>Warning message:
-data set ‘UNIMANshort’ not found</strong>
-<div class='input'><span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="symbol">UNIMANshort</span><span class="keyword">$</span><span class="symbol">C</span>
-<span class="symbol">sdata.uniman</span> <span class="assignement">&lt;-</span> <span class="symbol">UNIMANshort</span><span class="keyword">$</span><span class="symbol">dat</span>
+data(UNIMANshort)
+conc <- UNIMANshort$C
+sdata.uniman <- UNIMANshort$dat
 
-<span class="symbol">mod.uniman</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/prcomp'>prcomp</a></span><span class="keyword">(</span><span class="symbol">sdata.uniman</span><span class="keyword">,</span> <span class="argument">center</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">scale</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+mod.uniman <- prcomp(sdata.uniman, center = TRUE, scale = FALSE)
 
-<span class="comment"># 1) a virtual array with default noise parameters</span>
-<span class="comment"># - csd (0.1), ssd (0.1), dsd (0.1)</span>
-<span class="comment"># - data model 'mvr' reproduces the structure of UNIMAN data better</span>
-<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">model</span> <span class="argument">=</span> <span class="string">"plsr"</span><span class="keyword">,</span> <span class="argument">num</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="number">17</span><span class="keyword">,</span> <span class="argument">enableSorption</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span>
+# 1) a virtual array with default noise parameters
+# - csd (0.1), ssd (0.1), dsd (0.1)
+# - data model 'mvr' reproduces the structure of UNIMAN data better
+sa <- SensorArray(model = "plsr", num = 1:17, enableSorption = FALSE)
 
-<span class="comment"># plot short-term UNIMAN dataset (200 samples)</span>
-<span class="symbol">p0</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="argument">conc</span> <span class="argument">=</span> <span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">sdata</span> <span class="argument">=</span> <span class="symbol">sdata.uniman</span><span class="keyword">,</span> <span class="argument">mod</span> <span class="argument">=</span> <span class="symbol">mod.uniman</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"UNIMAN PCA"</span><span class="keyword">)</span>
-<span class="symbol">p0</span></div>
+# plot short-term UNIMAN dataset (200 samples)
+p0 <- plotPCA(sa, conc = conc, sdata = sdata.uniman, mod = mod.uniman, main = "UNIMAN PCA")
+p0
+</div>
+<p><img src='demo-SensorArrayNoise-2.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+p1 <- plotPCA(sa, conc = conc, mod = mod.uniman, main = "Synthetic data #1 \n projected on UNIMAN PCA")
+p1
+</div>
 <p><img src='demo-SensorArrayNoise-4.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">p1</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="argument">conc</span> <span class="argument">=</span> <span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">mod</span> <span class="argument">=</span> <span class="symbol">mod.uniman</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"Synthetic data #1 \n projected on UNIMAN PCA"</span><span class="keyword">)</span>
-<span class="symbol">p1</span></div>
-<p><img src='demo-SensorArrayNoise-6.png' alt='' width='400' height='400' /></p>
-<div class='input'>
-<span class="comment"># 2) add more noise to 'sa'</span>
-<span class="comment"># - csd = 0.5, ssd =0.5, dsd = 0.5</span>
-<span class="functioncall">csd</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0.5</span>
-<span class="functioncall">ssd</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0.5</span>
-<span class="functioncall">dsd</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0.5</span>
+# 2) add more noise to 'sa'
+# - csd = 0.5, ssd =0.5, dsd = 0.5
+csd(sa) <- 0.5
+ssd(sa) <- 0.5
+dsd(sa) <- 0.5
 
-<span class="symbol">p2</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="argument">conc</span> <span class="argument">=</span> <span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">mod</span> <span class="argument">=</span> <span class="symbol">mod.uniman</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"Synthetic data #2 \n projected on UNIMAN PCA"</span><span class="keyword">)</span>
-<span class="symbol">p2</span></div>
-<p><img src='demo-SensorArrayNoise-8.png' alt='' width='400' height='400' /></p>
+p2 <- plotPCA(sa, conc = conc, mod = mod.uniman, main = "Synthetic data #2 \n projected on UNIMAN PCA")
+p2
+</div>
+<p><img src='demo-SensorArrayNoise-6.png' alt='' width='400' height='400' /></p>
 <div class='input'></div></pre>
   </div>
   <div class="span4">

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Scenario. chemosensors 0.7.4</title>
+<title>Scenario. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -96,51 +96,78 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment"># scenario object (empty): default initialization </span>
-<span class="symbol">sc</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Scenario.html'>Scenario</a></span><span class="keyword">(</span><span class="argument">tunit</span> <span class="argument">=</span> <span class="number">60</span><span class="keyword">)</span>
+    <pre class="examples"><div class='input'># scenario object (empty): default initialization 
+sc <- Scenario(tunit = 60)
 
-<span class="comment"># add data to </span>
-<span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="number">0.05</span><span class="keyword">,</span> <span class="number">2</span><span class="keyword">)</span></div>
-<strong class='error'>Error in .local(object, ...): not implemented yet</strong>
-<div class='input'><span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="string">"B"</span><span class="keyword">,</span> <span class="number">0.05</span><span class="keyword">,</span> <span class="number">2</span><span class="keyword">)</span></div>
-<strong class='error'>Error in .local(object, ...): not implemented yet</strong>
-<div class='input'><span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="string">"C"</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">,</span> <span class="number">2</span><span class="keyword">)</span></div>
-<strong class='error'>Error in .local(object, ...): not implemented yet</strong>
-<div class='input'><span class="functioncall">add</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/list'>list</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="string">"B"</span><span class="keyword">,</span> <span class="string">"C"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">0.02</span><span class="keyword">,</span> <span class="number">0.04</span><span class="keyword">,</span> <span class="number">0.5</span><span class="keyword">)</span><span class="keyword">,</span> <span class="number">2</span><span class="keyword">)</span></div>
-<strong class='error'>Error in .local(object, ...): not implemented yet</strong>
-<div class='input'>
-<span class="comment"># scenario object: custom initialization</span>
-<span class="symbol">set</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A 0.05"</span><span class="keyword">,</span> <span class="string">"B 0.05"</span><span class="keyword">,</span> <span class="string">"C 1"</span><span class="keyword">,</span> <span class="string">"A 0.02, B 0.04, C 0.5"</span><span class="keyword">)</span>
-<span class="symbol">sc</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Scenario.html'>Scenario</a></span><span class="keyword">(</span><span class="argument">tunit</span> <span class="argument">=</span> <span class="number">60</span><span class="keyword">,</span> <span class="argument">T</span> <span class="argument">=</span> <span class="symbol">set</span><span class="keyword">,</span> <span class="argument">nT</span> <span class="argument">=</span> <span class="number">2</span><span class="keyword">,</span> <span class="argument">V</span> <span class="argument">=</span> <span class="symbol">set</span><span class="keyword">,</span> <span class="argument">nV</span> <span class="argument">=</span> <span class="number">2</span><span class="keyword">)</span>
+# add data to 
+add(sc) <- list("A", 0.05, 2)
+add(sc) <- list("B", 0.05, 2)
+add(sc) <- list("C", 1, 2)
+add(sc) <- list(c("A", "B", "C"), c(0.02, 0.04, 0.5), 2)
 
-<span class="comment"># get information about the sensor</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/show'>show</a></span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span></div>
-<div class='output'> Scenario (0 samples x 3 gases A, B, C)
+# scenario object: custom initialization
+set <- c("A 0.05", "B 0.05", "C 1", "A 0.02, B 0.04, C 0.5") 
+sc <- Scenario(tunit = 60, T = set, nT = 2, V = set, nV = 2)
+
+# a real example of Scenario
+sc <- Scenario(name = "Regression", tunit = 60, concUnits = "perc",
+  T = c("A 0.01", "A 0.02", "A 0.05"), nT = 30,
+  V = c("A 0.01", "A 0.02", "A 0.05"), nV = 30,
+  randomize = TRUE)
+sc
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span></div>
-<div class='output'> Scenario
- - 0 samples
+<div class='output'> Scenario `Regression` of 180 samples, tunit 60, randomize TRUE
+ - gases A, B, C
+ - Training Set: A 0.01 (30), A 0.02 (30), A 0.05 (30) 
+ - Validation Set: A 0.01 (30), A 0.02 (30), A 0.05 (30) 
+</div>
+<div class='input'>
+add(sc) <- list("A", 0.03, 30, "T")
+add(sc) <- list("A", 0.04, 30, "T")
+sc
+</div>
+<div class='output'> Scenario `Regression` of 240 samples, tunit 60, randomize TRUE
+ - gases A, B, C
+ - Training Set: A 0.01 (30), A 0.02 (30), A 0.03 (30), A 0.04 (30), A 0.05 (30) 
+ - Validation Set: A 0.01 (30), A 0.02 (30), A 0.05 (30) 
+</div>
+<div class='input'>
+# get information about the sensor
+show(sc)
+</div>
+<div class='output'> Scenario `Regression` of 240 samples, tunit 60, randomize TRUE
+ - gases A, B, C
+ - Training Set: A 0.01 (30), A 0.02 (30), A 0.03 (30), A 0.04 (30), A 0.05 (30) 
+ - Validation Set: A 0.01 (30), A 0.02 (30), A 0.05 (30) 
+</div>
+<div class='input'>print(sc)
+</div>
+<div class='output'> Scenario `Regression`
+ - 240 samples
  - 3 gases A, B, C 
  - tunit: 60 
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span></div>
-<p><img src='Scenario-14.png' alt='' width='400' height='400' /></p>
+plot(sc)  
+</div>
+<p><img src='Scenario-10.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">,</span> <span class="argument">facet</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">concUnits</span> <span class="argument">=</span> <span class="string">'norm'</span><span class="keyword">)</span></div>
-<p><img src='Scenario-16.png' alt='' width='400' height='400' /></p>
+plot(sc, facet = FALSE, concUnits = 'norm')
+</div>
+<p><img src='Scenario-12.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># extract conc. matrix from scenatio</span>
-<span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="functioncall">getConc</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span>
+# extract conc. matrix from scenatio
+conc <- getConc(sc)
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/head'>head</a></span><span class="keyword">(</span><span class="symbol">conc</span><span class="keyword">)</span><span class="keyword">)</span></div>
-<div class='output'>     A B C
-1 0.05 0 0
-2 0.05 0 0
-3 0.05 0 0
-4 0.05 0 0
-5 0.05 0 0
-6 0.05 0 0
+print(head(conc))
+</div>
+<div class='output'>  A B C
+1 0 0 0
+2 0 0 0
+3 0 0 0
+4 0 0 0
+5 0 0 0
+6 0 0 0
 </div></pre>
   </div>
   <div class="span4">

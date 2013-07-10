@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Sensor. chemosensors 0.7.4</title>
+<title>Sensor. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -40,7 +40,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+    <pre>Sensor(num = 1, ...)</pre>
         
     <div class="Description">
       <h2>Description</h2>
@@ -50,11 +50,12 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment"># sensor object: default initialization</span>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="keyword">)</span>
+    <pre class="examples"><div class='input'># sensor object: default initialization
+s <- Sensor()
 
-<span class="comment"># get information about the sensor</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/show'>show</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span></div>
+# get information about the sensor
+show(s)
+</div>
 <div class='output'> Sensor Array of 1 sensors, 3 gases A, B, C
  - enableSorption TRUE, enableDyn FALSE
  - Sensor Model (num 1), beta 2, data model 'ispline'
@@ -63,7 +64,8 @@
  - Sensor Noise Model (ssd 0.1), noise type 'randomWalk'
  - Drift Noise Model (dsd 0.1), common model 'cpc'
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span></div>
+<div class='input'>print(s)
+</div>
 <div class='output'> SensorArray
  - enableSorption: TRUE 
  (1) Sensor Model
@@ -87,7 +89,7 @@
  - 3 gases A, B, C 
  - ssd: 0.1 
  - noise type: randomWalk 
- - noise-factor: 1, 1, 1, 1, 1, 1, 0.2, 0.2, 0.2 
+ - noise-factor: 1, 1, 1, 1, 1, 1, 1, 1, 1 
  (5) Drift Noise Model
  - num 1 
  drift common model
@@ -95,38 +97,46 @@
  - ndcomp: 1 
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span></div>
+plot(s)  
+</div>
 <p><img src='Sensor-6.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># sensor object: custom parameters</span>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">enableSorption</span><span class="argument">=</span><span class="number">FALSE</span><span class="keyword">)</span> <span class="comment"># sorption model disabled</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Sensor with sorption model disabled"</span><span class="keyword">)</span></div>
+# sensor object: custom parameters
+s <- Sensor(num=5, enableSorption=FALSE) # sorption model disabled
+plot(s, main="Sensor with sorption model disabled")
+</div>
 <p><img src='Sensor-8.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">alpha</span><span class="argument">=</span><span class="number">0.01</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span> <span class="comment"># amost linear sensor</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Almost linear sensor, non-linearity 0.01"</span><span class="keyword">)</span></div>
+s <- Sensor(num=5, alpha=0.01) # amost linear sensor
+plot(s, main="Almost linear sensor, non-linearity 0.01")
+</div>
 <p><img src='Sensor-10.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">alpha</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span> <span class="comment"># saturated sensor</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Saturated sensor, non-linearity 1"</span><span class="keyword">)</span></div>
+s <- Sensor(num=5, alpha=1) # saturated sensor
+plot(s, main="Saturated sensor, non-linearity 1")
+</div>
 <p><img src='Sensor-12.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">csd</span><span class="argument">=</span><span class="number">0</span><span class="keyword">,</span> <span class="argument">ssd</span><span class="argument">=</span><span class="number">0</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span> <span class="comment"># noise level is set to zero</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="string">"snoise"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Noise-free sensor"</span><span class="keyword">)</span></div>
+s <- Sensor(num=5, csd=0, ssd=0, dsd = 0) # noise level is set to zero
+plot(s, "snoise", main="Noise-free sensor")
+</div>
 <p><img src='Sensor-14.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">csd</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">ssd</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span> <span class="comment"># maximum reasonable level of noise</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="string">"snoise"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Very noisy sensor"</span><span class="keyword">)</span></div>
+s <- Sensor(num=5, csd=1, ssd=1, dsd = 0) # maximum reasonable level of noise
+plot(s, "snoise", main="Very noisy sensor")
+</div>
 <p><img src='Sensor-16.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># method plot</span>
-<span class="comment">#  - plot types 'y': response, noise</span>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="keyword">)</span> <span class="comment"># default model</span>
+# method plot
+#  - plot types 'y': response, noise
+s <- Sensor() # default model
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="string">"response"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(s, 'response')"</span><span class="keyword">)</span> <span class="comment"># default plot type, i.e. 'plot(s)' does the same plotting</span></div>
+plot(s, "response", main="plot(s, 'response')") # default plot type, i.e. 'plot(s)' does the same plotting
+</div>
 <p><img src='Sensor-18.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="string">"snoise"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(s, 'snoise')"</span><span class="keyword">)</span></div>
+plot(s, "snoise", main="plot(s, 'snoise')")
+</div>
 <p><img src='Sensor-20.png' alt='' width='400' height='400' /></p>
 <div class='input'></div></pre>
   </div>

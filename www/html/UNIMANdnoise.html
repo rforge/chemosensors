@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>UNIMANdnoise. chemosensors 0.7.4</title>
+<title>UNIMANdnoise. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -82,11 +82,10 @@
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/data'>data</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">)</span></div>
-<strong class='warning'>Warning message:
-data set ‘UNIMANdnoise’ not found</strong>
-<div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/str'>str</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">)</span></div>
+data(UNIMANdnoise)
+
+str(UNIMANdnoise)
+</div>
 <div class='output'>List of 4
  $ centered: logi TRUE
  $ dspace  : num [1:17, 1:17] 0.274 0.312 0.28 0.278 0.278 ...
@@ -94,26 +93,31 @@ data set ‘UNIMANdnoise’ not found</strong>
  $ scaled  : logi TRUE
 </div>
 <div class='input'>
-<span class="comment"># 17 sensor loadings, 17 drift components</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/dim'>dim</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">$</span><span class="symbol">dspace</span><span class="keyword">)</span></div>
+# 17 sensor loadings, 17 drift components
+dim(UNIMANdnoise$dspace)
+</div>
 <div class='output'>[1] 17 17
 </div>
 <div class='input'>
-<span class="comment"># importance of 17 drift components</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/head'>head</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">$</span><span class="symbol">ndvar</span><span class="keyword">)</span></div>
+# importance of 17 drift components
+head(UNIMANdnoise$ndvar)
+</div>
 <div class='output'>[1] 0.864246632 0.062158036 0.048459565 0.006925524 0.006465561 0.005053250
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/barplot'>barplot</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">$</span><span class="symbol">ndvar</span><span class="keyword">,</span> <span class="argument">names.arg</span><span class="argument">=</span><span class="number">1</span><span class="keyword">:</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/length'>length</a></span><span class="keyword">(</span><span class="symbol">UNIMANdnoise</span><span class="keyword">$</span><span class="symbol">ndvar</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Importance of drift components"</span><span class="keyword">)</span></div>
-<p><img src='UNIMANdnoise-10.png' alt='' width='400' height='400' /></p>
-<div class='input'><span class="comment"># comp. 1 dominates, </span>
-<span class="comment"># comp. 1-3 dominate over the rest</span>
+barplot(UNIMANdnoise$ndvar, names.arg=1:length(UNIMANdnoise$ndvar), main="Importance of drift components")
+</div>
+<p><img src='UNIMANdnoise-8.png' alt='' width='400' height='400' /></p>
+<p><img src='UNIMANdnoise-9.png' alt='' width='400' height='400' /></p>
+<div class='input'># comp. 1 dominates, 
+# comp. 1-3 dominate over the rest
 
-<span class="symbol">loadings</span> <span class="assignement">&lt;-</span> <span class="symbol">UNIMANdnoise</span><span class="keyword">$</span><span class="symbol">dspace</span>
-<span class="symbol">col</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/grDevices/gray.colors'>grey.colors</a></span><span class="keyword">(</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">start</span><span class="argument">=</span><span class="number">0.3</span><span class="keyword">,</span> <span class="argument">end</span><span class="argument">=</span><span class="number">0.9</span><span class="keyword">)</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/matplot'>matplot</a></span><span class="keyword">(</span><span class="symbol">loadings</span><span class="keyword">[</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">]</span><span class="keyword">,</span> <span class="argument">t</span><span class="argument">=</span><span class="string">'l'</span><span class="keyword">,</span> <span class="argument">col</span><span class="argument">=</span><span class="symbol">col</span><span class="keyword">,</span> <span class="argument">lwd</span><span class="argument">=</span><span class="number">2</span><span class="keyword">,</span> <span class="argument">lty</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span>
-  <span class="argument">xlab</span><span class="argument">=</span><span class="string">"Sensors"</span><span class="keyword">,</span> <span class="argument">ylab</span><span class="argument">=</span><span class="string">"Loadings"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Loadings of sensors on first 3 drift components"</span><span class="keyword">)</span></div>
-<p><img src='UNIMANdnoise-12.png' alt='' width='400' height='400' /></p>
+loadings <- UNIMANdnoise$dspace
+col <- grey.colors(3, start=0.3, end=0.9)
+matplot(loadings[, 1:3], t='l', col=col, lwd=2, lty=1,
+  xlab="Sensors", ylab="Loadings", main="Loadings of sensors on first 3 drift components")
+</div>
+<p><img src='UNIMANdnoise-11.png' alt='' width='400' height='400' /></p>
 <div class='input'># sensors 7, 8, 9, 17 seem to be less drifty  
 </div></pre>
   </div>

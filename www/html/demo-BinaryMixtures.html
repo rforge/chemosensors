@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>demo-BinaryMixtures. chemosensors 0.7.4</title>
+<title>demo-BinaryMixtures. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -49,31 +49,30 @@
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">enableSorption</span><span class="argument">=</span><span class="number">FALSE</span><span class="keyword">)</span>
-<span class="functioncall">plotMixture</span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span></div>
+s <- Sensor(num=1, gases=c(1, 3), enableSorption=FALSE)
+plotMixture(s)
+</div>
 <p><img src='demo-BinaryMixtures-2.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span>
-<span class="functioncall">plotMixture</span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span></div>
+s <- Sensor(num=1, gases=c(1, 3))
+plotMixture(s)
+</div>
 <p><img src='demo-BinaryMixtures-4.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">opar</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/par'>par</a></span><span class="keyword">(</span><span class="argument">mfrow</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">2</span><span class="keyword">,</span> <span class="number">2</span><span class="keyword">)</span><span class="keyword">)</span></div>
+opar <- par(mfrow=c(2, 2))
+for(num in c(1, 4, 13, 17)) {
+  s <- Sensor(num=num, gases=c(1, 3))
+  Ka <- round(affinity(s), 0)
+  K <- round(coef(s, 'SorptionModel'), 0)
+  plotMixture(s, axes=FALSE,
+    xlab = paste("Gas A, K", K[1], "( affinity", Ka[1], ")"),
+    ylab = paste("Gas C, K", K[2], "( affinity", Ka[2], ")"),    
+    main=paste("num", num))
+}
+</div>
 <p><img src='demo-BinaryMixtures-6.png' alt='' width='400' height='400' /></p>
-<div class='input'><span class="keyword">for</span><span class="keyword">(</span><span class="symbol">num</span> <span class="keyword">in</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">4</span><span class="keyword">,</span> <span class="number">13</span><span class="keyword">,</span> <span class="number">17</span><span class="keyword">)</span><span class="keyword">)</span> <span class="keyword">{</span>
-  <span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="symbol">num</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span>
-  <span class="symbol">Ka</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Round'>round</a></span><span class="keyword">(</span><span class="functioncall"><a href='affinity.html'>affinity</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span><span class="keyword">,</span> <span class="number">0</span><span class="keyword">)</span>
-  <span class="symbol">K</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Round'>round</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/coef'>coef</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="string">'SorptionModel'</span><span class="keyword">)</span><span class="keyword">,</span> <span class="number">0</span><span class="keyword">)</span>
-  <span class="functioncall">plotMixture</span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="argument">axes</span><span class="argument">=</span><span class="number">FALSE</span><span class="keyword">,</span>
-    <span class="argument">xlab</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"Gas A, K"</span><span class="keyword">,</span> <span class="symbol">K</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">]</span><span class="keyword">,</span> <span class="string">"( affinity"</span><span class="keyword">,</span> <span class="symbol">Ka</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">]</span><span class="keyword">,</span> <span class="string">")"</span><span class="keyword">)</span><span class="keyword">,</span>
-    <span class="argument">ylab</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"Gas C, K"</span><span class="keyword">,</span> <span class="symbol">K</span><span class="keyword">[</span><span class="number">2</span><span class="keyword">]</span><span class="keyword">,</span> <span class="string">"( affinity"</span><span class="keyword">,</span> <span class="symbol">Ka</span><span class="keyword">[</span><span class="number">2</span><span class="keyword">]</span><span class="keyword">,</span> <span class="string">")"</span><span class="keyword">)</span><span class="keyword">,</span>
-    <span class="argument">main</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"num"</span><span class="keyword">,</span> <span class="symbol">num</span><span class="keyword">)</span><span class="keyword">)</span>
-<span class="keyword">}</span></div>
-<p><img src='demo-BinaryMixtures-8.png' alt='' width='400' height='400' /></p>
-<p><img src='demo-BinaryMixtures-9.png' alt='' width='400' height='400' /></p>
-<p><img src='demo-BinaryMixtures-10.png' alt='' width='400' height='400' /></p>
-<p><img src='demo-BinaryMixtures-11.png' alt='' width='400' height='400' /></p>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/par'>par</a></span><span class="keyword">(</span><span class="symbol">opar</span><span class="keyword">)</span></div>
-<p><img src='demo-BinaryMixtures-13.png' alt='' width='400' height='400' /></p></pre>
+<div class='input'>par(opar)
+</div></pre>
   </div>
   <div class="span4">
     <!-- <ul>

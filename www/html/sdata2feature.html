@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>sdata2feature. chemosensors 0.7.6</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.6</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Method sdata2feature</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Method sdata2feature converts a matrix of sensor data
+  into a data frame of features.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The input parameters are an object, e.g. of class
+  <code>SensorArray</code>, a concentration matrix, a matrix of
+  sensor data, and (optionally) a data frame derived from
+  conccentraion matrix.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>### 1) a concentration matrix of three gases (tunit 4)
+sa <- SensorArray(tunit = 4)
+
+set <- c("A 0.1", "B 0.1", "C 1")
+sc <- Scenario(set, tunit = 4)
+conc <- getConc(sc)
+
+head(conc)
+</div>
+<div class='output'>    A B C
+1 0.0 0 0
+2 0.0 0 0
+3 0.0 0 0
+4 0.0 0 0
+5 0.1 0 0
+6 0.1 0 0
+</div>
+<div class='input'>
+sdata <- predict(sa, conc)
+
+df <- sdata2feature(sa, conc, sdata)
+head(df)
+</div>
+<div class='output'>           S1          S2   A B C glab  lab tpoint
+1 -0.07119408 -0.07683563 0.0 0 0  Air  Air  airin
+2  0.01173173  0.01266138 0.0 0 0  Air  Air    air
+3 -0.17367610 -0.18743850 0.0 0 0  Air  Air    air
+4 -0.95776820 -1.03366348 0.0 0 0  Air  Air airout
+5  5.06341079  3.81626968 0.1 0 0    A A0.1  gasin
+6  5.15086429  3.87700327 0.1 0 0    A A0.1    gas
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>sdata2feature</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>SensorNoiseModel. chemosensors 0.7.4</title>
+<title>SensorNoiseModel. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -121,56 +121,63 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment"># model: default initialization</span>
-<span class="symbol">sn</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SensorNoiseModel.html'>SensorNoiseModel</a></span><span class="keyword">(</span><span class="keyword">)</span>
+    <pre class="examples"><div class='input'># model: default initialization
+sn <- SensorNoiseModel()
 
-<span class="comment"># get information about the model</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/show'>show</a></span><span class="keyword">(</span><span class="symbol">sn</span><span class="keyword">)</span></div>
+# get information about the model
+show(sn)
+</div>
 <div class='output'> Sensor Noise Model (ssd 0.1), noise type 'randomWalk'
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">sn</span><span class="keyword">)</span></div>
+<div class='input'>print(sn)
+</div>
 <div class='output'> Sensor Noise Model
  - num 1 
  - 3 gases A, B, C 
  - ssd: 0.1 
  - noise type: randomWalk 
- - noise-factor: 1, 1, 0.2 
+ - noise-factor: 1, 1, 1 
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sn</span><span class="keyword">)</span></div>
+plot(sn)  
+</div>
 <p><img src='SensorNoiseModel-6.png' alt='' width='400' height='400' /></p>
+<p><img src='SensorNoiseModel-7.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># model: custom parameters</span>
-<span class="comment"># - many sensors</span>
-<span class="symbol">sn</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SensorNoiseModel.html'>SensorNoiseModel</a></span><span class="keyword">(</span><span class="argument">ssd</span><span class="argument">=</span><span class="number">0.5</span><span class="keyword">,</span> <span class="argument">num</span><span class="argument">=</span><span class="number">1</span><span class="keyword">:</span><span class="number">17</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">2</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span>
+# model: custom parameters
+# - many sensors
+sn <- SensorNoiseModel(ssd=0.5, num=1:17, gases=c(1, 2, 3))
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">sn</span><span class="keyword">)</span></div>
+print(sn)
+</div>
 <div class='output'> Sensor Noise Model
  - num 1, 2, 3 ... 17 
  - 3 gases A, B, C 
  - ssd: 0.5 
  - noise type: randomWalk 
- - noise-factor: 1, 1, 0.2 
+ - noise-factor: 1, 1, 1 
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sn</span><span class="keyword">)</span></div>
-<p><img src='SensorNoiseModel-10.png' alt='' width='400' height='400' /></p>
+plot(sn)
+</div>
 <p><img src='SensorNoiseModel-11.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># method plot</span>
-<span class="comment">#  - plot types 'y': barplot, noise, walk</span>
-<span class="symbol">sn</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SensorNoiseModel.html'>SensorNoiseModel</a></span><span class="keyword">(</span><span class="keyword">)</span> <span class="comment"># default model</span>
+# method plot
+#  - plot types 'y': barplot, noise, walk
+sn <- SensorNoiseModel() # default model
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sn</span><span class="keyword">,</span> <span class="string">"barplot"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(sn, 'barplot')"</span><span class="keyword">)</span> <span class="comment"># default plot type, i.e. 'plot(sn)' does the same plotting</span></div>
+plot(sn, "barplot", main="plot(sn, 'barplot')") # default plot type, i.e. 'plot(sn)' does the same plotting
+</div>
 <p><img src='SensorNoiseModel-13.png' alt='' width='400' height='400' /></p>
-<p><img src='SensorNoiseModel-14.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sn</span><span class="keyword">,</span> <span class="string">"noise"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(sn, 'noise')"</span><span class="keyword">)</span></div>
-<p><img src='SensorNoiseModel-16.png' alt='' width='400' height='400' /></p>
+plot(sn, "noise", main="plot(sn, 'noise')")
+</div>
+<p><img src='SensorNoiseModel-15.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Random'>set.seed</a></span><span class="keyword">(</span><span class="number">6</span><span class="keyword">)</span> <span class="comment"># make results reproducible</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sn</span><span class="keyword">,</span> <span class="string">"walk"</span><span class="keyword">,</span> <span class="argument">n</span><span class="argument">=</span><span class="number">100</span><span class="keyword">,</span> <span class="argument">k</span><span class="argument">=</span><span class="number">5</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(sn, 'walk', n=100, k=5)"</span><span class="keyword">)</span></div>
-<p><img src='SensorNoiseModel-18.png' alt='' width='400' height='400' /></p>
+set.seed(6) # make results reproducible
+plot(sn, "walk", n=100, k=5, main="plot(sn, 'walk', n=100, k=5)")
+</div>
+<p><img src='SensorNoiseModel-17.png' alt='' width='400' height='400' /></p>
 <div class='input'></div></pre>
   </div>
   <div class="span4">

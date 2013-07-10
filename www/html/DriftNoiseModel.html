@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>DriftNoiseModel. chemosensors 0.7.4</title>
+<title>DriftNoiseModel. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -140,14 +140,16 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment"># model: default initialization</span>
-<span class="symbol">dn</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='DriftNoiseModel.html'>DriftNoiseModel</a></span><span class="keyword">(</span><span class="keyword">)</span>
+    <pre class="examples"><div class='input'># model: default initialization
+dn <- DriftNoiseModel()
 
-<span class="comment"># get information about the model</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/show'>show</a></span><span class="keyword">(</span><span class="symbol">dn</span><span class="keyword">)</span></div>
+# get information about the model
+show(dn)
+</div>
 <div class='output'> Drift Noise Model (dsd 0.1), common model 'cpc'
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">dn</span><span class="keyword">)</span></div>
+<div class='input'>print(dn)
+</div>
 <div class='output'> Drift Noise Model
  - num 1, 2 
  drift common model
@@ -155,14 +157,16 @@
  - ndcomp: 1 
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">dn</span><span class="keyword">)</span></div>
+plot(dn)  
+</div>
 <p><img src='DriftNoiseModel-6.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># model: custom parameters</span>
-<span class="comment"># - many sensors</span>
-<span class="symbol">dn</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='DriftNoiseModel.html'>DriftNoiseModel</a></span><span class="keyword">(</span><span class="argument">dsd</span><span class="argument">=</span><span class="number">0.5</span><span class="keyword">,</span> <span class="argument">ndcomp</span><span class="argument">=</span><span class="number">3</span><span class="keyword">,</span> <span class="argument">num</span><span class="argument">=</span><span class="number">1</span><span class="keyword">:</span><span class="number">17</span><span class="keyword">)</span>
+# model: custom parameters
+# - many sensors
+dn <- DriftNoiseModel(dsd=0.5, ndcomp=3, num=1:17)
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">dn</span><span class="keyword">)</span></div>
+print(dn)
+</div>
 <div class='output'> Drift Noise Model
  - num 1, 2, 3 ... 17 
  drift common model
@@ -170,23 +174,48 @@
  - ndcomp: 3 
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">dn</span><span class="keyword">)</span></div>
+plot(dn)
+</div>
 <p><img src='DriftNoiseModel-10.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># method plot</span>
-<span class="comment">#  - plot types 'y': barplot, noise, walk</span>
-<span class="symbol">dn</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='DriftNoiseModel.html'>DriftNoiseModel</a></span><span class="keyword">(</span><span class="keyword">)</span> <span class="comment"># default model</span>
+# method plot
+#  - plot types 'y': barplot, noise, walk
+dn <- DriftNoiseModel() # default model
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">dn</span><span class="keyword">,</span> <span class="string">"noise"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(dn, 'noise')"</span><span class="keyword">)</span> <span class="comment"># default plot type, i.e. 'plot(dn)' does the same plotting</span></div>
+plot(dn, "noise", main="plot(dn, 'noise')") # default plot type, i.e. 'plot(dn)' does the same plotting
+</div>
 <p><img src='DriftNoiseModel-12.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/data'>data</a></span><span class="keyword">(</span><span class="symbol">UNIMANshort</span><span class="keyword">)</span></div>
-<strong class='warning'>Warning message:
-data set ‘UNIMANshort’ not found</strong>
-<div class='input'><span class="symbol">X</span> <span class="assignement">&lt;-</span> <span class="symbol">UNIMANshort</span><span class="keyword">$</span><span class="symbol">dat</span><span class="keyword">[</span><span class="keyword">,</span> <span class="functioncall">num</span><span class="keyword">(</span><span class="symbol">dn</span><span class="keyword">)</span><span class="keyword">]</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">dn</span><span class="keyword">,</span> <span class="string">"pc"</span><span class="keyword">,</span> <span class="symbol">X</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(dn, 'pc', X)"</span><span class="keyword">)</span></div>
+data(UNIMANshort)
+X <- UNIMANshort$dat[, num(dn)]
+plot(dn, "pc", X, main="plot(dn, 'pc', X)")
+</div>
+<p><img src='DriftNoiseModel-14.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+### example with a SensorArray
+set.seed(1)
+sa <- SensorArray(num = 1:5)
+
+set <- c("A 0.01", "A 0.05", "C 0.1", "C 1")
+sc <- Scenario(rep(set, 10))
+conc <- getConc(sc)
+
+sdata <- predict(sa, conc)
+
+p1 <- plotPCA(sa, conc = conc, sdata = sdata, air = FALSE, main = "feature: transient")
+p1
+</div>
 <p><img src='DriftNoiseModel-16.png' alt='' width='400' height='400' /></p>
-<div class='input'></div></pre>
+<div class='input'>
+p2 <- plotPCA(sa, conc = conc, sdata = sdata, feature = "ss", main = "feature: steady-state")
+p2
+</div>
+<p><img src='DriftNoiseModel-18.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+p3 <- plotPCA(sa, conc = conc, sdata = sdata, feature = "step", main = "feature: step")
+p3
+</div>
+<p><img src='DriftNoiseModel-20.png' alt='' width='400' height='400' /></p></pre>
   </div>
   <div class="span4">
     <!-- <ul>

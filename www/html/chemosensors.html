@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>chemosensors. chemosensors 0.7.4</title>
+<title>chemosensors. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -50,24 +50,25 @@
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>
-<span class="comment"># concentration matrix of 3 gas classes: A, C and AC</span>
-<span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/matrix'>matrix</a></span><span class="keyword">(</span><span class="number">0</span><span class="keyword">,</span> <span class="number">60</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span>
-<span class="symbol">conc</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">:</span><span class="number">10</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">0.01</span> <span class="comment">#  A0.01</span>
-<span class="symbol">conc</span><span class="keyword">[</span><span class="number">11</span><span class="keyword">:</span><span class="number">20</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">0.1</span> <span class="comment"># C0.1</span>
-<span class="symbol">conc</span><span class="keyword">[</span><span class="number">21</span><span class="keyword">:</span><span class="number">30</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">0.05</span> <span class="comment">#  A0.05</span>
-<span class="symbol">conc</span><span class="keyword">[</span><span class="number">31</span><span class="keyword">:</span><span class="number">40</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">1</span> <span class="comment"># C1</span>
-<span class="symbol">conc</span><span class="keyword">[</span><span class="number">41</span><span class="keyword">:</span><span class="number">50</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">0.01</span> <span class="comment"># A0.01C0.1</span>
-<span class="symbol">conc</span><span class="keyword">[</span><span class="number">41</span><span class="keyword">:</span><span class="number">50</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">0.1</span> <span class="comment"># A0.01C0.1</span>
-<span class="symbol">conc</span><span class="keyword">[</span><span class="number">51</span><span class="keyword">:</span><span class="number">60</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">0.05</span> <span class="comment"># A0.05C1</span>
-<span class="symbol">conc</span><span class="keyword">[</span><span class="number">51</span><span class="keyword">:</span><span class="number">60</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="number">1</span> <span class="comment"># A0.05C1</span>
+# concentration matrix of 3 gas classes: A, C and AC
+conc <- matrix(0, 60, 3)
+conc[1:10, 1] <- 0.01 #  A0.01
+conc[11:20, 3] <- 0.1 # C0.1
+conc[21:30, 1] <- 0.05 #  A0.05
+conc[31:40, 3] <- 1 # C1
+conc[41:50, 1] <- 0.01 # A0.01C0.1
+conc[41:50, 3] <- 0.1 # A0.01C0.1
+conc[51:60, 1] <- 0.05 # A0.05C1
+conc[51:60, 3] <- 1 # A0.05C1
 
-<span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="symbol">conc</span><span class="keyword">[</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/sample'>sample</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/nrow'>nrow</a></span><span class="keyword">(</span><span class="symbol">conc</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="keyword">]</span>
+conc <- conc[sample(1:nrow(conc)), ]
 
-<span class="comment"># sensor array of 20 sensors with parametrized noise parameters</span>
-<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">nsensors</span><span class="argument">=</span><span class="number">20</span><span class="keyword">,</span> <span class="argument">csd</span><span class="argument">=</span><span class="number">0.1</span><span class="keyword">,</span> <span class="argument">ssd</span><span class="argument">=</span><span class="number">0.1</span><span class="keyword">,</span> <span class="argument">dsd</span><span class="argument">=</span><span class="number">0.1</span><span class="keyword">)</span>
+# sensor array of 20 sensors with parametrized noise parameters
+sa <- SensorArray(nsensors=20, csd=0.1, ssd=0.1, dsd=0.1)
 
-<span class="comment"># get information about the array</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">)</span></div>
+# get information about the array
+print(sa)
+</div>
 <div class='output'> SensorArray
  - enableSorption: TRUE 
  (1) Sensor Model
@@ -77,7 +78,7 @@
  - (first) data model
  - method: ispline (type: spline)
  - sensor model: coeffNonneg TRUE
-   -- coefficients (first): 3.0276, 4.0408, 4.8655 ... 3.8137 
+   -- coefficients (first): 3.1705, 3.6297, 5.0051 ... 4.4129 
  (2) Sorption Model
  - knum 1, 2, 3 ... 3 
  - 3 gases A, B, C 
@@ -91,28 +92,24 @@
  - 3 gases A, B, C 
  - ssd: 0.1 
  - noise type: randomWalk 
- - noise-factor: 1, 1, 1, 1, 1, 1, 0.2, 0.2, 0.2 
+ - noise-factor: 1, 1, 1, 1, 1, 1, 1, 1, 1 
  (5) Drift Noise Model
  - num 1, 2, 3 ... 3 
  drift common model
  - method: cpc 
  - ndcomp: 1 
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">)</span></div>
+<div class='input'>plot(sa)
+</div>
 <p><img src='chemosensors-4.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># generate the data</span>
-<span class="symbol">sdata</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/predict'>predict</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="symbol">conc</span><span class="keyword">)</span></div>
-<strong class='warning'>Warning message:
-duplicated levels will not be allowed in factors anymore</strong>
-<strong class='warning'>Warning message:
-duplicated levels will not be allowed in factors anymore</strong>
-<strong class='warning'>Warning message:
-duplicated levels will not be allowed in factors anymore</strong>
-<div class='input'>
-<span class="comment"># plot the data</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="string">"prediction"</span><span class="keyword">,</span> <span class="argument">conc</span><span class="argument">=</span><span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">sdata</span><span class="argument">=</span><span class="symbol">sdata</span><span class="keyword">,</span> <span class="argument">leg</span><span class="argument">=</span><span class="string">"top"</span><span class="keyword">)</span></div>
-<p><img src='chemosensors-10.png' alt='' width='400' height='400' /></p></pre>
+# generate the data
+sdata <- predict(sa, conc)
+
+# plot the data
+plot(sa, "prediction", conc=conc, sdata=sdata, leg="top")
+</div>
+<p><img src='chemosensors-6.png' alt='' width='400' height='400' /></p></pre>
   </div>
   <div class="span4">
     <!-- <ul>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>sdata.frame. chemosensors 0.7.6</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.6</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Method sdata.frame</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Method sdata.frame converts a concetration matrix and
+  (optionally) a sensor data matrix into a data frame.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The input parameters are an object, e.g.
+  <code>SensorArray</code>, a concentration matrix, and
+  (optionally) a sensor data matrix. The output data frame
+  has the following columns:</p>
+  
+      <p><table><tr><td> <code>S1</code>, <code>S2</code>, ... </td>
+<td> Sensor
+  signals. </td>
+</tr><tr><td> <code>A</code>, <code>B</code>, ... </td>
+<td> Gas
+  concentrations (column names equal to gas names of the
+  object). </td>
+</tr><tr><td> <code>glab</code> </td>
+<td> Gas labels, e.g. <code>A</code>
+  or <code>Air</code>. </td>
+</tr><tr><td> <code>lab</code> </td>
+<td> Gas+Concetratoin
+  labels, e.g. <code>A 0.01</code>. </td>
+</tr></table></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>set.seed(1)
+
+### 1) a concentration matrix of three gases (tunit 4)
+sa <- SensorArray(tunit = 4)
+
+set <- c("A 0.1", "B 0.1", "C 1")
+sc <- Scenario(set, tunit = 4)
+conc <- getConc(sc)
+
+head(conc)
+</div>
+<div class='output'>    A B C
+1 0.0 0 0
+2 0.0 0 0
+3 0.0 0 0
+4 0.0 0 0
+5 0.1 0 0
+6 0.1 0 0
+</div>
+<div class='input'>
+sdata <- predict(sa, conc)
+
+p1 <- plotSignal(sa, conc = conc, sdata = sdata)
+p1
+</div>
+<p><img src='sdata.frame-4.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+# get a data.frame of features
+df.transient <- sdata.frame(sa, conc = conc, sdata = sdata, feature = "transient")
+
+df.ss <- sdata.frame(sa, conc = conc, sdata = sdata, feature = "steady-state")
+
+df.step <- sdata.frame(sa, conc = conc, sdata = sdata, feature = "step")
+
+# plot
+p2 <- ggplot(df.transient, aes(x = 1:length(S1))) +
+  geom_line(aes(y = S1, color = "S1")) +
+  geom_line(aes(y = S2, color = "S2")) +
+  labs(title = "feature: transient")
+p2
+</div>
+<p><img src='sdata.frame-6.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+df <- rbind(data.frame(df.ss, feature = "steady-state"),
+  data.frame(df.step, feature = "step"))
+  
+p3 <- ggplot(df, aes(lab, S1, fill = feature)) + geom_bar(stat = "identity", position = "dodge")
+p3
+</div>
+<p><img src='sdata.frame-8.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>sdata.frame</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

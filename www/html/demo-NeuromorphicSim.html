@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>demo-NeuromorphicSim. chemosensors 0.7.4</title>
+<title>demo-NeuromorphicSim. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -83,128 +83,141 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment"># options(cores = 2) # use this option to confiure the parallel computation (in this case 2 CPU cores are specified)</span>
+    <pre class="examples"><div class='input'># options(cores = 2) # use this option to confiure the parallel computation (in this case 2 CPU cores are specified)
 
-<span class="comment">### step 1/7: take a look at the reference array of 17 UNIMAN sensors</span>
-<span class="symbol">sa.uniman</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">nsensors</span> <span class="argument">=</span> <span class="number">17</span><span class="keyword">)</span>
+### step 1/7: take a look at the reference array of 17 UNIMAN sensors
+sa.uniman <- SensorArray(nsensors = 17) 
 
-<span class="comment"># polar plot </span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa.uniman</span><span class="keyword">,</span> <span class="string">'polar'</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"17 UNIMAN sensors"</span><span class="keyword">)</span></div>
+# polar plot 
+plot(sa.uniman, 'polar', main = "17 UNIMAN sensors")
+</div>
 <p><img src='demo-NeuromorphicSim-2.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># affinity space for gases 1 and 3</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa.uniman</span><span class="keyword">,</span> <span class="string">'affinitySpace'</span><span class="keyword">,</span> <span class="argument">gases</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span></div>
+# affinity space for gases 1 and 3
+plot(sa.uniman, 'affinitySpace', gases = c(1, 3))
+</div>
 <p><img src='demo-NeuromorphicSim-4.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">### step 2/7: select sensor non-linearity (parameter alpha) for a sensor</span>
-<span class="comment"># - (here) sensor `num` is 3, tesed values of `alpha` are 0.01, 1 and 2.25</span>
-<span class="comment"># - (note) in the current implementation, parameter `alpha` is the same </span>
-<span class="comment">#    for all sensors in a array</span>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span> <span class="argument">=</span> <span class="number">3</span><span class="keyword">,</span> <span class="argument">alpha</span> <span class="argument">=</span> <span class="number">0.01</span><span class="keyword">)</span>
-<span class="functioncall">plotMixture</span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="argument">gases</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"alpha:"</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/aes_colour_fill_alpha'>alpha</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+### step 2/7: select sensor non-linearity (parameter alpha) for a sensor
+# - (here) sensor `num` is 3, tesed values of `alpha` are 0.01, 1 and 2.25
+# - (note) in the current implementation, parameter `alpha` is the same 
+#    for all sensors in a array
+s <- Sensor(num = 3, alpha = 0.01)
+plotMixture(s, gases = c(1, 3), main = paste("alpha:", alpha(s)))
+</div>
 <p><img src='demo-NeuromorphicSim-6.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span> <span class="argument">=</span> <span class="number">3</span><span class="keyword">,</span> <span class="argument">alpha</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">)</span>
-<span class="functioncall">plotMixture</span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="argument">gases</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"alpha:"</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/aes_colour_fill_alpha'>alpha</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+s <- Sensor(num = 3, alpha = 1)
+plotMixture(s, gases = c(1, 3), main = paste("alpha:", alpha(s)))
+</div>
 <p><img src='demo-NeuromorphicSim-8.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Sensor.html'>Sensor</a></span><span class="keyword">(</span><span class="argument">num</span> <span class="argument">=</span> <span class="number">3</span><span class="keyword">,</span> <span class="argument">alpha</span> <span class="argument">=</span> <span class="number">2.25</span><span class="keyword">)</span>
-<span class="functioncall">plotMixture</span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">,</span> <span class="argument">gases</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"alpha:"</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/aes_colour_fill_alpha'>alpha</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+s <- Sensor(num = 3, alpha = 2.25)
+plotMixture(s, gases = c(1, 3), main = paste("alpha:", alpha(s)))
+</div>
 <p><img src='demo-NeuromorphicSim-10.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">### step 3/7: select sensor diversity (parameter beta) for a sensor array</span>
-<span class="comment"># - (here) the number of sensors `nsensors` is 34 (two times more than 17 UNIMAN sensors)</span>
-<span class="comment">#    tesed values of `beta` are 1, 2, 5 and 10</span>
-<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">nsensors</span> <span class="argument">=</span> <span class="number">34</span><span class="keyword">,</span> <span class="argument">beta</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">)</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="string">'polar'</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"beta:"</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Special'>beta</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+### step 3/7: select sensor diversity (parameter beta) for a sensor array
+# - (here) the number of sensors `nsensors` is 34 (two times more than 17 UNIMAN sensors)
+#    tesed values of `beta` are 1, 2, 5 and 10
+sa <- SensorArray(nsensors = 34, beta = 1)
+plot(sa, 'polar', main = paste("beta:", beta(sa)))
+</div>
 <p><img src='demo-NeuromorphicSim-12.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">nsensors</span> <span class="argument">=</span> <span class="number">34</span><span class="keyword">,</span> <span class="argument">beta</span> <span class="argument">=</span> <span class="number">2</span><span class="keyword">)</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="string">'polar'</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"beta:"</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Special'>beta</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+sa <- SensorArray(nsensors = 34, beta = 2)
+plot(sa, 'polar', main = paste("beta:", beta(sa)))
+</div>
 <p><img src='demo-NeuromorphicSim-14.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">nsensors</span> <span class="argument">=</span> <span class="number">34</span><span class="keyword">,</span> <span class="argument">beta</span> <span class="argument">=</span> <span class="number">5</span><span class="keyword">)</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="string">'polar'</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"beta:"</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Special'>beta</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+sa <- SensorArray(nsensors = 34, beta = 5)
+plot(sa, 'polar', main = paste("beta:", beta(sa)))
+</div>
 <p><img src='demo-NeuromorphicSim-16.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">nsensors</span> <span class="argument">=</span> <span class="number">34</span><span class="keyword">,</span> <span class="argument">beta</span> <span class="argument">=</span> <span class="number">10</span><span class="keyword">)</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="string">'polar'</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/paste'>paste</a></span><span class="keyword">(</span><span class="string">"beta:"</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Special'>beta</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+sa <- SensorArray(nsensors = 34, beta = 10)
+plot(sa, 'polar', main = paste("beta:", beta(sa)))
+</div>
 <p><img src='demo-NeuromorphicSim-18.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">### step 4/7: define the parameters of the array</span>
-<span class="comment"># - (here we use the default parameters) </span>
-<span class="comment">#   `alpha` is 2.25 (default), `beta` is 2,</span>
-<span class="comment">#   noise parameters `csd`, `ssd` and `dsd` are all 0.1,</span>
-<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">nsensors</span> <span class="argument">=</span> <span class="number">34</span><span class="keyword">)</span>
+### step 4/7: define the parameters of the array
+# - (here we use the default parameters) 
+#   `alpha` is 2.25 (default), `beta` is 2,
+#   noise parameters `csd`, `ssd` and `dsd` are all 0.1,
+sa <- SensorArray(nsensors = 34)
 
-<span class="comment"># polar plot</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="string">'polar'</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"Virtual sensors"</span><span class="keyword">)</span></div>
+# polar plot
+plot(sa, 'polar', main = "Virtual sensors")
+</div>
 <p><img src='demo-NeuromorphicSim-20.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># affinity space for gases 1 and 3</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="string">'affinitySpace'</span><span class="keyword">,</span> <span class="argument">gases</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span></div>
+# affinity space for gases 1 and 3
+plot(sa, 'affinitySpace', gases = c(1, 3))
+</div>
 <p><img src='demo-NeuromorphicSim-22.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">### step 5: define a concentration matrix (via class Scenario)</span>
-<span class="comment"># - (here) let's assume a scenario of mixture quantification for gases 1 and 3 </span>
-<span class="comment">#   `tunit` is set to 60 (recommended value)</span>
-<span class="symbol">training.set</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A 0.01"</span><span class="keyword">,</span> <span class="string">"A 0.05"</span><span class="keyword">,</span> <span class="string">"C 0.1"</span><span class="keyword">,</span> <span class="string">"C 1"</span><span class="keyword">)</span>
-<span class="symbol">validation.set</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A 0.01, C 0.1"</span><span class="keyword">,</span> <span class="string">"A 0.0025, C 0.5"</span><span class="keyword">,</span> <span class="string">"A 0.05, C 1"</span><span class="keyword">)</span>
+### step 5: define a concentration matrix (via class Scenario)
+# - (here) let's assume a scenario of mixture quantification for gases 1 and 3 
+#   `tunit` is set to 60 (recommended value)
+training.set <- c("A 0.01", "A 0.05", "C 0.1", "C 1")
+validation.set <- c("A 0.01, C 0.1", "A 0.0025, C 0.5", "A 0.05, C 1")
 
-<span class="symbol">sc</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='Scenario.html'>Scenario</a></span><span class="keyword">(</span><span class="argument">tunit</span> <span class="argument">=</span> <span class="number">60</span><span class="keyword">,</span> <span class="argument">T</span> <span class="argument">=</span> <span class="symbol">training.set</span><span class="keyword">,</span> <span class="argument">nT</span> <span class="argument">=</span> <span class="number">2</span><span class="keyword">,</span> <span class="argument">V</span> <span class="argument">=</span> <span class="symbol">validation.set</span><span class="keyword">,</span> <span class="argument">nV</span> <span class="argument">=</span> <span class="number">2</span><span class="keyword">)</span>
+sc <- Scenario(tunit = 60, T = training.set, nT = 2, V = validation.set, nV = 2)
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span></div>
+plot(sc)
+</div>
 <p><img src='demo-NeuromorphicSim-24.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">,</span> <span class="argument">facet</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">concUnits</span> <span class="argument">=</span> <span class="string">'norm'</span><span class="keyword">)</span></div>
+plot(sc, facet = FALSE, concUnits = 'norm')
+</div>
 <p><img src='demo-NeuromorphicSim-26.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># extract conc. matrix</span>
-<span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="functioncall">getConc</span><span class="keyword">(</span><span class="symbol">sc</span><span class="keyword">)</span>
+# extract conc. matrix
+conc <- getConc(sc)
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/head'>head</a></span><span class="keyword">(</span><span class="symbol">conc</span><span class="keyword">)</span><span class="keyword">)</span></div>
-<div class='output'>     A B C
-1 0.01 0 0
-2 0.01 0 0
-3 0.01 0 0
-4 0.01 0 0
-5 0.01 0 0
-6 0.01 0 0
+print(head(conc))
+</div>
+<div class='output'>  A B C
+1 0 0 0
+2 0 0 0
+3 0 0 0
+4 0 0 0
+5 0 0 0
+6 0 0 0
 </div>
 <div class='input'>
-<span class="comment">### step 6/7: generate sensor data in reaction to `conc`</span>
-<span class="symbol">conc0</span> <span class="assignement">&lt;-</span> <span class="symbol">conc</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">:</span><span class="number">240</span><span class="keyword">,</span> <span class="keyword">]</span>
-<span class="comment"># to save CPU time of demonstration, </span>
-<span class="comment"># we use just two cycles of 2x60 time length each</span>
-<span class="comment"># 1 cycle = gas exposure phase and cleaning phase</span>
+### step 6/7: generate sensor data in reaction to `conc`
+conc0 <- conc[1:240, ] 
+# to save CPU time of demonstration, 
+# we use just two cycles of 2x60 time length each
+# 1 cycle = gas exposure phase and cleaning phase
 
-<span class="symbol">sdata</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/predict'>predict</a></span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="symbol">conc0</span><span class="keyword">,</span> <span class="argument">nclusters</span> <span class="argument">=</span> <span class="number">2</span><span class="keyword">)</span></div>
-<strong class='warning'>Warning message:
-duplicated levels will not be allowed in factors anymore</strong>
-<strong class='warning'>Warning message:
-duplicated levels will not be allowed in factors anymore</strong>
-<strong class='warning'>Warning message:
-duplicated levels will not be allowed in factors anymore</strong>
+sdata <- predict(sa, conc0, nclusters = 2)
+</div>
 <div class='output'> * Started computing in parallel on 2 CPU cores (if available) (SensorModel::sdataModel).
+ * Finished computing in parallel.
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/qplot'>qplot</a></span><span class="keyword">(</span><span class="symbol">X1</span><span class="keyword">,</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">sdata</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">geom</span> <span class="argument">=</span> <span class="string">"line"</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/facet_wrap'>facet_wrap</a></span><span class="keyword">(</span><span class="keyword">~</span> <span class="symbol">X2</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>xlab</a></span><span class="keyword">(</span><span class="string">"Time, a.u."</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>ylab</a></span><span class="keyword">(</span><span class="string">"Sensor Signal, a.u."</span><span class="keyword">)</span></div>
-<p><img src='demo-NeuromorphicSim-35.png' alt='' width='400' height='400' /></p>
+qplot(X1, value, data = melt(sdata), geom = "line") + facet_wrap(~ X2) + 
+  xlab("Time, a.u.") + ylab("Sensor Signal, a.u.")
+</div>
+<p><img src='demo-NeuromorphicSim-32.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">### step 7/7: some additional plots for testing</span>
+### step 7/7: some additional plots for testing
 
-<span class="comment"># plot just few sensors</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/qplot'>qplot</a></span><span class="keyword">(</span><span class="symbol">X1</span><span class="keyword">,</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">sdata</span><span class="keyword">[</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">2</span><span class="keyword">]</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">geom</span> <span class="argument">=</span> <span class="string">"line"</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/facet_wrap'>facet_wrap</a></span><span class="keyword">(</span><span class="keyword">~</span> <span class="symbol">X2</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>labs</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="string">"Time, a.u."</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="string">"Sensor Signal, a.u."</span><span class="keyword">,</span> <span class="argument">title</span> <span class="argument">=</span> <span class="string">"First two sensors"</span><span class="keyword">)</span></div>
-<p><img src='demo-NeuromorphicSim-37.png' alt='' width='400' height='400' /></p>
+# plot just few sensors
+qplot(X1, value, data = melt(sdata[, 1:2]), geom = "line") + facet_wrap(~ X2) + 
+  labs(x = "Time, a.u.", y = "Sensor Signal, a.u.", title = "First two sensors")
+</div>
+<p><img src='demo-NeuromorphicSim-34.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># re-generate sensor data as noise-free</span>
-<span class="symbol">sa0</span> <span class="assignement">&lt;-</span> <span class="symbol">sa</span>
-<span class="functioncall">csd</span><span class="keyword">(</span><span class="symbol">sa0</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0</span>
-<span class="functioncall">ssd</span><span class="keyword">(</span><span class="symbol">sa0</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0</span>
-<span class="functioncall">dsd</span><span class="keyword">(</span><span class="symbol">sa0</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="number">0</span>
-<span class="symbol">sa0</span></div>
+# re-generate sensor data as noise-free
+sa0 <- sa
+csd(sa0) <- 0
+ssd(sa0) <- 0
+dsd(sa0) <- 0
+sa0
+</div>
 <div class='output'> Sensor Array of 34 sensors, 3 gases A, B, C
  - enableSorption TRUE, enableDyn FALSE
  - Sensor Model (num 1, 2, 3 ... 17), beta 2, data model 'ispline'
@@ -214,13 +227,16 @@ duplicated levels will not be allowed in factors anymore</strong>
  - Drift Noise Model (dsd 0), common model 'cpc'
 </div>
 <div class='input'>
-<span class="symbol">sdata0</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/predict'>predict</a></span><span class="keyword">(</span><span class="symbol">sa0</span><span class="keyword">,</span> <span class="symbol">conc0</span><span class="keyword">,</span> <span class="argument">nclusters</span> <span class="argument">=</span> <span class="number">2</span><span class="keyword">)</span></div>
+sdata0 <- predict(sa0, conc0, nclusters = 2) 
+</div>
 <div class='output'> * Started computing in parallel on 2 CPU cores (if available) (SensorModel::sdataModel).
+ * Finished computing in parallel.
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/qplot'>qplot</a></span><span class="keyword">(</span><span class="symbol">X1</span><span class="keyword">,</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">sdata0</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">geom</span> <span class="argument">=</span> <span class="string">"line"</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/facet_wrap'>facet_wrap</a></span><span class="keyword">(</span><span class="keyword">~</span> <span class="symbol">X2</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>labs</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="string">"Time, a.u."</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="string">"Sensor Signal, a.u."</span><span class="keyword">,</span> <span class="argument">title</span> <span class="argument">=</span> <span class="string">"Noise-free array"</span><span class="keyword">)</span></div>
-<p><img src='demo-NeuromorphicSim-43.png' alt='' width='400' height='400' /></p></pre>
+qplot(X1, value, data = melt(sdata0), geom = "line") + facet_wrap(~ X2) + 
+  labs(x = "Time, a.u.", y = "Sensor Signal, a.u.", title = "Noise-free array")
+</div>
+<p><img src='demo-NeuromorphicSim-40.png' alt='' width='400' height='400' /></p></pre>
   </div>
   <div class="span4">
     <!-- <ul>

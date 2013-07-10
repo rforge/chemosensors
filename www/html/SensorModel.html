@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>SensorModel. chemosensors 0.7.4</title>
+<title>SensorModel. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -123,14 +123,16 @@
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>
-<span class="comment"># sensor model: default initialization</span>
-<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SensorModel.html'>SensorModel</a></span><span class="keyword">(</span><span class="keyword">)</span>
+# sensor model: default initialization
+sm <- SensorModel()
 
-<span class="comment"># get information about the model</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/show'>show</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span></div>
+# get information about the model
+show(sm)
+</div>
 <div class='output'> Sensor Model (num 1), beta 2, data model 'ispline'
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span></div>
+<div class='input'>print(sm)
+</div>
 <div class='output'> Sensor Model
  - num 1 
  - beta 2 
@@ -141,7 +143,8 @@
    -- coefficients (first): 7.5816, 2.5812, 0 ... 0 
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/coef'>coef</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span><span class="keyword">)</span> <span class="comment"># sensitivity coefficients</span></div>
+print(coef(sm)) # sensitivity coefficients
+</div>
 <div class='output'>          [,1]
  [1,] 7.581598
  [2,] 2.581216
@@ -154,19 +157,22 @@
  [9,] 0.000000
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span></div>
+plot(sm)  
+</div>
 <p><img src='SensorModel-8.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># get available model names</span>
-<span class="symbol">model.names</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorModelNames</span><span class="keyword">(</span><span class="keyword">)</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">model.names</span><span class="keyword">)</span></div>
+# get available model names
+model.names <- SensorModelNames()
+print(model.names)
+</div>
 <div class='output'>[1] "plsr"         "mvr"          "broken-stick" "ispline"     
 </div>
 <div class='input'>
-<span class="comment"># sensor model: custom parameters</span>
-<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SensorModel.html'>SensorModel</a></span><span class="keyword">(</span><span class="argument">num</span><span class="argument">=</span><span class="number">7</span><span class="keyword">,</span> <span class="argument">model</span><span class="argument">=</span><span class="string">"plsr"</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span>
+# sensor model: custom parameters
+sm <- SensorModel(num=7, model="plsr", gases=c(1, 3))
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span></div>
+print(sm)
+</div>
 <div class='output'> Sensor Model
  - num 7 
  - beta 2 
@@ -178,17 +184,19 @@
    -- coefficients (first): 0.186, 0.0116 
 </div>
 <div class='input'>
-<span class="comment">#plot(sm, uniman=TRUE) # add UNIMAN reference data (the model was build from)</span>
+#plot(sm, uniman=TRUE) # add UNIMAN reference data (the model was build from)
 
-<span class="comment"># method plot</span>
-<span class="comment">#  - plot types 'y': response, predict</span>
-<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SensorModel.html'>SensorModel</a></span><span class="keyword">(</span><span class="keyword">)</span> <span class="comment"># default sensor model</span>
+# method plot
+#  - plot types 'y': response, predict
+sm <- SensorModel() # default sensor model
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="string">"response"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(sm, 'response')"</span><span class="keyword">)</span> <span class="comment"># default plot type, i.e. 'plot(sm)' does the same plotting</span></div>
+plot(sm, "response", main="plot(sm, 'response')") # default plot type, i.e. 'plot(sm)' does the same plotting
+</div>
 <p><img src='SensorModel-14.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">conc</span> <span class="assignement">&lt;-</span> <span class="functioncall">concSample</span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="string">"range"</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">n</span><span class="argument">=</span><span class="number">10</span><span class="keyword">)</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="string">"predict"</span><span class="keyword">,</span> <span class="symbol">conc</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="number">1</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(sm, 'predict', conc, gases=1)"</span><span class="keyword">)</span></div>
+conc <- concSample(sm, "range", gases=1, n=10)
+plot(sm, "predict", conc, gases=1, main="plot(sm, 'predict', conc, gases=1)")
+</div>
 <p><img src='SensorModel-16.png' alt='' width='400' height='400' /></p></pre>
   </div>
   <div class="span4">

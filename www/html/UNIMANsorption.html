@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>UNIMANsorption. chemosensors 0.7.4</title>
+<title>UNIMANsorption. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -95,10 +95,11 @@
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/data'>data</a></span><span class="keyword">(</span><span class="symbol">UNIMANsorption</span><span class="keyword">,</span> <span class="argument">package</span><span class="argument">=</span><span class="string">"chemosensors"</span><span class="keyword">)</span>
+data(UNIMANsorption, package="chemosensors")
 
-<span class="comment"># print the list of loaded data variables</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/str'>str</a></span><span class="keyword">(</span><span class="symbol">UNIMANsorption</span><span class="keyword">)</span></div>
+# print the list of loaded data variables
+str(UNIMANsorption)
+</div>
 <div class='output'>List of 1
  $ qkc: num [1:17, 1:3, 1:4] 10.02 9.51 9.52 6.57 9.19 ...
   ..- attr(*, "dimnames")=List of 3
@@ -107,11 +108,13 @@
   .. ..$ : chr [1:4] "Q" "K" "KCmin" "KCmax"
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/dim'>dim</a></span><span class="keyword">(</span><span class="symbol">UNIMANsorption</span><span class="keyword">$</span><span class="symbol">qkc</span><span class="keyword">)</span></div>
+dim(UNIMANsorption$qkc)
+</div>
 <div class='output'>[1] 17  3  4
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/str'>str</a></span><span class="keyword">(</span><span class="symbol">UNIMANsorption</span><span class="keyword">$</span><span class="symbol">qkc</span><span class="keyword">)</span></div>
+str(UNIMANsorption$qkc)
+</div>
 <div class='output'> num [1:17, 1:3, 1:4] 10.02 9.51 9.52 6.57 9.19 ...
  - attr(*, "dimnames")=List of 3
   ..$ : chr [1:17] "1" "2" "3" "4" ...
@@ -119,78 +122,107 @@
   ..$ : chr [1:4] "Q" "K" "KCmin" "KCmax"
 </div>
 <div class='input'>
-<span class="comment">### Langmuir parameter K</span>
-<span class="symbol">K</span> <span class="assignement">&lt;-</span> <span class="symbol">UNIMANsorption</span><span class="keyword">$</span><span class="symbol">qkc</span><span class="keyword">[</span><span class="keyword">,</span> <span class="keyword">,</span> <span class="string">"K"</span><span class="keyword">]</span>
+### Langmuir parameter K
+K <- UNIMANsorption$qkc[, , "K"]
 
-<span class="symbol">mf</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">K</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"sensor"</span><span class="keyword">,</span> <span class="string">"gas"</span><span class="keyword">)</span><span class="keyword">)</span>
+mf <- melt(K, varnames = c("sensor", "gas"))
 
-<span class="symbol">p1</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/qplot'>qplot</a></span><span class="keyword">(</span><span class="symbol">sensor</span><span class="keyword">,</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">mf</span><span class="keyword">,</span> <span class="argument">geom</span> <span class="argument">=</span> <span class="string">"line"</span><span class="keyword">,</span> <span class="argument">color</span> <span class="argument">=</span> <span class="symbol">gas</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>ylab</a></span><span class="keyword">(</span><span class="string">"Langmuir parameter K"</span><span class="keyword">)</span>
-<span class="symbol">p1</span></div>
+p1 <- qplot(sensor, value, data = mf, geom = "line", color = gas) +
+  ylab("Langmuir parameter K")
+p1
+</div>
 <p><img src='UNIMANsorption-8.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">p2</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/qplot'>qplot</a></span><span class="keyword">(</span><span class="symbol">sensor</span><span class="keyword">,</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">mf</span><span class="keyword">,</span> <span class="argument">geom</span> <span class="argument">=</span> <span class="string">"bar"</span><span class="keyword">,</span> <span class="argument">stat</span> <span class="argument">=</span> <span class="string">"identity"</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/facet_grid'>facet_grid</a></span><span class="keyword">(</span><span class="symbol">gas</span> <span class="keyword">~</span> <span class="symbol">.</span><span class="keyword">,</span> <span class="argument">scale</span> <span class="argument">=</span> <span class="string">"free_y"</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>ylab</a></span><span class="keyword">(</span><span class="string">"Langmuir parameter K"</span><span class="keyword">)</span>
-<span class="symbol">p2</span></div>
+p2 <- qplot(sensor, value, data = mf, geom = "bar", stat = "identity") + 
+  facet_grid(gas ~ ., scale = "free_y") + 
+  ylab("Langmuir parameter K")
+p2
+</div>
 <p><img src='UNIMANsorption-10.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">### Langmuir parameter KCmin</span>
-<span class="symbol">KCmin</span> <span class="assignement">&lt;-</span> <span class="symbol">UNIMANsorption</span><span class="keyword">$</span><span class="symbol">qkc</span><span class="keyword">[</span><span class="keyword">,</span> <span class="keyword">,</span> <span class="string">"KCmin"</span><span class="keyword">]</span>
+### Langmuir parameter KCmin
+KCmin <- UNIMANsorption$qkc[, , "KCmin"]
 
-<span class="symbol">mf</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">KCmin</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"sensor"</span><span class="keyword">,</span> <span class="string">"gas"</span><span class="keyword">)</span><span class="keyword">)</span>
+mf <- melt(KCmin, varnames = c("sensor", "gas"))
 
-<span class="symbol">p3</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/qplot'>qplot</a></span><span class="keyword">(</span><span class="symbol">sensor</span><span class="keyword">,</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">mf</span><span class="keyword">,</span> <span class="argument">geom</span> <span class="argument">=</span> <span class="string">"line"</span><span class="keyword">,</span> <span class="argument">color</span> <span class="argument">=</span> <span class="symbol">gas</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>ylab</a></span><span class="keyword">(</span><span class="string">"Langmuir parameter KCmin"</span><span class="keyword">)</span>
-<span class="symbol">p3</span></div>
+p3 <- qplot(sensor, value, data = mf, geom = "line", color = gas) +
+  ylab("Langmuir parameter KCmin")
+p3
+</div>
 <p><img src='UNIMANsorption-12.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">p4</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/qplot'>qplot</a></span><span class="keyword">(</span><span class="symbol">sensor</span><span class="keyword">,</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">mf</span><span class="keyword">,</span> <span class="argument">geom</span> <span class="argument">=</span> <span class="string">"bar"</span><span class="keyword">,</span> <span class="argument">stat</span> <span class="argument">=</span> <span class="string">"identity"</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/facet_grid'>facet_grid</a></span><span class="keyword">(</span><span class="symbol">gas</span> <span class="keyword">~</span> <span class="symbol">.</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>ylab</a></span><span class="keyword">(</span><span class="string">"Langmuir parameter KCmin"</span><span class="keyword">)</span>
-<span class="symbol">p4</span></div>
+p4 <- qplot(sensor, value, data = mf, geom = "bar", stat = "identity") + 
+  facet_grid(gas ~ .) + 
+  ylab("Langmuir parameter KCmin")
+p4
+</div>
 <p><img src='UNIMANsorption-14.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">### Langmuir parameter KCmax</span>
-<span class="symbol">KCmax</span> <span class="assignement">&lt;-</span> <span class="symbol">UNIMANsorption</span><span class="keyword">$</span><span class="symbol">qkc</span><span class="keyword">[</span><span class="keyword">,</span> <span class="keyword">,</span> <span class="string">"KCmax"</span><span class="keyword">]</span>
+### Langmuir parameter KCmax
+KCmax <- UNIMANsorption$qkc[, , "KCmax"]
 
-<span class="symbol">mf</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">KCmax</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"sensor"</span><span class="keyword">,</span> <span class="string">"gas"</span><span class="keyword">)</span><span class="keyword">)</span>
+mf <- melt(KCmax, varnames = c("sensor", "gas"))
 
-<span class="symbol">p5</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/qplot'>qplot</a></span><span class="keyword">(</span><span class="symbol">sensor</span><span class="keyword">,</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">mf</span><span class="keyword">,</span> <span class="argument">geom</span> <span class="argument">=</span> <span class="string">"line"</span><span class="keyword">,</span> <span class="argument">color</span> <span class="argument">=</span> <span class="symbol">gas</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>ylab</a></span><span class="keyword">(</span><span class="string">"Langmuir parameter KCmax"</span><span class="keyword">)</span>
-<span class="symbol">p5</span></div>
+p5 <- qplot(sensor, value, data = mf, geom = "line", color = gas) +
+  ylab("Langmuir parameter KCmax")
+p5
+</div>
 <p><img src='UNIMANsorption-16.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">p6</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/qplot'>qplot</a></span><span class="keyword">(</span><span class="symbol">sensor</span><span class="keyword">,</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">mf</span><span class="keyword">,</span> <span class="argument">geom</span> <span class="argument">=</span> <span class="string">"bar"</span><span class="keyword">,</span> <span class="argument">stat</span> <span class="argument">=</span> <span class="string">"identity"</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/facet_grid'>facet_grid</a></span><span class="keyword">(</span><span class="symbol">gas</span> <span class="keyword">~</span> <span class="symbol">.</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>ylab</a></span><span class="keyword">(</span><span class="string">"Langmuir parameter KCmax"</span><span class="keyword">)</span>
-<span class="symbol">p6</span></div>
+p6 <- qplot(sensor, value, data = mf, geom = "bar", stat = "identity") + 
+  facet_grid(gas ~ .) + 
+  ylab("Langmuir parameter KCmax")
+p6
+</div>
 <p><img src='UNIMANsorption-18.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">### summary plot for K*</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/library'>require</a></span><span class="keyword">(</span><span class="symbol">gridExtra</span><span class="keyword">)</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/gridExtra/arrangeGrob'>grid.arrange</a></span><span class="keyword">(</span><span class="symbol">p1</span><span class="keyword">,</span> <span class="symbol">p3</span><span class="keyword">,</span> <span class="symbol">p5</span><span class="keyword">,</span> <span class="argument">ncol</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">)</span></div>
+### summary plot for K*
+require(gridExtra)
+grid.arrange(p1, p3, p5, ncol = 1)
+</div>
 <p><img src='UNIMANsorption-20.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">### plot to group sensors based on affinities A vs. C</span>
-<span class="symbol">df</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/as.data.frame'>as.data.frame</a></span><span class="keyword">(</span><span class="symbol">K</span><span class="keyword">)</span>
-<span class="symbol">df</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/plyr/mutate'>mutate</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">,</span>
-  <span class="argument">sensor</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">:</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/nrow'>nrow</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">)</span><span class="keyword">,</span>
-  <span class="argument">sensor.group</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/ifelse'>ifelse</a></span><span class="keyword">(</span><span class="symbol">A</span> <span class="keyword">&gt;</span> <span class="symbol">C</span><span class="keyword">,</span> <span class="string">"More affinity to A"</span><span class="keyword">,</span> <span class="string">"More affinity to C"</span><span class="keyword">)</span><span class="keyword">)</span>
+### plot to group sensors based on affinities A vs. C
+df <- as.data.frame(K)
+df <- mutate(df,
+  sensor = 1:nrow(df),
+  sensor.group = ifelse(A > C, "More affinity to A", "More affinity to C"))
 
-<span class="symbol">mf</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/reshape/melt-24'>melt</a></span><span class="keyword">(</span><span class="symbol">K</span><span class="keyword">,</span> <span class="argument">varnames</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"sensor"</span><span class="keyword">,</span> <span class="string">"gas"</span><span class="keyword">)</span><span class="keyword">)</span>
+mf <- melt(K, varnames = c("sensor", "gas"))
 
-<span class="symbol">p7</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/ggplot'>ggplot</a></span><span class="keyword">(</span><span class="symbol">mf</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/aes'>aes</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/factor'>factor</a></span><span class="keyword">(</span><span class="symbol">sensor</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="symbol">value</span><span class="keyword">,</span> <span class="argument">fill</span> <span class="argument">=</span> <span class="symbol">gas</span><span class="keyword">)</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/geom_bar'>geom_bar</a></span><span class="keyword">(</span><span class="argument">position</span> <span class="argument">=</span> <span class="string">"dodge"</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>xlab</a></span><span class="keyword">(</span><span class="string">"sensor"</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>ylab</a></span><span class="keyword">(</span><span class="string">"Langmuir parameter K"</span><span class="keyword">)</span>
-<span class="symbol">p7</span></div>
-<p><img src='UNIMANsorption-22.png' alt='' width='400' height='400' /></p>
+p7 <- ggplot(mf, aes(x = factor(sensor), y = value, fill = gas)) + 
+  geom_bar(position = "dodge") +
+  xlab("sensor") + ylab("Langmuir parameter K")
+p7
+</div>
+<strong class='message'>Mapping a variable to y and also using stat="bin".
+  With stat="bin", it will attempt to set the y value to the count of cases in each group.
+  This can result in unexpected behavior and will not be allowed in a future version of ggplot2.
+  If you want y to represent counts of cases, use stat="bin" and don't map a variable to y.
+  If you want y to represent values in the data, use stat="identity".
+  See ?geom_bar for examples. (Deprecated; last used in version 0.9.2)</strong>
+<p><img src='UNIMANsorption-23.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">p8</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/ggplot'>ggplot</a></span><span class="keyword">(</span><span class="symbol">df</span><span class="keyword">,</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/aes'>aes</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/stats/reorder.factor'>reorder</a></span><span class="keyword">(</span><span class="argument">x</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/factor'>factor</a></span><span class="keyword">(</span><span class="symbol">sensor</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">A</span> <span class="keyword">-</span> <span class="symbol">C</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="symbol">A</span> <span class="keyword">-</span> <span class="symbol">C</span><span class="keyword">,</span> <span class="argument">fill</span> <span class="argument">=</span> <span class="symbol">sensor.group</span><span class="keyword">)</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/geom_bar'>geom_bar</a></span><span class="keyword">(</span><span class="argument">position</span> <span class="argument">=</span> <span class="string">"identity"</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/coord_flip'>coord_flip</a></span><span class="keyword">(</span><span class="keyword">)</span> <span class="keyword">+</span>
-  <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>xlab</a></span><span class="keyword">(</span><span class="string">"sensor"</span><span class="keyword">)</span> <span class="keyword">+</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/ggplot2/labs'>ylab</a></span><span class="keyword">(</span><span class="string">"Difference in K between A and C"</span><span class="keyword">)</span>
-<span class="symbol">p8</span></div>
-<p><img src='UNIMANsorption-24.png' alt='' width='400' height='400' /></p>
+p8 <- ggplot(df, aes(reorder(x = factor(sensor), A - C), y = A - C, fill = sensor.group)) + 
+  geom_bar(position = "identity") + coord_flip() +
+  xlab("sensor") + ylab("Difference in K between A and C")
+p8
+</div>
+<strong class='message'>Mapping a variable to y and also using stat="bin".
+  With stat="bin", it will attempt to set the y value to the count of cases in each group.
+  This can result in unexpected behavior and will not be allowed in a future version of ggplot2.
+  If you want y to represent counts of cases, use stat="bin" and don't map a variable to y.
+  If you want y to represent values in the data, use stat="identity".
+  See ?geom_bar for examples. (Deprecated; last used in version 0.9.2)</strong>
+<p><img src='UNIMANsorption-26.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+### UNIMAN affinities K in polar plot
+mf <- melt(UNIMANsorption$qkc[, , "K"], varnames = c("sensor", "gas"))
+
+p9 <- qplot(sensor, value, color = gas, data = mf, geom = "line") + coord_polar()
+p9
+</div>
+<p><img src='UNIMANsorption-28.png' alt='' width='400' height='400' /></p>
 <div class='input'></div></pre>
   </div>
   <div class="span4">

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>SorptionModel. chemosensors 0.7.4</title>
+<title>SorptionModel. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -138,52 +138,61 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment"># sorption model: default initialization</span>
-<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SorptionModel.html'>SorptionModel</a></span><span class="keyword">(</span><span class="keyword">)</span>
+    <pre class="examples"><div class='input'># sorption model: default initialization
+sm <- SorptionModel()
 
-<span class="comment"># get information about the model</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/show'>show</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span></div>
+# get information about the model
+show(sm)
+</div>
 <div class='output'> Sorption Model (knum 1), alpha 2.25
 </div>
-<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span></div>
+<div class='input'>print(sm)
+</div>
 <div class='output'> Sorption Model
  - knum 1 
  - 3 gases A, B, C 
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">)</span></div>
+plot(sm)  
+</div>
 <p><img src='SorptionModel-6.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># model: custom parameters</span>
-<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SorptionModel.html'>SorptionModel</a></span><span class="keyword">(</span><span class="argument">alpha</span><span class="argument">=</span><span class="number">0.01</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span> <span class="comment"># almost linear model</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Almost linear model, non-linearity 0.01"</span><span class="keyword">)</span></div>
+# model: custom parameters
+sm <- SorptionModel(alpha=0.01, gases=c(1, 3)) # almost linear model
+plot(sm, main="Almost linear model, non-linearity 0.01")
+</div>
 <p><img src='SorptionModel-8.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SorptionModel.html'>SorptionModel</a></span><span class="keyword">(</span><span class="argument">alpha</span><span class="argument">=</span><span class="number">0.3</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span> <span class="comment"># non-linear model</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Non-linear model, non-linearity 0.5"</span><span class="keyword">)</span></div>
+sm <- SorptionModel(alpha=0.3, gases=c(1, 3)) # non-linear model
+plot(sm, main="Non-linear model, non-linearity 0.5")
+</div>
 <p><img src='SorptionModel-10.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SorptionModel.html'>SorptionModel</a></span><span class="keyword">(</span><span class="argument">alpha</span><span class="argument">=</span><span class="number">0.5</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span> <span class="comment"># saturated model</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Saturated model, non-linearity 1"</span><span class="keyword">)</span></div>
+sm <- SorptionModel(alpha=0.5, gases=c(1, 3)) # saturated model
+plot(sm, main="Saturated model, non-linearity 1")
+</div>
 <p><img src='SorptionModel-12.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SorptionModel.html'>SorptionModel</a></span><span class="keyword">(</span><span class="argument">Knorm</span><span class="argument">=</span><span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">gases</span><span class="argument">=</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span> <span class="comment"># model with UNIMAN sorption parameters</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"Model with UNIMAN parameters (no normalization)"</span><span class="keyword">)</span></div>
+sm <- SorptionModel(Knorm=FALSE, gases=c(1, 3)) # model with UNIMAN sorption parameters
+plot(sm, main="Model with UNIMAN parameters (no normalization)")
+</div>
 <p><img src='SorptionModel-14.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># method plot</span>
-<span class="comment">#  - plot types 'y': response, data, predict</span>
-<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SorptionModel.html'>SorptionModel</a></span><span class="keyword">(</span><span class="keyword">)</span> <span class="comment"># default model</span>
+# method plot
+#  - plot types 'y': response, data, predict
+sm <- SorptionModel() # default model
 
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="string">"response"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(sm, 'response')"</span><span class="keyword">)</span> <span class="comment"># default plot type, i.e. 'plot(sm)' does the same plotting</span></div>
+plot(sm, "response", main="plot(sm, 'response')") # default plot type, i.e. 'plot(sm)' does the same plotting
+</div>
 <p><img src='SorptionModel-16.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="string">"data"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(sm, 'data')"</span><span class="keyword">)</span></div>
+plot(sm, "data", main="plot(sm, 'data')")
+</div>
 <p><img src='SorptionModel-18.png' alt='' width='400' height='400' /></p>
-<p><img src='SorptionModel-19.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="string">"predict"</span><span class="keyword">,</span> <span class="argument">main</span><span class="argument">=</span><span class="string">"plot(sm, 'predict')"</span><span class="keyword">)</span></div>
-<p><img src='SorptionModel-21.png' alt='' width='400' height='400' /></p></pre>
+plot(sm, "predict", main="plot(sm, 'predict')")
+</div>
+<p><img src='SorptionModel-20.png' alt='' width='400' height='400' /></p></pre>
   </div>
   <div class="span4">
     <!-- <ul>

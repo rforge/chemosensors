@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>conc2df. chemosensors 0.7.6</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.6</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Method conc2df</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Method conc2df converts a concetration matrix into a data
+  frame.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The input parameters are an object, e.g.
+  <code>SensorArray</code>, and a concentration matrix. The
+  output data frame has the following columns:</p>
+  
+      <p><table><tr><td> <code>A</code>, <code>B</code>, ... </td>
+<td> Gas
+  concentrations (column names equal to gas names of the
+  object). </td>
+</tr><tr><td> <code>glab</code> </td>
+<td> Gas labels, e.g. <code>A</code>
+  or <code>Air</code>. </td>
+</tr><tr><td> <code>lab</code> </td>
+<td> Gas+Concetratoin
+  labels, e.g. <code>A 0.01</code>. </td>
+</tr></table></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>
+### 1) a concentration matrix of three gases (tunit 1)
+sa <- SensorArray() 
+
+conc.values <- concMax(sa)
+conc <- diag(conc.values)
+
+conc 
+</div>
+<div class='output'>     [,1] [,2] [,3]
+[1,]  0.1  0.0    0
+[2,]  0.0  0.1    0
+[3,]  0.0  0.0    1
+</div>
+<div class='input'>
+cf <- conc2df(sa, conc)
+cf
+</div>
+<div class='output'>    A   B C glab  lab tpoint
+1 0.1 0.0 0    A A0.1  gasin
+2 0.0 0.1 0    B B0.1    gas
+3 0.0 0.0 1    C   C1 gasout
+</div>
+<div class='input'>
+### 2) a concentration matrix of three gases (tunit = 4)
+sa <- SensorArray(tunit = 4)
+
+set <- c("A 0.1", "B 0.1", "C 1")
+sc <- Scenario(set, tunit = 4)
+conc <- getConc(sc)
+
+head(conc)
+</div>
+<div class='output'>    A B C
+1 0.0 0 0
+2 0.0 0 0
+3 0.0 0 0
+4 0.0 0 0
+5 0.1 0 0
+6 0.1 0 0
+</div>
+<div class='input'>
+cf <- conc2df(sa, conc)
+head(cf)
+</div>
+<div class='output'>    A B C glab  lab tpoint
+1 0.0 0 0  Air  Air  airin
+2 0.0 0 0  Air  Air    air
+3 0.0 0 0  Air  Air    air
+4 0.0 0 0  Air  Air airout
+5 0.1 0 0    A A0.1  gasin
+6 0.1 0 0    A A0.1    gas
+</div>
+<div class='input'></div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>conc2df</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

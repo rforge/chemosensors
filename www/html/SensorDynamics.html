@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>SensorDynamics. chemosensors 0.7.4</title>
+<title>SensorDynamics. chemosensors 0.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.4</a>
+      <a class="brand" href="#">chemosensors 0.7.6</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -100,50 +100,55 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class="comment">### Sensor dynamics: default initialization</span>
-<span class="symbol">sdyn</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SensorDynamics.html'>SensorDynamics</a></span><span class="keyword">(</span><span class="keyword">)</span>
+    <pre class="examples"><div class='input'>### Sensor dynamics: default initialization
+sdyn <- SensorDynamics()
 
-<span class="symbol">sdyn</span> <span class="comment"># equivalent to: show(sdyn)</span></div>
+sdyn # equivalent to: show(sdyn)
+</div>
 <div class='output'> Sensor Dynamics Model (num 1)
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/print'>print</a></span><span class="keyword">(</span><span class="symbol">sdyn</span><span class="keyword">)</span></div>
+print(sdyn)
+</div>
 <div class='output'> Sensor Dynamics Model
  - num 1 
  - 3 gases A, B, C 
 </div>
 <div class='input'>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></span><span class="keyword">(</span><span class="symbol">sdyn</span><span class="keyword">)</span></div>
+#plot(sdyn)
+
+### SensorDynamics as a part of SensorModel
+sm <- SensorModel(tunit = 60)
+sdyn <- as(sm, "SensorDynamics")
+
+### Demo 1: response to pulses of different concentrations
+set.seed(5)
+sa <- SensorArray(tunit = 60, csd = 1, ssd = 0, dsd = 0)
+
+# mixture at low concentrations
+p1 <- plotSignal(sa, set = c("A 0.01", "C 0.1", "A 0.01, C 0.1"), main = "Low concentrations")
+p1
+</div>
 <p><img src='SensorDynamics-6.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">### SensorDynamics as a part of SensorModel</span>
-<span class="symbol">sm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='SensorModel.html'>SensorModel</a></span><span class="keyword">(</span><span class="argument">tunit</span> <span class="argument">=</span> <span class="number">60</span><span class="keyword">)</span>
-<span class="symbol">sdyn</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/methods/as'>as</a></span><span class="keyword">(</span><span class="symbol">sm</span><span class="keyword">,</span> <span class="string">"SensorDynamics"</span><span class="keyword">)</span>
-
-<span class="comment">### Demo 1: response to pulses of different concentrations</span>
-<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Random'>set.seed</a></span><span class="keyword">(</span><span class="number">5</span><span class="keyword">)</span>
-<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">tunit</span> <span class="argument">=</span> <span class="number">60</span><span class="keyword">,</span> <span class="argument">csd</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">,</span> <span class="argument">ssd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">,</span> <span class="argument">dsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span>
-
-<span class="comment"># mixture at low concentrations</span>
-<span class="symbol">p1</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotSignal</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A 0.01"</span><span class="keyword">,</span> <span class="string">"C 0.1"</span><span class="keyword">,</span> <span class="string">"A 0.01, C 0.1"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"Low concentrations"</span><span class="keyword">)</span>
-<span class="symbol">p1</span></div>
+# mixture at high concentrations
+p2 <- plotSignal(sa, set = c("A 0.05", "C 1", "A 0.05, C 1"), main = "High concentrations")
+p2
+</div>
 <p><img src='SensorDynamics-8.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment"># mixture at high concentrations</span>
-<span class="symbol">p2</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotSignal</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A 0.05"</span><span class="keyword">,</span> <span class="string">"C 1"</span><span class="keyword">,</span> <span class="string">"A 0.05, C 1"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">main</span> <span class="argument">=</span> <span class="string">"High concentrations"</span><span class="keyword">)</span>
-<span class="symbol">p2</span></div>
+###
+sa <- SensorArray(tunit = 60, nsd = 0)
+
+p3 <- plotSignal(sa, set = c("A", "B", "C"))
+p3
+</div>
 <p><img src='SensorDynamics-10.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-<span class="comment">###</span>
-<span class="symbol">sa</span> <span class="assignement">&lt;-</span> <span class="functioncall">SensorArray</span><span class="keyword">(</span><span class="argument">tunit</span> <span class="argument">=</span> <span class="number">60</span><span class="keyword">,</span> <span class="argument">nsd</span> <span class="argument">=</span> <span class="number">0</span><span class="keyword">)</span>
-
-<span class="symbol">p3</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotSignal</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="string">"B"</span><span class="keyword">,</span> <span class="string">"C"</span><span class="keyword">)</span><span class="keyword">)</span>
-<span class="symbol">p3</span></div>
-<p><img src='SensorDynamics-12.png' alt='' width='400' height='400' /></p>
-<div class='input'>
-<span class="symbol">p4</span> <span class="assignement">&lt;-</span> <span class="functioncall">plotPCA</span><span class="keyword">(</span><span class="symbol">sa</span><span class="keyword">,</span> <span class="argument">set</span> <span class="argument">=</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="string">"A"</span><span class="keyword">,</span> <span class="string">"B"</span><span class="keyword">,</span> <span class="string">"C"</span><span class="keyword">)</span><span class="keyword">)</span>
-<span class="symbol">p4</span></div>
-<p><img src='SensorDynamics-14.png' alt='' width='400' height='400' /></p></pre>
+p4 <- plotPCA(sa, set = c("A", "B", "C"))
+p4
+</div>
+<p><img src='SensorDynamics-12.png' alt='' width='400' height='400' /></p></pre>
   </div>
   <div class="span4">
     <!-- <ul>
