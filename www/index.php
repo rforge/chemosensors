@@ -101,7 +101,7 @@ sudo R CMD INSTALL pkg/
 <p>Please let us know if you have any problems related to installation or  
 running the software.</p>
 
-<h3>Documetation</h3>
+<h3>Documentation</h3>
 <p>Help pages in html format are available on <a href="http://chemosensors.r-forge.r-project.org/html/">http://chemosensors.r-forge.r-project.org/html/</a>. Thanks to <a href="https://github.com/hadley/devtools">devtools</a> and <a href="https://github.com/hadley/staticdocs">staticdocs</a>.</p> 
 
 <h3>Examples</h3>
