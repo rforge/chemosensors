@@ -59,6 +59,34 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <!-- end of project description -->
 
+<h3>References</h3>
+
+<p>
+<ul>
+  <li><a href="http://cran.r-project.org/web/packages/chemosensors/">The package chemosenors on CRAN</a>.</li>
+
+  <li><a href="http://r-forge.r-project.org/projects/chemosensors/">R-Forge development project page</a>.</li>
+  <ul>
+    <li><a href="https://r-forge.r-project.org/scm/?group_id=1327">Instructions</a> 
+      to access the source code (subversion repository).</li>
+    <li><a href="https://r-forge.r-project.org/scm/viewvc.php/?root=chemosensors">Browse</a>
+      the source code (subversion repository).</li>
+    <li><a href="https://r-forge.r-project.org/R/?group_id=1327">Build status</a> of the package.</li>
+  </ul>
+  
+  <li>Live demo examples (interactive) on Shiny web-server:</li>
+  <ul>
+    <li><a href="http://glimmer.rstudio.com/vvariani/chemosensors-01-uniman-replica/">01. Replica of UNIMAN data set.</a>
+    <li><a href="http://glimmer.rstudio.com/vvariani/chemosensors-02-affinity/">02. Affinity in Sensor Array.</a> 
+    <li><a href="http://glimmer.rstudio.com/vvariani/chemosensors-03-diversity/">03. Diversity in Sensor Array.</a> 
+  </ul>
+  
+  <li>Section <a href="http://neurochem.sisbio.recerca.upc.edu/?page_id=86">Synthetic Datasets</a> 
+    at the UPC site for Neurochem project.</li>
+</ul>
+</p>
+
+
 <h3>Installation</h3>
 <p>Chemosensors package can be installed as a regular R package from the R-Forge repository. The command to type in R:</p>
 <pre>
@@ -144,23 +172,6 @@ plot(sa, "prediction", conc=conc)
 
 <p><object width="550" height="360" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="src" value="uniman-vsa-200.swf" /><embed width="1100" height="720" type="application/x-shockwave-flash" src="uniman-vsa-200.swf" /></object></p>
 
-<h3>References</h3>
-
-<p>
-<ul>
-  <li><a href="http://r-forge.r-project.org/projects/chemosensors/">R-Forge project page</a>.</li>
-  <ul>
-    <li><a href="https://r-forge.r-project.org/scm/?group_id=1327">Instructions</a> 
-      to access the source code (subversion repository).</li>
-    <li><a href="https://r-forge.r-project.org/scm/viewvc.php/?root=chemosensors">Browse</a>
-      the source code (subversion repository).</li>
-    <li><a href="https://r-forge.r-project.org/R/?group_id=1327">Build status</a> of the package.</li>
-  </ul>
-  <li>Section <a href="http://neurochem.sisbio.recerca.upc.edu/?page_id=86">Synthetic Datasets</a> 
-    at the UPC site for Neurochem project.</li>
-</ul>
-</p>
-
 <h3>Contacts</h3>
 <p>Alexandre Perera<br>
 Email: alexandre.perera [at] upc.edu</p>
@@ -176,5 +187,8 @@ Tel.: +34 93 407 07 73</p>
 
 <h3>Acknowledgment</h3>
 <p>This work was funded from the European Community's Seventh Framework Programme (FP7/2007-2013) under grant agreement no. 216916: Biologically inspired computation for chemical sensing (NEUROChem), the Ramon y Cajal program from the Spanish Ministerio de Educacion y Ciencia and TEC2010-20886-C02-02. CIBER-BBN is an initiative of the Spanish ISCIII.</p>
+
+<h3>Updated</h3>
+<p>This page was last updated: 2013-10-13.</p>
 </body>
 </html>
