@@ -15,7 +15,8 @@ sa <- SensorArray(model = "plsr", num = 1:17, enableSorption = FALSE)
 p0 <- plotPCA(sa, conc = conc, sdata = sdata.uniman, mod = mod.uniman, main = "UNIMAN PCA")
 p0
 
-p1 <- plotPCA(sa, conc = conc, mod = mod.uniman, main = "Synthetic data #1 \n projected on UNIMAN PCA")
+p1 <- plotPCA(sa, conc = conc, mod = mod.uniman, 
+  main = "Synthetic data #1 \n projected on UNIMAN PCA")
 p1
 
 # 2) add more noise to 'sa'
@@ -24,6 +25,7 @@ csd(sa) <- 0.5
 ssd(sa) <- 0.5
 dsd(sa) <- 0.5
 
-p2 <- plotPCA(sa, conc = conc, mod = mod.uniman, main = "Synthetic data #2 \n projected on UNIMAN PCA")
+p2 <- plotPCA(sa, conc = conc, mod = mod.uniman, 
+  main = "Synthetic data #2 \n projected on UNIMAN PCA")
 p2
 

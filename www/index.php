@@ -63,9 +63,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <p>
 <ul>
-  <li><a href="http://cran.r-project.org/web/packages/chemosensors/">The package chemosenors on CRAN</a>.</li>
+  <li><a href="http://cran.r-project.org/web/packages/chemosensors/">The package chemosenors on CRAN (the stable version)</a>.</li>
 
-  <li><a href="http://r-forge.r-project.org/projects/chemosensors/">R-Forge development project page</a>.</li>
+  <li><a href="http://r-forge.r-project.org/projects/chemosensors/">R-Forge development project page (the development version)</a>.</li>
   <ul>
     <li><a href="https://r-forge.r-project.org/scm/?group_id=1327">Instructions</a> 
       to access the source code (subversion repository).</li>
@@ -87,7 +87,19 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 </p>
 
 
-<h3>Installation</h3>
+<h3>Installation from CRAN (recommended)</h3>
+
+<p>The command in R to install the package:</p>
+<pre>
+install.packages("chemosensors")
+</pre>
+
+<p>
+The package from the CRAN repository (the stable version) will installed.
+</p>
+
+<h3>Installation from R-forge</h3>
+
 <p>Chemosensors package can be installed as a regular R package from the R-Forge repository. The command to type in R:</p>
 <pre>
 install.packages("chemosensors", dep=TRUE, repos="http://r-forge.r-project.org")
@@ -100,10 +112,27 @@ For example, the local source file is 'chemosensors_0.7.1.tar.gz'.</p>
 
 <p>The user should run two commands inside R.</p>
 
+Depends:
+    R (>= 2.11.0),
+    methods,
+    stats,
+    pls,
+    plyr,
+    reshape2,
+    ggplot2
+Imports:
+    LearnBayes,
+    quadprog,
+    RColorBrewer
+Suggests:
+    doMC,
+    multicore,
+    car,
+    gridExtra
+
 <pre>
-install.packages("methods", "stats", "pls", "LearnBayes", "quadprog",  
-"plyr", "colorspace", "RColorBrewer", "reshape", "ggplot2", "ppls",  
-"splines", "MASS", "multicore")
+install.packages("methods", "stats", "pls", "plyr", "reshape2", "ggplot2",
+  "LearnBayes", "quadprog",  "RColorBrewer", "doMC", "multicore", "car", "gridExtra")  
 </pre>
 
 <pre>

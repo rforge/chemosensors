@@ -11,10 +11,10 @@ NULL
 # Parameters
 #----------------------------
 
-#' Get names of concentration units.
+#' Function to get available names for concentration units.
+#'
 #' @name ConcUnitsNames
-#' @rdname pub-ConcUnitsNames
-#' @keywords parameter
+#' @rdname chemosensors-package
 #' @return Character vector of units names.
 #' @export
 ConcUnitsNames <- function()
@@ -22,7 +22,6 @@ ConcUnitsNames <- function()
   return(c("perc", "perc 1e-2", "norm"))
 }
 
-#' @export
 ConcUnitsStr <- function(units)
 {
   unitsStr <- switch(units,
@@ -38,19 +37,34 @@ ConcUnitsStr <- function(units)
 # Defaults 
 #----------------------------
 
+#' Function defaultDataModel.
+#' @name defaultDataModel
+#' @rdname chemosensors-package
 #' @export
 defaultDataModel <- function() return("ispline")
 
+#' Function defaultConcUnitsInt.
+#' @name defaultConcUnitsInt
+#' @rdname chemosensors-package
 #' @export
 defaultConcUnitsInt <- function() return("perc 1e-2")
 
+#' Function defaultConcUnits.
+#' @name defaultConcUnits
+#' @rdname chemosensors-package
 #' @export
 defaultConcUnits <- function() return("perc")
 
+#' Function defaultConcUnitsSorption.
+#' @name defaultConcUnitsSorption
+#' @rdname chemosensors-package
 #' @export
 defaultConcUnitsSorption <- function() return("norm")
 
-#' @export defaultSet
+#' Function defaultSet
+#' @name defaultSet
+#' @rdname chemosensors-package
+#' @export
 defaultSet <- function() return(c("A 0.01", "A 0.02", "A 0.05",
   "B 0.01", "B 0.02", "B 0.05",
   "C 0.1", "C 1"))
@@ -59,21 +73,39 @@ defaultSet <- function() return(c("A 0.01", "A 0.02", "A 0.05",
 # Defaults (Datasets)
 #----------------------------
 
+#' Function defaultDataPackage.
+#' @name defaultDataPackage
+#' @rdname chemosensors-package
 #' @export
 defaultDataPackage <- function() return("chemosensors") # "chemosensors", NULL
 
+#' Function defaultDataSensorModel.
+#' @name defaultDataSensorModel
+#' @rdname chemosensors-package
 #' @export
 defaultDataSensorModel <- function() return("UNIMANshort")
 
+#' Function defaultDataDistr.
+#' @name defaultDataDistr
+#' @rdname chemosensors-package
 #' @export
 defaultDataDistr <- function() return("UNIMANdistr")
 
+#' Function defaultDataSensorNoiseModel.
+#' @name defaultDataSensorNoiseModel
+#' @rdname chemosensors-package
 #' @export
 defaultDataSensorNoiseModel <- function() return("UNIMANsnoise")
 
+#' Function defaultDataSorptionModel.
+#' @name defaultDataSorptionModel
+#' @rdname chemosensors-package
 #' @export
 defaultDataSorptionModel <- function() return("UNIMANsorption")
 
+#' Function defaultDataDriftNoiseModel.
+#' @name defaultDataDriftNoiseModel
+#' @rdname chemosensors-package
 #' @export
 defaultDataDriftNoiseModel <- function() return("UNIMANdnoise")
 
@@ -89,7 +121,10 @@ defaultDataDriftNoiseModel <- function() return("UNIMANdnoise")
 # Get/Set Methods
 #----------------------------
 
+#' @rdname get-methods
+#' @aliases num,ANY-method
 setMethod("num", "ANY", function(x) x@num)
+
 setMethod("numStr", "ANY", function(x) {
   num <- x@num
   n <- length(num)
@@ -98,19 +133,40 @@ setMethod("numStr", "ANY", function(x) {
     paste(paste(num[1:3], collapse=", "), " ... ", num[n], sep=''))
   return(numStr)
 })
+#' @rdname get-methods
+#' @aliases idx,ANY-method
 setMethod("idx", "ANY", function(x) x@idx)
-
+#' @rdname get-methods
+#' @aliases gases,ANY-method
 setMethod("gases", "ANY", function(x) x@gases)
+#' @rdname get-methods
+#' @aliases gind,ANY-method
 setMethod("gind", "ANY", function(x) x@gind)
+#' @rdname get-methods
+#' @aliases ngases,ANY-method
 setMethod("ngases", "ANY", function(x) ifelse("ngases" %in% slotNames(x), x@ngases, NA))
+#' @rdname get-methods
+#' @aliases gnames,ANY-method
 setMethod("gnames", "ANY", function(x) x@gnames)
 
+#' @rdname get-methods
+#' @aliases gases,missing-method
 setMethod("gases", "missing", function(x) 1:3)
+#' @rdname get-methods
+#' @aliases gind,missing-method
 setMethod("gind", "missing", function(x) 1:3)
+#' @rdname get-methods
+#' @aliases ngases,missing-method
 setMethod("ngases", "missing", function(x) 3)
+#' @rdname get-methods
+#' @aliases gnames,missing-method
 setMethod("gnames", "missing", function(x) LETTERS[1:3])
 
+#' @rdname get-methods
+#' @aliases nsensors,ANY-method
 setMethod("nsensors", "ANY", function(x) ifelse("num" %in% slotNames(x), length(x@num), NA))
+#' @rdname get-methods
+#' @aliases snames,ANY-method
 setMethod("snames", "ANY", function(x, sensor.names = "short", ...) {
   match.arg(sensor.names, c("short", "long"))
   
@@ -121,10 +177,17 @@ setMethod("snames", "ANY", function(x, sensor.names = "short", ...) {
   else
     return(NA)
 })
-
+#' @rdname get-methods
+#' @aliases concUnits,ANY-method
 setMethod("concUnits", "ANY", function(x) x@concUnits)
+#' @rdname get-methods
+#' @aliases concUnitsInt,ANY-method
 setMethod("concUnitsInt", "ANY", function(x) x@concUnitsInt)
 
+
+#' @name concUnits<-
+#' @aliases concUnits<-,ANY-method
+#' @rdname set-methods
 setReplaceMethod("concUnits", "ANY", function(object, value) 
 {
   object@concUnits <- value
@@ -152,10 +215,9 @@ setReplaceMethod("concUnits", "ANY", function(object, value)
 #'   \code{tpoint} \tab Time point labels to encode the gas pulses, e.g. \code{gasin}.
 #' }
 #' 
-#' @name sdata.frame
-#' @rdname www-sdata.frame
+#' @rdname scenario-methods
+#' @aliases sdata.frame,ANY-method
 #' @example inst/examples/sdata.frame-method.R
-#' @exportMethod sdata.frame
 setMethod("sdata.frame", "ANY", function(x, feature, df, ...) 
 { 
   stopifnot(!missing(x))
@@ -175,7 +237,8 @@ setMethod("sdata.frame", "ANY", function(x, feature, df, ...)
 # Predict Methods
 #----------------------------
 
-### Method coef
+#' @rdname get-methods
+#' @aliases coef,ANY-method
 setMethod("coef", "ANY", function(object, ...)
 {
   coefficients(object, ...)  
@@ -200,6 +263,9 @@ setMethod("coefStr", "ANY", function(object, sensor = 1, ...)
 #----------------------------
 # Model Methods
 #----------------------------
+
+#' @rdname model-methods
+#' @aliases concMin,ANY-method
 setMethod("concMin", "ANY", function(object, concUnits=object@concUnits, ...)
 {
   conc.min.perc <- c(0.01, 0.01, 0.1)[gases(object)]
@@ -212,6 +278,8 @@ setMethod("concMin", "ANY", function(object, concUnits=object@concUnits, ...)
   return(conc.min)
 })
 
+#' @rdname model-methods
+#' @aliases concMax,ANY-method
 setMethod("concMax", "ANY", function(object, concUnits=object@concUnits, ...)
 {
   conc.max.perc <- c(0.1, 0.1, 1.0)[gases(object)]
@@ -300,7 +368,8 @@ setMethod("concDenorm", "ANY", function(object, conc, concUnits="default", concU
   return(conc)
 })
 
-### Method concSample
+#' @rdname model-methods
+#' @aliases concSample,ANY-method
 setMethod("concSample", "ANY", function(object, type, n, 
   gases=0, concUnits="default", ...)
 {
@@ -385,7 +454,8 @@ setMethod("concSample", "ANY", function(object, type, n,
   return(conc)
 })
 
-### Method concSampleDyn
+#' @rdname model-methods
+#' @aliases concSampleDyn,ANY-method
 setMethod("concSampleDyn", "ANY", function(object, type, n, 
   gases = 0, concUnits = "default", ...)
 {
@@ -451,20 +521,13 @@ setMethod("sdataSample", "ANY", function(object, n, ...)
 })
 
 
-#----------------------------
-# Noise Methods
-#----------------------------
-
-setReplaceMethod("nsd", "ANY", function(object, value) 
-{
-  return (object)
-})
 
 #----------------------------
 # Plot Methods
 #----------------------------
 
-### Method plotPolar
+#' @rdname plot-methods
+#' @aliases plotPolar,ANY-method
 setMethod("plotPolar", "ANY", function(x, y, polar = TRUE, geom = "line",
   main = "Model Response: Polar plot", xlab = "Sensor", ylab = "Sensor Signal", xlim = NULL, ylim = NULL,
   graphics = "ggplot", ret = TRUE, ...)
@@ -514,8 +577,8 @@ setMethod("plotPolar", "ANY", function(x, y, polar = TRUE, geom = "line",
     colnames(sdata) <- x@idx
   
     df <- cbind(cf, sdata)
-    df <- melt(df, id.vars = colnames(cf), variable_name = "sensor")  
-    colnames(df)[ncol(df)] <- "y"  
+    df <- melt(df, id.vars = colnames(cf))  
+    colnames(df)[c(ncol(df) - 1, ncol(df))] <- c("sensor", "y")
     df <- mutate(df, S = paste("S", sensor, sep = ""))
 
     df <- mutate(df, sensor = as.numeric(sensor))
@@ -560,7 +623,8 @@ setMethod("plotPolar", "ANY", function(x, y, polar = TRUE, geom = "line",
 
 })
 
-### Method plotPolar
+#' @rdname plot-methods
+#' @aliases plotPolarGases,ANY-method
 setMethod("plotPolarGases", "ANY", function(x, y, polar = TRUE, geom = "line",
   main = "Model Response: Polar plot per analyte", xlab = "Sensor", ylab = "Sensor Signal", xlim = NULL, ylim = NULL,
   graphics = "ggplot", ret = FALSE, ...)
@@ -609,8 +673,8 @@ setMethod("plotPolarGases", "ANY", function(x, y, polar = TRUE, geom = "line",
     colnames(sdata) <- x@idx
   
     df <- cbind(cf, sdata)
-    df <- melt(df, id.vars = colnames(cf), variable_name = "sensor")  
-    colnames(df)[ncol(df)] <- "y"  
+    df <- melt(df, id.vars = colnames(cf))  
+    colnames(df)[c(ncol(df) - 1, ncol(df))] <- c("sensor", "y")
     df <- mutate(df, S = paste("S", sensor, sep = ""))
 
     df <- mutate(df, sensor = as.numeric(sensor))
@@ -737,9 +801,6 @@ setMethod("plotResponseOld", "ANY", function(x, y, concUnits = "norm",
       main=main, xlab = xlab, ylab = ylab, ...)  
    }
   else if(graphics == "ggplot") {
-    require(reshape)
-    require(ggplot2)
-
     xf <- as.data.frame(xp)
     colnames(xf) <- paste(rep(1:nsensors, each = ngases), rep(1:ngases, times = nsensors), sep = ".")
     xm <- reshape::melt.data.frame(xf, measure.vars = colnames(xf))
@@ -808,7 +869,8 @@ setMethod("plotResponseOld", "ANY", function(x, y, concUnits = "norm",
   }
 })
 
-### Method plotTimeline
+#' @rdname plot-methods
+#' @aliases plotTimeline,ANY-method
 setMethod("plotTimeline", "ANY", function(x, y, conc, sdata, concUnits = "default",
   leg="none",
   lwd = 2, lty = 1, col, bty="n",
@@ -843,7 +905,7 @@ setMethod("plotTimeline", "ANY", function(x, y, conc, sdata, concUnits = "defaul
   
 })
 
-### Method plotAffinitySpace
+### Method plotAffinitySpaceOld
 setMethod("plotAffinitySpaceOld", "ANY", function(x, y, type = 'points', conc, sdata,
   gases = 1:2, 
   lwd = 2, pch=20, cex=2, 
@@ -908,7 +970,9 @@ setMethod("plotAffinitySpaceOld", "ANY", function(x, y, type = 'points', conc, s
     for(i in 1:nsensors) {
       varcovi <- diag(sd[i, gind])
       mui <- mu[i, gind]
-      require(car)
+      if(!require(car)) {
+        stop("Package `car` is needed for plotting.")
+      }
       car::ellipse(mui, varcovi, 1, col=col, center.cex=0, fill=TRUE, lwd=lwd)
     }
     abline(0, 1, lwd=lwd, lty=3) 
@@ -924,7 +988,9 @@ setMethod("plotAffinitySpaceOld", "ANY", function(x, y, type = 'points', conc, s
     #grid(col='lightgrey', lwd=lwd, lty=3)
   }
   else if(type == 'density') {
-    require(MASS)
+    if(!require(MASS)) {
+        stop("Package `MASS` is needed for plotting.")
+    }  
 
     d <- MASS::kde2d(xp, yp, n=50)
 
@@ -939,7 +1005,8 @@ setMethod("plotAffinitySpaceOld", "ANY", function(x, y, type = 'points', conc, s
   
 })
 
-### Method plotAffinitySpace
+#' @rdname plot-methods
+#' @aliases plotAffinitySpace,ANY-method
 setMethod("plotAffinitySpace", "ANY", function(x, y, type = 'points', 
   gases = 1:2, 
   main = "Affinity Space", xlab, ylab, 
@@ -998,8 +1065,8 @@ setMethod("plotAffinitySpace", "ANY", function(x, y, type = 'points',
     colnames(sdata) <- x@idx
   
     df <- cbind(cf, sdata)
-    df <- melt(df, id.vars = colnames(cf), variable_name = "sensor")  
-    colnames(df)[ncol(df)] <- "y"  
+    df <- melt(df, id.vars = colnames(cf))  
+    colnames(df)[c(ncol(df) - 1, ncol(df))] <- c("sensor", "y")
     df <- mutate(df, S = paste("S", sensor, sep = ""))
 
     df <- mutate(df, sensor = as.numeric(sensor))
@@ -1040,7 +1107,8 @@ setMethod("plotAffinitySpace", "ANY", function(x, y, type = 'points',
   }    
 })
 
-### Method plotAffinityMap
+#' @rdname plot-methods
+#' @aliases plotAffinityMap,ANY-method
 setMethod("plotAffinityMap", "ANY", function(x, y, 
   gases = 0, 
   main = "Affinity Map", xlab, ylab, ...)
@@ -1062,7 +1130,9 @@ setMethod("plotAffinityMap", "ANY", function(x, y,
   
   aff <- affinity(x, gases=gases)
     
-  require(MASS)
+  if(!require(MASS)) {
+    stop("Package `MASS` is needed for plotting.")
+  } 
   d <- MASS::kde2d(aff[1, ], aff[2, ], n=50)
 
   col <- mapcol(x)
@@ -1074,7 +1144,8 @@ setMethod("plotAffinityMap", "ANY", function(x, y,
   contour(d, add=TRUE, nlevels=10)
 })
 
-### Method plotAffinity
+#' @rdname plot-methods
+#' @aliases plotAffinity,ANY-method
 setMethod("plotAffinity", "ANY", function(x, y, 
   gases = 0, 
   main = "Affinity Map", xlab, ylab, ...)
@@ -1096,7 +1167,9 @@ setMethod("plotAffinity", "ANY", function(x, y,
   
   aff <- affinity(x, gases=gases)
     
-  require(MASS)
+  if(!require(MASS)) {
+    stop("Package `MASS` is needed for plotting.")
+  } 
   d <- MASS::kde2d(aff[1, ], aff[2, ], n=50)
 
   col <- mapcol(x)
@@ -1108,7 +1181,8 @@ setMethod("plotAffinity", "ANY", function(x, y,
   contour(d, add=TRUE, nlevels=10)
 })
 
-### Method plotMixture
+#' @rdname plot-methods
+#' @aliases plotMixture,ANY-method
 setMethod("plotMixture", "ANY", function(x, y, n = 20, concUnits = "default",
   gases = 0, las2 = 1,
   axes = TRUE, col, nlevels = 10,
@@ -1158,7 +1232,8 @@ setMethod("plotMixture", "ANY", function(x, y, n = 20, concUnits = "default",
   }
 })
 
-### Method plotSignal
+#' @rdname plot-methods
+#' @aliases plotSignal,ANY-method
 setMethod("plotSignal", "ANY", function(x, y, conc, set,
   concUnits = "default", 
   main = "Model Response to Concentration", 
@@ -1231,7 +1306,8 @@ ccol.function <- function(conc, pal,
   return(col)  
 }
   
-### Method ccol
+#' @rdname plot-methods
+#' @aliases ccol,ANY-method
 setMethod("ccol", "ANY", function(object, conc, pal, ...)
 { 
   # missing object/conc
@@ -1264,7 +1340,8 @@ setMethod("ccol", "ANY", function(object, conc, pal, ...)
   return(col)
 })
 
-### Method gcol
+#' @rdname plot-methods
+#' @aliases gcol,ANY-method
 setMethod("gcol", "ANY", function(object, gases=0, pal, ...)
 {
   if(sum(gases == 0)) gases <- gases(object)
@@ -1280,7 +1357,8 @@ setMethod("gcol", "ANY", function(object, gases=0, pal, ...)
   return(col)
 })
 
-### Method mapcol
+#' @rdname plot-methods
+#' @aliases mapcol,ANY-method
 setMethod("mapcol", "ANY", function(object, col, n=100, ...)
 {
   if(missing(col)) col <- rev(c("#D73027", "#FC8D59", "#FEE090", "#FFFFBF", "#E0F3F8", "#91BFDB", "#4575B4")) # base colors
@@ -1290,7 +1368,8 @@ setMethod("mapcol", "ANY", function(object, col, n=100, ...)
   return(pal)
 })
 
-### Method scol
+#' @rdname plot-methods
+#' @aliases scol,ANY-method
 setMethod("scol", "ANY", function(object, n, 
   start = 0.2, end = 0.8, gamma = 2.2)
 {
@@ -1306,7 +1385,8 @@ setMethod("scol", "ANY", function(object, n,
 # Other Methods
 #----------------------------
 
-### Method affinity
+#' @rdname SensorArray-class
+#' @aliases affinity,ANY-method
 setMethod("affinity", "ANY", function(object, concUnits = "norm", 
   gases = 0, type = "inc", n = 300, ...)
 {

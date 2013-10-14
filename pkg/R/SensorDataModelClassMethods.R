@@ -9,8 +9,7 @@ NULL
 
 #' Class SensorDataModel.
 #' @name SensorDataModel-class
-#' @rdname int-SensorDataModel-class
-#' @keywords class
+#' @rdname SensorDataModel-class
 #' @exportClass SensorDataModel
 {}
 
@@ -21,6 +20,15 @@ setClass("SensorDataModel")
 # Class constructor
 #----------------------------
 
+#' Constructor method of SensorDataModel Class.
+#'
+#' @param model Name of the data model. Supported names: 
+#'   \code{"pls"}, \code{"pls"}, \code{"mvr"}, \code{"broken-stick"} and \code{"ispline"}.
+#' @param ... Parameters of constructor.
+#' @return An object of class \code{SensorDataModel}.
+#'
+#' @name SensorDataModel
+#' @rdname SensorDataModel-class
 #' @export
 SensorDataModel <- function(model, ...)
 {
@@ -348,7 +356,7 @@ plot.SensorDataModel.prediction <- function(x, y, C, p = 1,
     main=main, xlab = xlab, ylab = ylab)  
 }
 
-plot.SensorDataModel.pca <- function(x, y, C, Y, ...)
+plot.DataModel.pca <- function(x, y, C, Y, mod, ...)
 {
   if(missing(C) | missing(Y))
     stop("Error in 'plot.SensorDataModel.prediction': 'C' or 'Y' is missing.")

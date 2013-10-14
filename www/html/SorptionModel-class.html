@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>SorptionModel-class. chemosensors 0.7.7</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.7</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Method knum.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>defaultSorptionModel()
+
+SorptionModel(...)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>...</dt>
+      <dd>parameters of constructor.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>List of the default parameters.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Method knum.</p>
+  
+      <p>Method concUnitsSorption.</p>
+  
+      <p>Class <code><a href='SorptionModel-class.html'>SorptionModel</a></code> controls the the amount
+  of gas absorbed by the sensor, that emulates the
+  non-linearity nature intrinsic for the polymeric sensors.</p>
+  
+      <p>Function to get default constructor parameters of class
+  <code><a href='SorptionModel-class.html'>SorptionModel</a></code>.</p>
+  
+      <p>Constructor method of SorptionModel Class.</p>
+  
+      <p>Wrapper function SorptionModel.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The model is based on the extended Langmuir isotherm for
+  a multi-component gas mixture, and has two parameters per
+  analyte, <code>Q</code> denotes the sorption capacity and
+  <code>K</code> stands for the sorption affinity.</p>
+  
+      <p>Slots of the class: <table><tr><td> <code>knum</code> </td>
+<td> </td>
+</tr><tr><td>
+  <code>sorptionModel</code> </td>
+<td> List of model parameters 'K'
+  and 'Q'. </td>
+</tr></table> Slots of the class: <table><tr><td>
+  <code>knum</code> </td>
+<td> Sensor number that encodes a UNIMAN
+  sorption profile (<code>1:17</code>). The default value is
+  <code>1</code>. </td>
+</tr><tr><td> <code>gases</code> </td>
+<td> Gas indices. </td>
+</tr><tr><td>
+  <code>ngases</code> </td>
+<td> The number of gases. </td>
+</tr><tr><td> <code>gnames</code>
+  </td>
+<td> Names of gases. </td>
+</tr><tr><td> <code>concUnits</code> </td>
+<td>
+  Concentration units external to the model, values given
+  in an input concentration matrix. </td>
+</tr><tr><td> <code>concUnitsInt</code>
+  </td>
+<td> Concentration units internal for the model, values
+  used numerically to evaluate the Langmuir relation. </td>
+</tr><tr><td>
+  <code>sorptionModel</code> </td>
+<td> A list that contains the
+  Langmuir parameters. </td>
+</tr><tr><td> <code>srdata</code> </td>
+<td> The reference
+  data of Lanmuir parameters from UNIMAN dataset (see
+  <code><a href='UNIMANsorption.html'>UNIMANsorption</a></code>). </td>
+</tr><tr><td> <code>alpha</code> </td>
+<td>
+  (parameter of sensor non-linearity in mixtures) A scaling
+  coefficient of non-linearity induced via the affinity
+  parameter <code>K</code>. The default value is <code>2.25</code>. </td>
+</tr></table></p>
+  
+      <p>Methods of the class: <table><tr><td> <code>predict</code> </td>
+<td>
+  Predicts a model response to an input concentration
+  matrix. </td>
+</tr></table></p>
+  
+      <p>The <code>plot</code> method has three types (parameter
+  <code>y</code>): <table><tr><td> <code>response</code> </td>
+<td> (default)
+  Shows a modeled trasnformation of concentration profile
+  per analyte. </td>
+</tr><tr><td> <code>data</code> </td>
+<td> Shows the reference
+  data from UNIMAN dataset. </td>
+</tr><tr><td> <code>predict</code> </td>
+<td> Depicts
+  input and ouput of the model for all analytes. </td>
+</tr></table></p>
+  
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+      
+      <p>We introduce a single parameter <code>alpha</code> of the model
+  to control the level of non-linearity simulated by the
+  Langmuir isotherm. This parameter <code>alpha</code> defines a
+  normalization across the 17 UNIMAN sorption profiles from
+  dataset <code><a href='UNIMANsorption.html'>UNIMANsorption</a></code>, scaling <code>K</code>
+  values based on other two parameters <code>Kmin</code> (default
+  value <code>1</code> and <code>Kmax</code> (default value
+  <code>150</code>). Normalization can be disable by setting
+  parameter <code>Knorm</code> to <code>FALSE</code>, that results in
+  usage of the sorption <code>K</code> parameters, equal to
+  UNIMAN ones.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># sorption model: default initialization
+sm <- SorptionModel()
+
+# get information about the model
+show(sm)
+</div>
+<div class='output'> Sorption Model (knum 1), alpha 2.25
+</div>
+<div class='input'>print(sm)
+</div>
+<div class='output'> Sorption Model
+ - knum 1 
+ - 3 gases A, B, C 
+</div>
+<div class='input'>
+plot(sm)  
+</div>
+<p><img src='SorptionModel-class-6.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+# model: custom parameters
+# almost linear model
+sm <- SorptionModel(alpha=0.01, gases=c(1, 3)) 
+plot(sm, main="Almost linear model, non-linearity 0.01")
+</div>
+<p><img src='SorptionModel-class-8.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+# non-linear model
+sm <- SorptionModel(alpha=0.3, gases=c(1, 3)) 
+plot(sm, main="Non-linear model, non-linearity 0.5")
+</div>
+<p><img src='SorptionModel-class-10.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+# saturated model
+sm <- SorptionModel(alpha=0.5, gases=c(1, 3)) 
+plot(sm, main="Saturated model, non-linearity 1")
+</div>
+<p><img src='SorptionModel-class-12.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+# model with UNIMAN sorption parameters
+sm <- SorptionModel(Knorm=FALSE, gases=c(1, 3)) 
+plot(sm, main="Model with UNIMAN parameters (no normalization)")
+</div>
+<p><img src='SorptionModel-class-14.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+# method plot
+#  - plot types 'y': response, data, predict
+sm <- SorptionModel() # default model
+
+plot(sm, "response", main="plot(sm, 'response')") 
+</div>
+<p><img src='SorptionModel-class-16.png' alt='' width='400' height='400' /></p>
+<div class='input'># default plot type, i.e. 'plot(sm)' does the same plotting
+
+plot(sm, "data", main="plot(sm, 'data')")
+</div>
+<p><img src='SorptionModel-class-18.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+plot(sm, "predict", main="plot(sm, 'predict')")
+</div>
+<p><img src='SorptionModel-class-20.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>SorptionModel</li><li>SorptionModel-class</li><li>concUnitsSorption</li><li>concUnitsSorption,SorptionModel-method</li><li>defaultSorptionModel</li><li>knum</li><li>knum,SorptionModel-method</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  <code><a href='UNIMANsorption.html'>UNIMANsorption</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

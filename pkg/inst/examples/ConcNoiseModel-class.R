@@ -19,4 +19,5 @@ plot(cn)
 #  - plot types 'y': noise
 cn <- ConcNoiseModel() # default model
 
-plot(cn, "noise", main="plot(cn, 'noise')") # default plot type, i.e. 'plot(cn)' does the same plotting
+plot(cn, "noise", main="plot(cn, 'noise')") 
+# default plot type, i.e. 'plot(cn)' does the same plotting

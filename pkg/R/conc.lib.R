@@ -49,6 +49,9 @@ setMethod("extractConc", "ANY", function(object, conc, set, scenario, n,
 
 ### Method checkConc
 # Function checks if 'conc' can be devided into pulses
+
+#' @rdname scenario-methods
+#' @aliases checkConc,ANY-method
 setMethod("checkConc", "ANY", function(object, conc, ...)
 {
   n <- nrow(conc)
@@ -133,10 +136,9 @@ setMethod("checkConc", "ANY", function(object, conc, ...)
 #'   \code{tpoint} \tab Time point labels to encode the gas pulses, e.g. \code{gasin}.
 #' }
 #' 
-#' @name conc2df
-#' @rdname www-conc2df
 #' @example inst/examples/conc2df-method.R
-#' @exportMethod conc2df
+#' @rdname scenario-methods
+#' @aliases conc2df,ANY-method
 setMethod("conc2df", "ANY", function(object, conc, ...)
 {  
   if(missing(conc))
@@ -170,7 +172,8 @@ setMethod("conc2df", "ANY", function(object, conc, ...)
   return(df[, c(gnames, "glab", "lab", "tpoint")])  
 })
 
-### Method conc2lab
+#' @rdname scenario-methods
+#' @aliases conc2lab,ANY-method
 setMethod("conc2lab", "ANY", function(object, ...)
 {  
   df <- conc2df(object, ...)
@@ -179,7 +182,8 @@ setMethod("conc2lab", "ANY", function(object, ...)
   return(lab)
 })
 
-### Method conc2glab
+#' @rdname scenario-methods
+#' @aliases conc2glab,ANY-method
 setMethod("conc2glab", "ANY", function(object, ...)
 {  
   df <- conc2df(object, ...)
@@ -192,7 +196,8 @@ setMethod("conc2glab", "ANY", function(object, ...)
 # Conc2Col Methods
 #----------------------------
 
-### Method conc2col
+#' @rdname scenario-methods
+#' @aliases conc2col,ANY-method
 setMethod("conc2col", "ANY", function(object, conc, pal, ...)
 {  
   if(missing(conc))
@@ -282,6 +287,9 @@ setMethod("conc2col", "ANY", function(object, conc, pal, ...)
 
 ### Method conc2tpoint
 # "airin"  "air"    "airout" "gasin"  "gas"    "gasout"
+
+#' @rdname scenario-methods
+#' @aliases conc2tpoint,ANY-method
 setMethod("conc2tpoint", "ANY", function(object, conc, ...)
 {
   if(missing(conc))
@@ -322,7 +330,8 @@ setMethod("conc2tpoint", "ANY", function(object, conc, ...)
   return(as.character(tpoint))
 })
 
-### Method getTPoint
+#' @rdname scenario-methods
+#' @aliases getTPoint,ANY-method
 setMethod("getTPoint", "ANY", function(object, conc, tpoint, ...)
 {
   stopifnot(!missing(conc))

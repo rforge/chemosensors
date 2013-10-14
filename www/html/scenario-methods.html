@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>scenario-methods. chemosensors 0.7.7</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.7</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Methods to control the scenario.</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Methods to control the scenario.</p>
+  
+      <p>Method sdata.frame.</p>
+  
+      <p>Method nsamples.</p>
+  
+      <p>Method cmatrix.</p>
+  
+      <p>Method add<-.</p>
+  
+      <p>Method checkConc.</p>
+  
+      <p>Method sdata2feature.</p>
+  
+      <p>Method sdata2df.</p>
+  
+      <p>Method conc2df.</p>
+  
+      <p>Method conc2lab.</p>
+  
+      <p>Method conc2glab.</p>
+  
+      <p>Method conc2col.</p>
+  
+      <p>Method getTPoint.</p>
+  
+      <p>Method conc2tpoint.</p>
+  
+      <p>Method lab2df.</p>
+  
+      <p>Method label2df.</p>
+  
+      <p>Method set2lab.</p>
+  
+      <p>Method sdata.frame converts a concetration matrix and
+  (optionally) a sensor data matrix into a data frame.</p>
+  
+      <p>Method conc2df converts a concetration matrix into a data
+  frame.</p>
+  
+      <p>Method sdata2feature converts a matrix of sensor data
+  into a data frame of features.</p>
+  
+      <p>Method sdata2df converts a matrix of sensor data into a
+  data frame.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The input parameters are an object, e.g.
+  <code>SensorArray</code>, a concentration matrix, and
+  (optionally) a sensor data matrix. The output data frame
+  has the following columns:</p>
+  
+      <p><table><tr><td> <code>S1</code>, <code>S2</code>, ... </td>
+<td> Sensor
+  signals. </td>
+</tr><tr><td> <code>A</code>, <code>B</code>, ... </td>
+<td> Gas
+  concentrations (column names equal to gas names of the
+  object). </td>
+</tr><tr><td> <code>glab</code> </td>
+<td> Gas labels, e.g. <code>A</code>
+  or <code>Air</code>. </td>
+</tr><tr><td> <code>lab</code> </td>
+<td> Gas+Concetratoin
+  labels, e.g. <code>A 0.01</code>. </td>
+</tr></table></p>
+  
+      <p>The input parameters are an object, e.g.
+  <code>SensorArray</code>, and a concentration matrix. The
+  output data frame has the following columns:</p>
+  
+      <p><table><tr><td> <code>A</code>, <code>B</code>, ... </td>
+<td> Gas
+  concentrations (column names equal to gas names of the
+  object). </td>
+</tr><tr><td> <code>glab</code> </td>
+<td> Gas labels, e.g. <code>A</code>
+  or <code>Air</code>. </td>
+</tr><tr><td> <code>lab</code> </td>
+<td> Gas+Concetratoin
+  labels, e.g. <code>A 0.01</code>. </td>
+</tr></table></p>
+  
+      <p>The input parameters are an object, e.g. of class
+  <code>SensorArray</code>, a concentration matrix, a matrix of
+  sensor data, and (optionally) a data frame derived from
+  conccentraion matrix.</p>
+  
+      <p>The input parameters are an object, e.g. of class
+  <code>SensorArray</code>, and a matrix of sensor data.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>set.seed(1)
+
+### 1) a concentration matrix of three gases (tunit 4)
+sa <- SensorArray(tunit = 4)
+
+set <- c("A 0.1", "B 0.1", "C 1")
+sc <- Scenario(set, tunit = 4)
+conc <- getConc(sc)
+
+head(conc)
+</div>
+<div class='output'>    A B C
+1 0.0 0 0
+2 0.0 0 0
+3 0.0 0 0
+4 0.0 0 0
+5 0.1 0 0
+6 0.1 0 0
+</div>
+<div class='input'>
+sdata <- predict(sa, conc)
+
+p1 <- plotSignal(sa, conc = conc, sdata = sdata)
+p1
+</div>
+<p><img src='scenario-methods-4.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+# get a data.frame of features
+df.transient <- sdata.frame(sa, conc = conc, sdata = sdata, feature = "transient")
+
+df.ss <- sdata.frame(sa, conc = conc, sdata = sdata, feature = "steady-state")
+
+df.step <- sdata.frame(sa, conc = conc, sdata = sdata, feature = "step")
+
+# plot
+p2 <- ggplot(df.transient, aes(x = 1:length(S1))) +
+  geom_line(aes(y = S1, color = "S1")) +
+  geom_line(aes(y = S2, color = "S2")) +
+  labs(title = "feature: transient")
+p2
+</div>
+<p><img src='scenario-methods-6.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+df <- rbind(data.frame(df.ss, feature = "steady-state"),
+  data.frame(df.step, feature = "step"))
+  
+p3 <- ggplot(df, aes(lab, S1, fill = feature)) + geom_bar(stat = "identity", position = "dodge")
+p3
+</div>
+<p><img src='scenario-methods-8.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+### 1) a concentration matrix of three gases (tunit 1)
+sa <- SensorArray() 
+
+conc.values <- concMax(sa)
+conc <- diag(conc.values)
+
+conc 
+</div>
+<div class='output'>     [,1] [,2] [,3]
+[1,]  0.1  0.0    0
+[2,]  0.0  0.1    0
+[3,]  0.0  0.0    1
+</div>
+<div class='input'>
+cf <- conc2df(sa, conc)
+cf
+</div>
+<div class='output'>    A   B C glab  lab tpoint
+1 0.1 0.0 0    A A0.1  gasin
+2 0.0 0.1 0    B B0.1    gas
+3 0.0 0.0 1    C   C1 gasout
+</div>
+<div class='input'>
+### 2) a concentration matrix of three gases (tunit = 4)
+sa <- SensorArray(tunit = 4)
+
+set <- c("A 0.1", "B 0.1", "C 1")
+sc <- Scenario(set, tunit = 4)
+conc <- getConc(sc)
+
+head(conc)
+</div>
+<div class='output'>    A B C
+1 0.0 0 0
+2 0.0 0 0
+3 0.0 0 0
+4 0.0 0 0
+5 0.1 0 0
+6 0.1 0 0
+</div>
+<div class='input'>
+cf <- conc2df(sa, conc)
+head(cf)
+</div>
+<div class='output'>    A B C glab  lab tpoint
+1 0.0 0 0  Air  Air  airin
+2 0.0 0 0  Air  Air    air
+3 0.0 0 0  Air  Air    air
+4 0.0 0 0  Air  Air airout
+5 0.1 0 0    A A0.1  gasin
+6 0.1 0 0    A A0.1    gas
+</div>
+<div class='input'>
+### 1) a concentration matrix of three gases (tunit 4)
+sa <- SensorArray(tunit = 4)
+
+set <- c("A 0.1", "B 0.1", "C 1")
+sc <- Scenario(set, tunit = 4)
+conc <- getConc(sc)
+
+head(conc)
+</div>
+<div class='output'>    A B C
+1 0.0 0 0
+2 0.0 0 0
+3 0.0 0 0
+4 0.0 0 0
+5 0.1 0 0
+6 0.1 0 0
+</div>
+<div class='input'>
+sdata <- predict(sa, conc)
+
+df <- sdata2feature(sa, conc, sdata)
+head(df)
+</div>
+<div class='output'>           S1          S2   A B C glab  lab tpoint
+1 -0.08189234 -0.08866503 0.0 0 0  Air  Air  airin
+2  0.01093537  0.01183975 0.0 0 0  Air  Air    air
+3  0.06935956  0.07509576 0.0 0 0  Air  Air    air
+4 -0.15973803 -0.17294874 0.0 0 0  Air  Air airout
+5  6.20643918  5.41737825 0.1 0 0    A A0.1  gasin
+6  6.87936410  6.14678371 0.1 0 0    A A0.1    gas
+</div>
+<div class='input'>
+### 1) a concentration matrix of three gases (tunit 4)
+sa <- SensorArray(tunit = 4)
+
+set <- c("A 0.1", "B 0.1", "C 1")
+sc <- Scenario(set, tunit = 4)
+conc <- getConc(sc)
+
+head(conc)
+</div>
+<div class='output'>    A B C
+1 0.0 0 0
+2 0.0 0 0
+3 0.0 0 0
+4 0.0 0 0
+5 0.1 0 0
+6 0.1 0 0
+</div>
+<div class='input'>
+sdata <- predict(sa, conc)
+
+sf <- sdata2df(sa, sdata)
+
+head(sf)
+</div>
+<div class='output'>         S1        S2
+1 0.3315624 0.3610083
+2 0.3637254 0.3960278
+3 0.5523272 0.6013792
+4 0.6359962 0.6924789
+5 6.5550796 6.3744601
+6 6.8815691 6.7257216
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>add&lt;-</li><li>add&lt;-,Scenario-method</li><li>checkConc</li><li>checkConc,ANY-method</li><li>cmatrix</li><li>cmatrix,Scenario-method</li><li>conc2col</li><li>conc2col,ANY-method</li><li>conc2df</li><li>conc2df,ANY-method</li><li>conc2glab</li><li>conc2glab,ANY-method</li><li>conc2lab</li><li>conc2lab,ANY-method</li><li>conc2tpoint</li><li>conc2tpoint,ANY-method</li><li>getTPoint</li><li>getTPoint,ANY-method</li><li>lab2df</li><li>lab2df,Scenario-method</li><li>label2df</li><li>label2df,Scenario-method</li><li>nsamples</li><li>nsamples,Scenario-method</li><li>scenario-methods</li><li>sdata.frame</li><li>sdata.frame,ANY-method</li><li>sdata.frame,Scenario-method</li><li>sdata2df</li><li>sdata2df,ANY-method</li><li>sdata2feature</li><li>sdata2feature,ANY-method</li><li>sdata2pulse</li><li>sdata2pulse,ANY-method</li><li>set2lab</li><li>set2lab,Scenario-method</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

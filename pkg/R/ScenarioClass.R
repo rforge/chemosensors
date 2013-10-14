@@ -12,12 +12,6 @@ NULL
 # Class defintion
 #----------------------------
 
-#' The function \code{validObject} for class \code{\link{Scenario}}.
-#'
-#' @param object A \code{\link{Scenario}} object
-#' @return TRUE if the object is valid. Otherwise, a character error string.
-#' @name validScenario
-#' @rdname int-validScenario
 validScenario <- function(object)
 {
   return(TRUE)
@@ -50,9 +44,8 @@ validScenario <- function(object)
 #' \tabular{rl}{
 #'   \code{time} \tab Shows the concentration of gases over time. \cr
 #' }
-#' @name Scenario
-#' @rdname www-Scenario
-#' @keywords Scenario-class
+#' @name Scenario-class
+#' @rdname Scenario-class
 #' @example inst/examples/Scenario-class.R
 #' @exportClass Scenario
 setClass(Class="Scenario", 
@@ -73,7 +66,8 @@ setClass(Class="Scenario",
 # Print/Show Methods
 #----------------------------
 
-#' @exportMethod print
+#' @rdname class-methods
+#' @aliases print,Scenario-method
 setMethod ("print", "Scenario", function(x, ...)
 {
   cat(" Scenario")
@@ -84,13 +78,15 @@ setMethod ("print", "Scenario", function(x, ...)
   cat(" - tunit:", tunit(x), "\n")
 })
 
-#' @exportMethod show
 setMethod ("show", "Scenario", function(object)
 {
   # local functions
   set_to_str <- function(set, n)
   {
     if(length(n) == 0 | length(n) == 1 & n[1] == 0) { return("empty") }
+    
+    # dummy assignment to get rid of errors from `R CMD check` (no visible binding for global variable ‘label’)
+    label <- NULL
     
     df <- data.frame(label = rep(set, n)) # training frame
     sf <- ddply(df, "label", summarise, num = length(label))
@@ -122,8 +118,16 @@ setMethod ("show", "Scenario", function(object)
 # Get/Set Methods
 #----------------------------
 
+#' @rdname get-methods
+#' @aliases tunit,Scenario-method
 setMethod("tunit", "Scenario", function(x) x@tunit)
+
+#' @rdname scenario-methods
+#' @aliases nsamples,Scenario-method
 setMethod("nsamples", "Scenario", function(x) sum(x@nT) + sum(x@nV))
+
+#' @rdname scenario-methods
+#' @aliases cmatrix,Scenario-method
 setMethod("cmatrix", "Scenario", function(x, ...) subset(sdata.frame(x, ...), select = gnames(x)))
 
 #----------------------------

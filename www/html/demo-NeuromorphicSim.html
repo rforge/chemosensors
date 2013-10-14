@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>demo-NeuromorphicSim. chemosensors 0.7.6</title>
+<title>demo-NeuromorphicSim. chemosensors 0.7.7</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.6</a>
+      <a class="brand" href="#">chemosensors 0.7.7</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -45,10 +45,11 @@
       
       <p>This demonstration shows an example of neuromorphic
   simulations possible with package
-  <code><a href='chemosensors.html'>chemosensors</a></code>. Particularly, we perform a
-  mixture quantification scenario, where the system is
-  trained on pure analytes and validation is thought to
-  quantify concentration of components in mixtures.</p>
+  <code><a href='chemosensors-package.html'>chemosensors-package</a></code>. Particularly, we
+  perform a mixture quantification scenario, where the
+  system is trained on pure analytes and validation is
+  thought to quantify concentration of components in
+  mixtures.</p>
   
     </div>
 
@@ -61,11 +62,11 @@
   concentration matrix (of three analytes maximum) can be
   coded in several ways, manually by function <code>matrix</code>
   or by using methods of class <code>Scenario</code>.  See the
-  example code on class help page <code><a href='Scenario.html'>Scenario</a></code>
+  example code on class help page <code><a href='Scenario-class.html'>Scenario</a></code>
   for more details.  </li>
 <li>To configure a sensor array,
   there are a list of parameters for initialization method
-  of class <code>SensorArray</code>: the number of sensors
+  of class <code><a href='SensorArray-class.html'>SensorArray</a></code>: the number of sensors
   (<code>nsensors</code>), sensor types (<code>num</code>), sensor
   non-linearity (<code>alpha</code>), sensor diversity
   (<code>beta</code>), noise levels (<code>csd</code>, <code>ssd</code> and
@@ -83,7 +84,11 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'># options(cores = 2) # use this option to confiure the parallel computation (in this case 2 CPU cores are specified)
+    <pre class="examples"><div class='input'># Many lines of code are commented to respect the CRAN policy on CPU time per Rd file.
+
+# options(cores = 2) 
+# use this option to confiure the parallel computation 
+# (in this case 2 CPU cores are specified)
 
 ### step 1/7: take a look at the reference array of 17 UNIMAN sensors
 sa.uniman <- SensorArray(nsensors = 17) 
@@ -107,39 +112,29 @@ plotMixture(s, gases = c(1, 3), main = paste("alpha:", alpha(s)))
 </div>
 <p><img src='demo-NeuromorphicSim-6.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-s <- Sensor(num = 3, alpha = 1)
-plotMixture(s, gases = c(1, 3), main = paste("alpha:", alpha(s)))
-</div>
-<p><img src='demo-NeuromorphicSim-8.png' alt='' width='400' height='400' /></p>
-<div class='input'>
-s <- Sensor(num = 3, alpha = 2.25)
-plotMixture(s, gases = c(1, 3), main = paste("alpha:", alpha(s)))
-</div>
-<p><img src='demo-NeuromorphicSim-10.png' alt='' width='400' height='400' /></p>
-<div class='input'>
+#s <- Sensor(num = 3, alpha = 1)
+#plotMixture(s, gases = c(1, 3), main = paste("alpha:", alpha(s)))
+
+#s <- Sensor(num = 3, alpha = 2.25)
+#plotMixture(s, gases = c(1, 3), main = paste("alpha:", alpha(s)))
+
 ### step 3/7: select sensor diversity (parameter beta) for a sensor array
 # - (here) the number of sensors `nsensors` is 34 (two times more than 17 UNIMAN sensors)
 #    tesed values of `beta` are 1, 2, 5 and 10
 sa <- SensorArray(nsensors = 34, beta = 1)
 plot(sa, 'polar', main = paste("beta:", beta(sa)))
 </div>
-<p><img src='demo-NeuromorphicSim-12.png' alt='' width='400' height='400' /></p>
+<p><img src='demo-NeuromorphicSim-8.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-sa <- SensorArray(nsensors = 34, beta = 2)
-plot(sa, 'polar', main = paste("beta:", beta(sa)))
-</div>
-<p><img src='demo-NeuromorphicSim-14.png' alt='' width='400' height='400' /></p>
-<div class='input'>
-sa <- SensorArray(nsensors = 34, beta = 5)
-plot(sa, 'polar', main = paste("beta:", beta(sa)))
-</div>
-<p><img src='demo-NeuromorphicSim-16.png' alt='' width='400' height='400' /></p>
-<div class='input'>
-sa <- SensorArray(nsensors = 34, beta = 10)
-plot(sa, 'polar', main = paste("beta:", beta(sa)))
-</div>
-<p><img src='demo-NeuromorphicSim-18.png' alt='' width='400' height='400' /></p>
-<div class='input'>
+#sa <- SensorArray(nsensors = 34, beta = 2)
+#plot(sa, 'polar', main = paste("beta:", beta(sa)))
+
+#sa <- SensorArray(nsensors = 34, beta = 5)
+#plot(sa, 'polar', main = paste("beta:", beta(sa)))
+
+#sa <- SensorArray(nsensors = 34, beta = 10)
+#plot(sa, 'polar', main = paste("beta:", beta(sa)))
+
 ### step 4/7: define the parameters of the array
 # - (here we use the default parameters) 
 #   `alpha` is 2.25 (default), `beta` is 2,
@@ -147,15 +142,11 @@ plot(sa, 'polar', main = paste("beta:", beta(sa)))
 sa <- SensorArray(nsensors = 34)
 
 # polar plot
-plot(sa, 'polar', main = "Virtual sensors")
-</div>
-<p><img src='demo-NeuromorphicSim-20.png' alt='' width='400' height='400' /></p>
-<div class='input'>
+#plot(sa, 'polar', main = "Virtual sensors")
+
 # affinity space for gases 1 and 3
-plot(sa, 'affinitySpace', gases = c(1, 3))
-</div>
-<p><img src='demo-NeuromorphicSim-22.png' alt='' width='400' height='400' /></p>
-<div class='input'>
+#plot(sa, 'affinitySpace', gases = c(1, 3))
+
 ### step 5: define a concentration matrix (via class Scenario)
 # - (here) let's assume a scenario of mixture quantification for gases 1 and 3 
 #   `tunit` is set to 60 (recommended value)
@@ -164,14 +155,9 @@ validation.set <- c("A 0.01, C 0.1", "A 0.0025, C 0.5", "A 0.05, C 1")
 
 sc <- Scenario(tunit = 60, T = training.set, nT = 2, V = validation.set, nV = 2)
 
-plot(sc)
-</div>
-<p><img src='demo-NeuromorphicSim-24.png' alt='' width='400' height='400' /></p>
-<div class='input'>
-plot(sc, facet = FALSE, concUnits = 'norm')
-</div>
-<p><img src='demo-NeuromorphicSim-26.png' alt='' width='400' height='400' /></p>
-<div class='input'>
+#plot(sc)
+#plot(sc, facet = FALSE, concUnits = 'norm')
+
 # extract conc. matrix
 conc <- getConc(sc)
 
@@ -192,25 +178,17 @@ conc0 <- conc[1:240, ]
 # we use just two cycles of 2x60 time length each
 # 1 cycle = gas exposure phase and cleaning phase
 
-sdata <- predict(sa, conc0, nclusters = 2)
-</div>
-<div class='output'> * Started computing in parallel on 2 CPU cores (if available) (SensorModel::sdataModel).
- * Finished computing in parallel.
-</div>
-<div class='input'>
-qplot(X1, value, data = melt(sdata), geom = "line") + facet_wrap(~ X2) + 
-  xlab("Time, a.u.") + ylab("Sensor Signal, a.u.")
-</div>
-<p><img src='demo-NeuromorphicSim-32.png' alt='' width='400' height='400' /></p>
-<div class='input'>
+#sdata <- predict(sa, conc0, nclusters = 2)
+
+#p1 <- qplot(X1, value, data = melt(sdata), geom = "line") + facet_wrap(~ X2) + 
+#  xlab("Time, a.u.") + ylab("Sensor Signal, a.u.")
+
 ### step 7/7: some additional plots for testing
 
 # plot just few sensors
-qplot(X1, value, data = melt(sdata[, 1:2]), geom = "line") + facet_wrap(~ X2) + 
-  labs(x = "Time, a.u.", y = "Sensor Signal, a.u.", title = "First two sensors")
-</div>
-<p><img src='demo-NeuromorphicSim-34.png' alt='' width='400' height='400' /></p>
-<div class='input'>
+#p2 <- qplot(X1, value, data = melt(sdata[, 1:2]), geom = "line") + facet_wrap(~ X2) + 
+#  labs(x = "Time, a.u.", y = "Sensor Signal, a.u.", title = "First two sensors")
+
 # re-generate sensor data as noise-free
 sa0 <- sa
 csd(sa0) <- 0
@@ -227,16 +205,11 @@ sa0
  - Drift Noise Model (dsd 0), common model 'cpc'
 </div>
 <div class='input'>
-sdata0 <- predict(sa0, conc0, nclusters = 2) 
-</div>
-<div class='output'> * Started computing in parallel on 2 CPU cores (if available) (SensorModel::sdataModel).
- * Finished computing in parallel.
-</div>
-<div class='input'>
-qplot(X1, value, data = melt(sdata0), geom = "line") + facet_wrap(~ X2) + 
-  labs(x = "Time, a.u.", y = "Sensor Signal, a.u.", title = "Noise-free array")
-</div>
-<p><img src='demo-NeuromorphicSim-40.png' alt='' width='400' height='400' /></p></pre>
+#sdata0 <- predict(sa0, conc0, nclusters = 2) 
+
+#p3 <- qplot(X1, value, data = melt(sdata0), geom = "line") + facet_wrap(~ X2) + 
+#  labs(x = "Time, a.u.", y = "Sensor Signal, a.u.", title = "Noise-free array")
+</div></pre>
   </div>
   <div class="span4">
     <!-- <ul>

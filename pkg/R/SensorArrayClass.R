@@ -10,12 +10,6 @@ NULL
 # Class defintion/constructor
 #----------------------------
 
-#' The function \code{validObject} for class \code{\link{SensorArray}}.
-#'
-#' @param object A \code{\link{SensorArray}} object
-#' @return TRUE if the object is valid. Otherwise, a character error string.
-#' @name validSensorArray
-#' @rdname int-validSensorArray
 validSensorArray <- function(object)
 {
   return(TRUE)
@@ -26,7 +20,7 @@ validSensorArray <- function(object)
 #' Class \code{SensorArray} is a extension of the class \code{\link{Sensor}} for many sensor elements.
 #'
 #' The array aggregates classes \code{\link{ConcNoiseModel}}, \code{\link{SensorNoiseModel}}, 
-#' \code{\link{SorptionModel}}, \code{\link{SensorArrayModel}} and \code{\link{DriftNoiseModel}}.
+#' \code{\link{SorptionModel}}, \code{\link{SensorModel}} and \code{\link{DriftNoiseModel}}.
 #' 
 #' In comparision to the class \code{\link{Sensor}}, slot \code{num} is a numeric vector, 
 #' and class \code{SensorArray} also inherits class \code{\link{DriftNoiseModel}}.
@@ -39,7 +33,7 @@ validSensorArray <- function(object)
 #'   \code{idx} \tab Sensor index (unique ID number). \cr
 #'   \code{enableSorption} \tab Boolean whether \code{\link{SorptionModel}} is enabled. Default value is \code{TRUE}. \cr
 #'   \code{...} \tab Slots inherited from super-classes \code{\link{ConcNoiseModel}}, \code{\link{SensorNoiseModel}}, 
-#'     \code{\link{SorptionModel}}, \code{\link{SensorArrayModel}} and \code{\link{DriftNoiseModel}}. \cr
+#'     \code{\link{SorptionModel}}, \code{\link{SensorModel}} and \code{\link{DriftNoiseModel}}. \cr
 #' }
 #'
 #' Methods of the class:
@@ -56,9 +50,9 @@ validSensorArray <- function(object)
 #' \tabular{rl}{
 #'   \code{response} \tab (default) Shows the sensitivity curves per gas in normalized concentration units. \cr
 #' }
-#' @name SensorArray
-#' @rdname SensorArray
-#' @keywords SensorArray
+#'
+#' @name SensorArray-class
+#' @rdname SensorArray-class
 #' @seealso \code{\link{Sensor}}, \code{\link{DriftNoiseModel}}
 #' @example inst/examples/SensorArray-class.R
 #' @exportClass SensorArray
@@ -74,7 +68,8 @@ setClass(Class="SensorArray",
 # Print/Show Methods
 #----------------------------
 
-#' @exportMethod print
+#' @rdname class-methods
+#' @aliases print,SensorArray-method
 setMethod ("print","SensorArray", function(x, ...)
 {
   cat(" SensorArray\n")
@@ -88,7 +83,6 @@ setMethod ("print","SensorArray", function(x, ...)
   }
 })
 
-#' @exportMethod show
 setMethod ("show", "SensorArray", function(object)
 {
   cat(" Sensor Array of ", nsensors(object), " sensors, ", 
@@ -118,11 +112,18 @@ setMethod ("show", "SensorArray", function(object)
 #----------------------------
 # Get/Set methods
 #----------------------------
+
+#' @rdname get-methods
+#' @aliases enableSorption,SensorArray-method
 setMethod("enableSorption", "SensorArray", function(x) x@enableSorption)
 
 #----------------------------
 # Noise Methods
 #----------------------------
+
+#' @name nsd<-
+#' @aliases nsd<-,SensorArray-method
+#' @rdname noise-methods
 setReplaceMethod("nsd", "SensorArray", function(object, value) 
 {
   csd(object) <- value

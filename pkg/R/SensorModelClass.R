@@ -12,12 +12,6 @@ NULL
 # Class defintion
 #----------------------------
 
-#' The function \code{validObject} for class \code{\link{SensorModel}}.
-#'
-#' @param object A \code{\link{SensorModel}} object
-#' @return TRUE if the object is valid. Otherwise, a character error string.
-#' @name validSensorModel
-#' @rdname int-validSensorModel
 validSensorModel <- function(object)
 {
   if(coeffNonneg(object)) {
@@ -50,11 +44,11 @@ validSensorModel <- function(object)
 #       \code{min}, \code{max}, \code{crit}, \code{sat}. \cr
 #\code{conc0} \tab List of characteristic concentration values per gas (in air):
 #       \code{min}, \code{max}, \code{crit}, \code{sat}. \cr
-#'   \code{dataModel} \tab Data model of class \code{\link{SensorDataModel}} performs a regression (free of the routine on units convertion, etc). \cr
+#'   \code{dataModel} \tab Data model of class \code{SensorDataModel} performs a regression (free of the routine on units convertion, etc). \cr
 #'   \code{coeffNonneg} \tab Logical whether model coefficients must be non-negative. By default, \code{FALSE}. \cr
 #'   \code{coeffNonnegTransform} \tab Name of transformation to convert negative model coefficients to non-negative values. \cr
 #'   \code{beta} \tab (parameter of sensor diversity) A scaling coefficient of how different coefficients 
-#'     of \code{\link{SensorDataModel}} will be in comparision with those coefficients of the UNIMAN sensors. 
+#'     of \code{SensorDataModel} will be in comparision with those coefficients of the UNIMAN sensors. 
 #'     The default value is \code{2}. \cr
 #' }
 #'
@@ -70,9 +64,8 @@ validSensorModel <- function(object)
 #'   \code{predict} \tab  Depicts input (parameter \code{conc}) and ouput of the model for a specified gas (parameter \code{gases}). \cr
 #' }
 #'
-#' @name SensorModel
-#' @rdname www-SensorModel
-#' @keywords SensorModel
+#' @name SensorModel-class
+#' @rdname SensorModel-class
 #' @seealso \code{\link{UNIMANshort}}
 #' @example inst/examples/SensorModel-class.R
 #' @exportClass SensorModel
@@ -93,7 +86,8 @@ setClass(Class="SensorModel",
 # Print/Show Methods
 #----------------------------
 
-#' @exportMethod print
+#' @rdname class-methods
+#' @aliases print,SensorModel-method
 setMethod ("print", "SensorModel", function(x, ...)
 {
   cat(" Sensor Model\n")
@@ -106,7 +100,6 @@ setMethod ("print", "SensorModel", function(x, ...)
   cat("   -- coefficients (first):", coefStr(x, sensor=1), "\n")
 })
 
-#' @exportMethod show
 setMethod ("show", "SensorModel", function(object)
 {
   cat(" Sensor Model (num ", numStr(object), "), beta ", beta(object), ", data model '", modelName(object), "'", "\n", sep='')
@@ -116,11 +109,29 @@ setMethod ("show", "SensorModel", function(object)
 # Get/Set Methods
 #----------------------------
 
+#' @rdname SensorModel-class
+#' @aliases coeffNonneg,SensorModel-method
 setMethod("coeffNonneg", "SensorModel", function(x) x@coeffNonneg)
 
+#' @rdname get-methods
+#' @aliases modelName,SensorModel-method
 setMethod("modelName", "SensorModel", function(x) x@dataModel[[1]]$method)
 
+#' @rdname get-methods
+#' @aliases beta,SensorModel-method
 setMethod("beta", "SensorModel", function(x) x@beta)
+
+#----------------------------
+# Noise Methods
+#----------------------------
+
+#' @name nsd<-
+#' @aliases nsd<-,SensorModel-method
+#' @rdname noise-methods
+setReplaceMethod("nsd", "SensorModel", function(object, value) 
+{
+  return (object)
+})
 
 #----------------------------
 # Plot Methods

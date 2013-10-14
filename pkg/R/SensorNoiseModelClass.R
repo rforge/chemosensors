@@ -7,12 +7,6 @@ NULL
 # Class defintion
 #----------------------------
 
-#' The function \code{validObject} for class \code{\link{SensorNoiseModel}}.
-#'
-#' @param object A \code{\link{SensorNoiseModel}} object
-#' @return TRUE if the object is valid. Otherwise, a character error string.
-#' @name validSensorNoiseModel
-#' @rdname int-validSensorNoiseModel
 validSensorNoiseModel <- function(object)
 {
   if(sum(ssd(object) < 0)) return("'ssd' is negative")
@@ -55,9 +49,8 @@ validSensorNoiseModel <- function(object)
 #'   \code{walk} \tab  Shows the random walk on a scatterplot for two given coefficients. \cr
 #' }
 #'  
-#' @name SensorNoiseModel
-#' @rdname www-SensorNoiseModel
-#' @keywords SensorNoiseModel-class
+#' @name SensorNoiseModel-class
+#' @rdname SensorNoiseModel-class
 #' @seealso \code{\link{UNIMANsnoise}}, \code{\link{Sensor}}
 #' @example inst/examples/SensorNoiseModel-class.R
 #' @exportClass SensorNoiseModel
@@ -77,7 +70,8 @@ setClass(Class="SensorNoiseModel",
 # Print/Show Methods
 #----------------------------
 
-#' @exportMethod print
+#' @rdname class-methods
+#' @aliases print,SensorNoiseModel-method
 setMethod ("print","SensorNoiseModel", function(x, ...)
 {
   cat(" Sensor Noise Model\n")
@@ -88,7 +82,6 @@ setMethod ("print","SensorNoiseModel", function(x, ...)
   cat(" - noise-factor:", paste(noisef(x), collapse=", "), "\n")    
 })
 
-#' @exportMethod show
 setMethod ("show","SensorNoiseModel", function(object)
 {
   cat(" Sensor Noise Model (ssd ", 
@@ -105,10 +98,21 @@ setMethod ("show","SensorNoiseModel", function(object)
 # Get/Set Methods
 #----------------------------
 
+#' @rdname noise-methods
+#' @aliases ssd,SensorNoiseModel-method
 setMethod("ssd", "SensorNoiseModel", function(x) x@ssd)
+
+#' @rdname get-methods
+#' @aliases type,SensorNoiseModel-method
 setMethod("type", "SensorNoiseModel", function(x) x@sntype)
+
+#' @rdname SensorNoiseModel-class
+#' @aliases noisef,SensorNoiseModel-method
 setMethod("noisef", "SensorNoiseModel", function(x) x@snf)
 
+#' @name ssd<-
+#' @aliases ssd<-,SensorNoiseModel-method
+#' @rdname noise-methods
 setReplaceMethod("ssd", "SensorNoiseModel", function(object, value) 
 {
   object@ssd <- value
@@ -127,6 +131,10 @@ setReplaceMethod("ssd", "SensorNoiseModel", function(object, value)
 #----------------------------
 # Noise Methods
 #----------------------------
+
+#' @name nsd<-
+#' @aliases nsd<-,SensorNoiseModel-method
+#' @rdname noise-methods
 setReplaceMethod("nsd", "SensorNoiseModel", function(object, value) 
 {
   ssd(object) <- value

@@ -25,7 +25,8 @@ print(sm)
 #  - plot types 'y': response, predict
 sm <- SensorModel() # default sensor model
 
-plot(sm, "response", main="plot(sm, 'response')") # default plot type, i.e. 'plot(sm)' does the same plotting
+plot(sm, "response", main="plot(sm, 'response')") 
+# default plot type, i.e. 'plot(sm)' does the same plotting
 
 conc <- concSample(sm, "range", gases=1, n=10)
 plot(sm, "predict", conc, gases=1, main="plot(sm, 'predict', conc, gases=1)")

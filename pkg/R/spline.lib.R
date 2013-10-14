@@ -16,9 +16,7 @@
 #' The number of spline basis functions: \eqn{nbasis = norder + nknots - 2}.
 #'
 #' @name SplineBasis-class
-#' @rdname int-SplineBasis-class
-#' @keywords class
-# @example inst/examples/splineBasis.R
+#' @rdname SplineBasis-class
 #' @exportClass SplineBasis
 {}
 
@@ -26,15 +24,19 @@ setClass("SplineBasis")
 
 #' Constructor of SplineBasis class.
 #'
-#' @name splineBasis
-#' @rdname int-splineBasis
 #' @param type Type of spline basis: 'bspline', 'mspline' or 'ispline'. The default value is 'bspline'.
+#' @param x Numeric vector of data points.
 #' @param breaks Break points. Include the boundary knots; ordered.
 #' @param rangeval The range of data points (minimum and maximum values). Must include the break points.
 #' @param norder The order of the basis functions. The cubic spline basis has the order 4. The default value: 3.
+#' @param lambda Smoothing parameter for quadratic solver when performing fitting with restriction conditions.
+#' @param tol Tolerance value for stopping criteria in iterative procedures.
 #' @param first The number of first basis functions to be omitted. Supported values: 0 or 1. The default value is 0. 
 #' @param last The number of last basis functions to be omitted. Supported values: 0 or 1. The default value is 0.
 #' @return An object of class 'SplineBasis'.
+#'
+#' @name splineBasis
+#' @rdname SplineBasis-class
 #' @export
 splineBasis <- function(type="bspline", x, breaks, rangeval, norder=3, 
   lambda = 0.1, tol = 1e-16,
@@ -95,15 +97,22 @@ splineBasis <- function(type="bspline", x, breaks, rangeval, norder=3,
   return(bs)
 }
 
+#' Wrapper to constructor of SplineBasis Class.
+#'
+#' @param ... Parameters of constructor.
+#' 
+#' @name SplineBasis
+#' @rdname SplineBasis-class
 #' @export
 SplineBasis <- function(...) splineBasis(...)
 
 createBSplineBasis <- function(breaks, norder)
 {
-  bs <- create.bspline.basis(breaks=breaks, norder=norder)
+  stop("Error in `spline.lib.R`: function `createBSplineBasis` is depreciated.")
+  #bs <- create.bspline.basis(breaks=breaks, norder=norder)
   bs$breaks <- breaks
   bs$norder <- norder
-  bs$knots <- knots.basisfd(bs, interior=FALSE)
+  #bs$knots <- knots.basisfd(bs, interior=FALSE)
  
   return(bs)
 }
@@ -216,8 +225,15 @@ plotSplineBasis <- function(x, y='default',
 # Functions 'getSplineDesign'
 #----------------------------
 
+#' Function getSplineDesign.
+#'
+#' @param all Logical whther include all basis functions.
+#' @return A design matrix.
+#'
+#' @name getSplineDesign
+#' @rdname SplineBasis-class
 #' @export
-getSplineDesign <- function(bs, x, all=TRUE)
+getSplineDesign <- function(bs, x, all = TRUE)
 {
   rangeval <- bs$rangeval
   
@@ -230,7 +246,8 @@ getSplineDesign <- function(bs, x, all=TRUE)
   
   # Design Matrix for B-Spline basis
   M <- switch(bs$type,
-    bspline=bsplineS(x, breaks=bs$breaks, norder=bs$norder),
+    bspline=stop("Error in `spline.lib.R`: function `getSplineDesign` does not support mode `bsplinr`"), 
+      #bsplineS(x, breaks=bs$breaks, norder=bs$norder),
     mspline=getMSplineDesign(bs, x),
     ispline=getISplineDesign(bs, x),
     iqspline=getIQSplineDesign(bs, x),        
@@ -250,6 +267,8 @@ getSplineDesign <- function(bs, x, all=TRUE)
 
 getMSplineDesign <- function(bs, x, method="bsplines", last.inc=TRUE)
 {
+  stop("Error in `spline.lib.R`: function `getMSplineDesign` is depreciated.")
+
   # process parameters
   x <- as.numeric(x)  
   
@@ -262,14 +281,14 @@ getMSplineDesign <- function(bs, x, method="bsplines", last.inc=TRUE)
   # recursive method
   if(method == "recursive") {
     for(i in 1:n) {
-      M[,i] <- computeM(x,k,t,i)
+      #M[,i] <- computeM(x,k,t,i)
     }   
   }
   # method via the formula Bi = (t[i+k]-t[i])Mi/k
   else if(method == "bsplines") {
-    B <- bsplineS(x, breaks=bs$breaks, norder=bs$norder)
+    #B <- bsplineS(x, breaks=bs$breaks, norder=bs$norder)
     for(i in 1:n) {
-      M[, i] <- k * B[, i] / (t[i+k] - t[i])
+      #M[, i] <- k * B[, i] / (t[i+k] - t[i])
     }
   }
   else
@@ -399,6 +418,45 @@ getIQSplineDesign <- function(bs, x)
 #----------------------------
 # Functions 'fit'
 #----------------------------
+
+Penalty.matrix <- function (m, order = 2) 
+{
+    Diff.matrix <- function(m, order = 2) {
+        d.matrix <- function(m) {
+            A <- cbind(diag(m - 1), rep(0, m - 1))
+            B <- cbind(rep(0, m - 1), -1 * diag(m - 1))
+            d <- A + B
+            return(d)
+        }
+        D <- d.matrix(m)
+        if (order > 1) {
+            for (k in 2:order) {
+                D <- d.matrix(m - k + 1) %*% D
+            }
+        }
+        return(D)
+    }
+    p <- length(m)
+    start.block = cumsum(m) - m + 1
+    end.block = cumsum(m)
+    P <- matrix(0, sum(m), sum(m))
+    for (i in 1:p) {
+        D <- Diff.matrix(m[i], order = order)
+        K <- t(D) %*% D
+        P[start.block[i]:end.block[i], start.block[i]:end.block[i]] = K
+    }
+    return(P)
+}
+
+
+#' Function fitSplineBasis.
+#'
+#' @param bs An object of class \code{SplineBasis}.
+#' @param y Numeric vector of data points (respone).
+#' @return Numeric vector of beta coefficients.
+#'
+#' @name fitSplineBasis
+#' @rdname SplineBasis-class
 #' @export
 fitSplineBasis <- function(bs, x, y)
 {
@@ -409,8 +467,7 @@ fitSplineBasis <- function(bs, x, y)
     
   # regression
 	XTX <- t(X) %*% X
-	require(ppls)
-  D <- ppls::Penalty.matrix(ncol(X), 2)
+  D <- Penalty.matrix(ncol(X), 2)
   if(sum(D == 0) == prod(dim(D)))
     stop("Error in 'fitSplineBasis': penalty matrix 'D' is zero-entry.")
     
@@ -441,7 +498,7 @@ fitSplineBasis <- function(bs, x, y)
 }
 
 #' @S3method predict SplineBasis
-predict.SplineBasis <- function(object, x, beta)
+predict.SplineBasis <- function(object, x, beta, ...)
 {
   bs <- object
   

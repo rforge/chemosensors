@@ -11,12 +11,14 @@ conc <- predict(cn, conc)
 
 sdata <- predict(sm@dataModel[[1]], C = conc, out = "gas") 
 
-p1 <- qplot(1:nrow(sdata), sdata, geom = "line")
+colnames(sdata) <- sa@gnames
+p1 <- ggplot(melt(sdata), aes(X1, value, group = X2, color = X2)) + geom_line()
 p1
 
 sdata.pulse <- sdata2pulse(sm, conc, sdata)
 
 sdata.out <- predict(as(sm, "SensorDynamics"), conc = conc, sdata = sdata.pulse)
+sdata.out <- sdata.out[, , 1]
 
 sdata.delta <- sdata.out - sdata.pulse
 
@@ -42,7 +44,7 @@ sdyn <- SensorDynamics()
 show(sdyn)
 print(sdyn)
 
-plot(sdyn)
+#plot(sdyn)
 
 # SensorDynamics as a part of SensorModel
 sm <- SensorModel(tunit=60)
@@ -78,6 +80,7 @@ p2
 sdata.pulse <- sdata2pulse(s, conc.noised, sdata)
 
 sdata.out <- predict(as(sm, "SensorDynamics"), conc = conc.noised, sdata = sdata.pulse)
+sdata.out <- sdata.out[, , 1]
 
 sdata.delta <- sdata.out - sdata.pulse
 

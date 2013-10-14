@@ -12,12 +12,6 @@ NULL
 # Class defintion
 #----------------------------
 
-#' The function \code{validObject} for class \code{\link{SensorDynamics}}.
-#'
-#' @param object A \code{\link{SensorDynamics}} object
-#' @return TRUE if the object is valid. Otherwise, a character error string.
-#' @name validSensorDynamics
-#' @rdname int-validSensorDynamics
 validSensorDynamics <- function(object)
 {
   #if(coeffNonneg(object)) {
@@ -56,9 +50,8 @@ validSensorDynamics <- function(object)
 #'   \code{predict} \tab  Depicts a temporal signal of the model. \cr
 #' }
 #'
-#' @name SensorDynamics
-#' @rdname www-SensorDynamics
-#' @keywords SensorDynamics
+#' @name SensorDynamics-class
+#' @rdname SensorDynamics-class
 #' @seealso \code{\link{UNIMANtransient}}
 #' @example inst/examples/SensorDynamics-class.R
 #' @exportClass SensorDynamics
@@ -79,7 +72,8 @@ setClass(Class="SensorDynamics",
 # Print/Show Methods
 #----------------------------
 
-#' @exportMethod print
+#' @rdname class-methods
+#' @aliases print,SensorDynamics-method
 setMethod ("print", "SensorDynamics", function(x, ...)
 {
   cat(" Sensor Dynamics Model\n")
@@ -87,7 +81,6 @@ setMethod ("print", "SensorDynamics", function(x, ...)
   cat(" -", ngases(x), "gases", paste(gnames(x), collapse=", "), "\n")
 })
 
-#' @exportMethod show
 setMethod ("show", "SensorDynamics", function(object)
 {
   cat(" Sensor Dynamics Model (num ", paste(num(object), collapse=", "), ")", "\n", sep='')
@@ -97,13 +90,29 @@ setMethod ("show", "SensorDynamics", function(object)
 # Get/Set Methods
 #----------------------------
 
+#' @rdname get-methods
+#' @aliases tunit,SensorDynamics-method
 setMethod("tunit", "SensorDynamics", function(x) x@tunit)
-setMethod("enableDyn", "SensorDynamics", function(x) x@enableDyn)
 
+#' @rdname SensorDynamics-class
+#' @aliases nconst,SensorDynamics-method
 setMethod("nconst", "SensorDynamics", function(x) x@nconst)
+
+#' @rdname SensorDynamics-class
+#' @aliases trange,SensorDynamics-method
 setMethod("trange", "SensorDynamics", function(x) x@trange)
+
+#' @rdname SensorDynamics-class
+#' @aliases tconst,SensorDynamics-method
 setMethod("tconst", "SensorDynamics", function(x) x@tconst)
 
+#' @rdname get-methods
+#' @aliases enableDyn,SensorDynamics-method
+setMethod("enableDyn", "SensorDynamics", function(x) x@enableDyn)
+
+#' @name enableDyn<-
+#' @aliases enableDyn<-,SensorDynamics-method
+#' @rdname set-methods
 setReplaceMethod("enableDyn", "SensorDynamics", function(object, value) 
 {
   object@enableDyn <- value

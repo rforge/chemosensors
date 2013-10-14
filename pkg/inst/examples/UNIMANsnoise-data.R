@@ -39,10 +39,12 @@ p2
 set.seed(10)
 sa1 <- SensorArray(model = "plsr", num = c(4, 7, 14), csd = 0, ssd = 1, dsd = 0)
 
-p3 <- plotPCA(sa1, set = rep(c("A", "B", "C"), 10), air = FALSE) + labs(title = "Less noisy sensors")
+p3 <- plotPCA(sa1, set = rep(c("A", "B", "C"), 10), air = FALSE) + 
+  labs(title = "Less noisy sensors")
 p3
 
 sa2 <- SensorArray(model = "plsr", num = c(1, 5, 17), csd = 0, ssd = 1, dsd = 0)
 
-p4 <- plotPCA(sa2, set = rep(c("A", "B", "C"), 10), air = FALSE) + labs(title = "More noisy sensors")
+p4 <- plotPCA(sa2, set = rep(c("A", "B", "C"), 10), air = FALSE) + 
+  labs(title = "More noisy sensors")
 p4

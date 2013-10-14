@@ -1,3 +1,4 @@
+
 # last revision: 23 Jan 2012
 
 #@include DriftNoiseModelClassMethods.R
@@ -13,12 +14,6 @@ NULL
 # Class defintion
 #----------------------------
 
-#' The function \code{validObject} for class \code{\link{DriftNoiseModel}}.
-#'
-#' @param object A \code{\link{DriftNoiseModel}} object
-#' @return TRUE if the object is valid. Otherwise, a character error string.
-#' @name validDriftNoiseModel
-#' @rdname int-validDriftNoiseModel
 validDriftNoiseModel <- function(object)
 {
   return(TRUE)
@@ -57,7 +52,7 @@ validDriftNoiseModel <- function(object)
 #'   \code{dsd} \tab Parameter of standard deviation used to generate the drift noise. The deault value is 0.1. \cr
 #'   \code{ndcomp} \tab The number of components spanning the drift sub-space. The default number is 2. \cr
 #'   \code{ndvar} \tab The importance values of drift components. The default values are \code{\link{UNIMANdnoise}} dataset. \cr
-#'   \code{driftModel} \tab Drift model of class \code{\link{DriftCommonModel}}. \cr
+#'   \code{driftModel} \tab Drift model of class \code{DriftCommonModel}. \cr
 #' }
 #' Methods of the class:
 #' \tabular{rl}{
@@ -78,10 +73,9 @@ validDriftNoiseModel <- function(object)
 #' First, the colums in \code{V} matrix are selected according to numbers pointed in \code{num}.
 #' Second, QR-decomposition of the resulted matrix is performed to orthogonolize the component vectors. 
 #'
-#' @name DriftNoiseModel
-#' @rdname www-DriftNoiseModel
+#' @name DriftNoiseModel-class
+#' @rdname DriftNoiseModel-class
 #' @example inst/examples/DriftNoiseModel-class.R
-#' @keywords DriftNoiseModel-class
 #' @seealso \code{\link{UNIMANdnoise}}, \code{\link{SensorArray}}
 #' @exportClass DriftNoiseModel
 setClass(Class="DriftNoiseModel", 
@@ -96,7 +90,8 @@ setClass(Class="DriftNoiseModel",
 # Print/Show Methods
 #----------------------------
 
-#' @exportMethod print
+#' @rdname class-methods
+#' @aliases print,DriftNoiseModel-method
 setMethod ("print","DriftNoiseModel", function(x, ...)
 {
   cat(" Drift Noise Model\n")
@@ -104,7 +99,6 @@ setMethod ("print","DriftNoiseModel", function(x, ...)
   print(x@driftModel)
 })
 
-#' @exportMethod show
 setMethod ("show","DriftNoiseModel", function(object)
 {
   cat(" Drift Noise Model (dsd ", dsd(object), "), ", "common model '", modelName(object), "'", "\n", sep='')
@@ -114,14 +108,33 @@ setMethod ("show","DriftNoiseModel", function(object)
 # Get/Set Methods
 #----------------------------
 
+#' @rdname get-methods
+#' @aliases modelName,DriftNoiseModel-method
 setMethod("modelName", "DriftNoiseModel", function(x) x@driftModel$method)
+
+#' @rdname get-methods
+#' @aliases type,DriftNoiseModel-method
 setMethod("type", "DriftNoiseModel", function(x) x@driftModel$method)
 
+#' @rdname noise-methods
+#' @aliases dsd,DriftNoiseModel-method
 setMethod("dsd", "DriftNoiseModel", function(x) x@dsd)
+
+#' @rdname DriftNoiseModel-class
+#' @aliases dspace,DriftNoiseModel-method
 setMethod("dspace", "DriftNoiseModel", function(x) x@driftModel$dspace[, 1:x@driftModel$ndcomp])
+
+#' @rdname DriftNoiseModel-class
+#' @aliases ndcomp,DriftNoiseModel-method
 setMethod("ndcomp", "DriftNoiseModel", function(x) x@ndcomp)
+
+#' @rdname DriftNoiseModel-class
+#' @aliases ndvar,DriftNoiseModel-method
 setMethod("ndvar", "DriftNoiseModel", function(x) x@ndvar)
 
+#' @name dsd<-
+#' @aliases dsd<-,DriftNoiseModel-method
+#' @rdname noise-methods
 setReplaceMethod("dsd", "DriftNoiseModel", function(object, value) 
 {
   object@dsd <- value

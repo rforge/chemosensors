@@ -5,6 +5,13 @@
 #-------------------
 # Dataset loading
 #-------------------
+
+#' Function loadUNIMANdata.
+#'
+#' @param dataset Name of dataset to be loaded.
+#'
+#' @name loadUNIMANdata
+#' @rdname chemosensors-package
 #' @export
 loadUNIMANdata <- function(dataset)
 {
@@ -26,10 +33,11 @@ loadUNIMANdata <- function(dataset)
       }
     }
   }    
-    
-  eval(parse(text = paste("dat <-", dataset))) # -> `dat`
   
-  return(dat)
+  out <- list()  
+  eval(parse(text = paste("out$dat <-", dataset))) # -> `dat`
+  
+  return(out$dat)
 }
 
 #-------------------
@@ -43,7 +51,6 @@ is.installed <- function(mypkg) is.element(mypkg, installed.packages()[, 1])
 # Captured Variance
 #----------------------------
 
-#' @export
 capturedVar <- function(X, pc, mod) 
 {
   if(missing(mod)) stop("Error in 'capturedVar': 'mod' is missing.")
@@ -56,7 +63,6 @@ capturedVar <- function(X, pc, mod)
   capturedVarDir(X, E)
 }
 
-#' @export
 capturedVarDir <- function(X, E) 
 {
   X <- as.matrix(X)  

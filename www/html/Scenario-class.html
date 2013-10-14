@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Scenario-class. chemosensors 0.7.7</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.7</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Class Scenario.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>defaultParScenario()
+
+Scenario(...)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>...</dt>
+      <dd>parameters of constructor.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>List of the default parameters.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Class <code>Scenario</code> represents a concentration profile
+  to build a concentration matrix.</p>
+  
+      <p>Function to get default constructor parameters of class
+  <code><a href='Scenario-class.html'>Scenario</a></code>.</p>
+  
+      <p>Constructor method of Scenario Class.</p>
+  
+      <p>Wrapper function Scenario.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>Slots of the class: <table><tr><td> <code>tunit</code> </td>
+<td> Time
+  length of a single gas pulse.  The unity value means
+  experiments with steady-state sensor signals. The default
+  value is <code>1</code>. </td>
+</tr><tr><td> <code>gases</code> </td>
+<td> Gas indices. </td>
+</tr><tr><td>
+  <code>ngases</code> </td>
+<td> The number of gases. </td>
+</tr><tr><td> <code>gnames</code>
+  </td>
+<td> Names of gases. </td>
+</tr><tr><td> <code>concUnits</code> </td>
+<td>
+  Concentration units external to the model, values given
+  in an input concentration matrix. </td>
+</tr><tr><td> <code>concUnitsInt</code>
+  </td>
+<td> Concentration units internal to the model. </td>
+</tr><tr><td>
+  <code>df</code> </td>
+<td> Data frame of a concentration profile with
+  the columns: names of gases (<code>gnames</code>), <code>time</code>,
+  <code>set</code>, <code>lab</code> and <code>tpoint</code>. </td>
+</tr></table></p>
+  
+      <p>Methods of the class: <table><tr><td> <code>add<-</code> </td>
+<td> A
+  replacement method to add gas pulses to the object. </td>
+</tr><tr><td>
+  <code>getConc</code> </td>
+<td> Get the concentration matrix of the
+  object. </td>
+</tr></table></p>
+  
+      <p>The <code>plot</code> method has one type (parameter <code>y</code>):
+  <table><tr><td> <code>time</code> </td>
+<td> Shows the concentration of
+  gases over time. </td>
+</tr></table></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># scenario object (empty): default initialization 
+sc <- Scenario(tunit = 60)
+
+# add data to 
+add(sc) <- list("A", 0.05, 2)
+add(sc) <- list("B", 0.05, 2)
+add(sc) <- list("C", 1, 2)
+add(sc) <- list(c("A", "B", "C"), c(0.02, 0.04, 0.5), 2)
+
+# scenario object: custom initialization
+set <- c("A 0.05", "B 0.05", "C 1", "A 0.02, B 0.04, C 0.5") 
+sc <- Scenario(tunit = 60, T = set, nT = 2, V = set, nV = 2)
+
+# a real example of Scenario
+sc <- Scenario(name = "Regression", tunit = 60, concUnits = "perc",
+  T = c("A 0.01", "A 0.02", "A 0.05"), nT = 30,
+  V = c("A 0.01", "A 0.02", "A 0.05"), nV = 30,
+  randomize = TRUE)
+sc
+</div>
+<div class='output'> Scenario `Regression` of 180 samples, tunit 60, randomize TRUE
+ - gases A, B, C
+ - Training Set: A 0.01 (30), A 0.02 (30), A 0.05 (30) 
+ - Validation Set: A 0.01 (30), A 0.02 (30), A 0.05 (30) 
+</div>
+<div class='input'>
+add(sc) <- list("A", 0.03, 30, "T")
+add(sc) <- list("A", 0.04, 30, "T")
+sc
+</div>
+<div class='output'> Scenario `Regression` of 240 samples, tunit 60, randomize TRUE
+ - gases A, B, C
+ - Training Set: A 0.01 (30), A 0.02 (30), A 0.03 (30), A 0.04 (30), A 0.05 (30) 
+ - Validation Set: A 0.01 (30), A 0.02 (30), A 0.05 (30) 
+</div>
+<div class='input'>
+# get information about the sensor
+show(sc)
+</div>
+<div class='output'> Scenario `Regression` of 240 samples, tunit 60, randomize TRUE
+ - gases A, B, C
+ - Training Set: A 0.01 (30), A 0.02 (30), A 0.03 (30), A 0.04 (30), A 0.05 (30) 
+ - Validation Set: A 0.01 (30), A 0.02 (30), A 0.05 (30) 
+</div>
+<div class='input'>print(sc)
+</div>
+<div class='output'> Scenario `Regression`
+ - 240 samples
+ - 3 gases A, B, C 
+ - tunit: 60 
+</div>
+<div class='input'>
+## Not run:
+plot(sc)  
+</div>
+<p><img src='Scenario-class-10.png' alt='' width='400' height='400' /></p>
+<div class='input'>plot(sc, facet = FALSE, concUnits = 'norm')
+</div>
+<p><img src='Scenario-class-12.png' alt='' width='400' height='400' /></p>
+<div class='input'>## End(Not run)
+
+# extract conc. matrix from scenatio
+conc <- getConc(sc)
+
+print(head(conc))
+</div>
+<div class='output'>  A B C
+1 0 0 0
+2 0 0 0
+3 0 0 0
+4 0 0 0
+5 0 0 0
+6 0 0 0
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>Scenario</li><li>Scenario-class</li><li>defaultParScenario</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

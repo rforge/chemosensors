@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>SplineBasis-class. chemosensors 0.7.7</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.7</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>SplineBasis class.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>splineBasis(type = "bspline", x, breaks, rangeval, norder = 3, lambda = 0.1, tol = 1e-16, 
+  first = 0, last = 0)
+
+SplineBasis(...)
+
+getSplineDesign(bs, x, all = TRUE)
+
+fitSplineBasis(bs, x, y)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>type</dt>
+      <dd>Type of spline basis: 'bspline', 'mspline' or
+  'ispline'. The default value is 'bspline'.</dd>
+      <dt>x</dt>
+      <dd>Numeric vector of data points.</dd>
+      <dt>breaks</dt>
+      <dd>Break points. Include the boundary knots;
+  ordered.</dd>
+      <dt>rangeval</dt>
+      <dd>The range of data points (minimum and
+  maximum values). Must include the break points.</dd>
+      <dt>norder</dt>
+      <dd>The order of the basis functions. The cubic
+  spline basis has the order 4. The default value: 3.</dd>
+      <dt>lambda</dt>
+      <dd>Smoothing parameter for quadratic solver
+  when performing fitting with restriction conditions.</dd>
+      <dt>tol</dt>
+      <dd>Tolerance value for stopping criteria in
+  iterative procedures.</dd>
+      <dt>first</dt>
+      <dd>The number of first basis functions to be
+  omitted. Supported values: 0 or 1. The default value is
+  0.</dd>
+      <dt>last</dt>
+      <dd>The number of last basis functions to be
+  omitted. Supported values: 0 or 1. The default value is
+  0.</dd>
+      <dt>...</dt>
+      <dd>Parameters of constructor.</dd>
+      <dt>all</dt>
+      <dd>Logical whther include all basis functions.</dd>
+      <dt>bs</dt>
+      <dd>An object of class <code>SplineBasis</code>.</dd>
+      <dt>y</dt>
+      <dd>Numeric vector of data points (respone).</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>An object of class 'SplineBasis'.</p>
+  
+      <p>A design matrix.</p>
+  
+      <p>Numeric vector of beta coefficients.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Slots: type, rangeval, nbasis, params, breaks, norder,
+  knots.</p>
+  
+      <p>Constructor of SplineBasis class.</p>
+  
+      <p>Wrapper to constructor of SplineBasis Class.</p>
+  
+      <p>Function getSplineDesign.</p>
+  
+      <p>Function fitSplineBasis.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The number of spline basis functions: <code class = 'eq'>nbasis =
+  norder + nknots - 2</code>.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>SplineBasis</li><li>SplineBasis-class</li><li>fitSplineBasis</li><li>getSplineDesign</li><li>splineBasis</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

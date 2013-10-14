@@ -7,12 +7,10 @@ NULL
 # Class constructor
 #----------------------------
 
-#' Get default constructor parameters of class \code{\link{SensorDynamics}}.
-#' @name defaultParSensorDynamics
-#' @rdname pub-defaultParSensorDynamics
-#' @keywords SensorDynamics defaults
+#' Function to get default constructor parameters of class \code{\link{SensorDynamics}}.
+#' @rdname SensorDynamics-class
+#' @aliases defaultParSensorDynamics
 #' @return List of the default parameters.
-#@example inst/examples/defaultParSensorDynamics.R
 #' @export
 defaultParSensorDynamics <- function()
 {
@@ -25,7 +23,10 @@ defaultParSensorDynamics <- function()
   return(par)
 }
 
-### Constructor of SensorDynamics class.
+#' Constructor method of SensorDynamics Class.
+#'
+#' @name SensorDynamics
+#' @rdname SensorDynamics-class
 setMethod("initialize", "SensorDynamics", function(.Object,
   # common for sub-classes
   num="numeric", gases="numeric", gnames="character", concUnits="character", concUnitsInt="character",
@@ -92,6 +93,11 @@ setMethod("initialize", "SensorDynamics", function(.Object,
   return(.Object)
 })
 
+#' Wrapper function SensorDynamics.
+#'
+#' @name SensorDynamics
+#' @rdname SensorDynamics-class
+#' @param ... parameters of constructor.
 #' @export
 SensorDynamics <- function(...)
 {
@@ -101,6 +107,9 @@ SensorDynamics <- function(...)
 #----------------------------
 # Plot Methods
 #----------------------------
+
+#' @rdname plot-methods
+#' @aliases plot,SensorDynamics-method
 setMethod("plot", "SensorDynamics", function (x, y, ...) 
 {
   yval <- c("predict")
@@ -135,6 +144,9 @@ plot.SensorDynamics.predict <- function(x, y,
 
   nsdata <- predict(x, conc, sdata, sensors=sind, ...)  
 
+  # dummy assignment to get rid of errors from `R CMD check` (no visible binding for global variable ‘gas’)
+  gas <- sensor <- value <- label <- NULL
+
   df1 <- data.frame(melt(sdata, varnames = c("sample", "gas", "sensor")), data = "input")
   df2 <- data.frame(melt(nsdata, varnames = c("sample", "gas", "sensor")), data = "output")  
   df <- rbind(df1, df2)
@@ -163,7 +175,8 @@ plot.SensorDynamics.predict <- function(x, y,
 # Predict Methods
 #----------------------------
 
-### Method coefficients
+#' @rdname get-methods
+#' @aliases coefficients,SensorDynamics-method
 setMethod("coefficients", "SensorDynamics", function(object, ...)
 {
   coef <- tconst(object)
@@ -171,13 +184,15 @@ setMethod("coefficients", "SensorDynamics", function(object, ...)
   return(coef)
 })
 
-### Method ncoef
+#' @rdname get-methods
+#' @aliases ncoef,SensorDynamics-method
 setMethod("ncoef", "SensorDynamics", function(x)
 {
   length(coef(x))
 })
 
-### Method predict
+#' @rdname model-methods
+#' @aliases predict,SensorDynamics-method
 setMethod("predict", "SensorDynamics", function(object, conc, sdata, sensors, ...)
 {
   if(missing(conc)) stop("Error in SensorDynamics::predict: 'conc' is missing.")

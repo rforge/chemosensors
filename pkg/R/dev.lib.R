@@ -1,5 +1,4 @@
 
-#' @export
 devClassHierarchy <- function(classes=c("Sensor"))
 { 
   cat("\n\n * Class Hierarchy\n\n")
@@ -10,7 +9,6 @@ devClassHierarchy <- function(classes=c("Sensor"))
   cat("\n ***\n\n")    
 }
 
-#' @export
 devClassSlots <- function(classes=c(subClasses("Sensor"), "Sensor"))
 {
   cat("\n\n * Class Slots\n\n")
@@ -21,7 +19,6 @@ devClassSlots <- function(classes=c(subClasses("Sensor"), "Sensor"))
   cat("\n ***\n\n")    
 }
 
-#' @export 
 devClassParam <- function(fun=c("defaultConcUnitsInt", "defaultConcUnits"))
 {
   cat("\n\n * Package Parameters\n\n")
@@ -31,7 +28,6 @@ devClassParam <- function(fun=c("defaultConcUnitsInt", "defaultConcUnits"))
   cat("\n ***\n\n")    
 }
 
-#' @export
 devDefaults <- function(fun=c("defaultDataPackage"))
 {
   cat("\n\n * Package Defaults\n\n")
@@ -41,7 +37,6 @@ devDefaults <- function(fun=c("defaultDataPackage"))
   cat("\n ***\n\n")    
 }
 
-#' @export
 devReport <- function(fun=c("devClassHierarchy", "devClassSlots", "devClassParam", "devDefaults"))
 {
   for(f in fun) {

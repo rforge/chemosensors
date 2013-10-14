@@ -1,7 +1,7 @@
 #' Demo SensorArrayNoise.
 #'
 #' @name demo-SensorArrayNoise
-#' @rdname www-demo-SensorArrayNoise
+#' @rdname demo-SensorArrayNoise
 #' @docType data
 #' @keywords demo
 #' @example demo/SensorArrayNoise.R
@@ -10,7 +10,7 @@ NULL
 #' Demo SensorAffinity.
 #'
 #' @name demo-SensorAffinity
-#' @rdname www-demo-SensorAffinity
+#' @rdname demo-SensorAffinity
 #' @docType data
 #' @keywords demo
 #' @example demo/SensorAffinity.R
@@ -19,7 +19,7 @@ NULL
 #' Demo SensorNoise.
 #'
 #' @name demo-SensorNoise
-#' @rdname www-demo-SensorNoise
+#' @rdname demo-SensorNoise
 #' @docType data
 #' @keywords demo
 #' @example demo/SensorNoise.R
@@ -28,7 +28,7 @@ NULL
 #' Demo VirtualSensors.
 #'
 #' @name demo-VirtualSensors
-#' @rdname www-demo-VirtualSensors
+#' @rdname demo-VirtualSensors
 #' @docType data
 #' @keywords demo
 #' @example demo/VirtualSensors.R
@@ -37,7 +37,7 @@ NULL
 #' Demo Mixtures.
 #'
 #' @name demo-Mixtures
-#' @rdname www-demo-Mixtures
+#' @rdname demo-Mixtures
 #' @docType data
 #' @keywords demo
 #' @example demo/Mixtures.R
@@ -46,7 +46,7 @@ NULL
 #' Demo BinaryMixtures.
 #'
 #' @name demo-BinaryMixtures
-#' @rdname www-demo-BinaryMixtures
+#' @rdname demo-BinaryMixtures
 #' @docType data
 #' @keywords demo
 #' @example demo/BinaryMixtures.R
@@ -55,7 +55,7 @@ NULL
 #' Demo NeuromorphicSim.
 #'
 #' This demonstration shows an example of neuromorphic simulations 
-#' possible with package \code{\link{chemosensors}}. 
+#' possible with package \code{\link{chemosensors-package}}. 
 #' Particularly, we perform a mixture quantification scenario,
 #' where the system is trained on pure analytes and validation is thought to
 #' quantify concentration of components in mixtures. 
@@ -76,7 +76,7 @@ NULL
 #' }
 #' 
 #' @name demo-NeuromorphicSim
-#' @rdname www-demo-NeuromorphicSim
+#' @rdname demo-NeuromorphicSim
 #' @docType data
 #' @keywords demo
 #' @example demo/NeuromorphicSim.R

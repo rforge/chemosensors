@@ -19,7 +19,8 @@ plot(sn)
 #  - plot types 'y': barplot, noise, walk
 sn <- SensorNoiseModel() # default model
 
-plot(sn, "barplot", main="plot(sn, 'barplot')") # default plot type, i.e. 'plot(sn)' does the same plotting
+plot(sn, "barplot", main="plot(sn, 'barplot')") 
+# default plot type, i.e. 'plot(sn)' does the same plotting
 
 plot(sn, "noise", main="plot(sn, 'noise')")
 

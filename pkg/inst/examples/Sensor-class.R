@@ -11,10 +11,10 @@ plot(s)
 s <- Sensor(num=5, enableSorption=FALSE) # sorption model disabled
 plot(s, main="Sensor with sorption model disabled")
 
-s <- Sensor(num=5, alpha=0.01, gases=c(1, 3)) # amost linear sensor
+s <- Sensor(num=5, alpha=0.01) # amost linear sensor
 plot(s, main="Almost linear sensor, non-linearity 0.01")
 
-s <- Sensor(num=5, alpha=1, gases=c(1, 3)) # saturated sensor
+s <- Sensor(num=5, alpha=1) # saturated sensor
 plot(s, main="Saturated sensor, non-linearity 1")
 
 s <- Sensor(num=5, csd=0, ssd=0, dsd = 0) # noise level is set to zero
@@ -27,7 +27,8 @@ plot(s, "snoise", main="Very noisy sensor")
 #  - plot types 'y': response, noise
 s <- Sensor() # default model
 
-plot(s, "response", main="plot(s, 'response')") # default plot type, i.e. 'plot(s)' does the same plotting
+plot(s, "response", main="plot(s, 'response')") 
+# default plot type, i.e. 'plot(s)' does the same plotting
 
 plot(s, "snoise", main="plot(s, 'snoise')")
 

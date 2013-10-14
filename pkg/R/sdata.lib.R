@@ -53,10 +53,9 @@ setMethod("extractSdata", "ANY", function(object, conc, sdata, sf, df, concUnits
 #' The input parameters are an object, e.g. of class \code{SensorArray}, a concentration matrix,
 #' a matrix of sensor data, and (optionally) a data frame derived from conccentraion matrix.
 #' 
-#' @name sdata2feature
-#' @rdname www-sdata2feature
 #' @example inst/examples/sdata2feature-method.R
-#' @exportMethod sdata2feature
+#' @rdname scenario-methods
+#' @aliases sdata2feature,ANY-method
 setMethod("sdata2feature", "ANY", function(object, conc, sdata, feature = "transient", 
   cf, sf, ...)
 { 
@@ -196,10 +195,9 @@ sdata2feature.df <- function(object, feature, df, ...)
 #'
 #' The input parameters are an object, e.g. of class \code{SensorArray}, and a matrix of sensor data.
 #' 
-#' @name sdata2df
-#' @rdname www-sdata2df
 #' @example inst/examples/sdata2df-method.R
-#' @exportMethod sdata2df
+#' @rdname scenario-methods
+#' @aliases sdata2df,ANY-method
 setMethod("sdata2df", "ANY", function(object, sdata, ...)
 {  
   if(missing(sdata))
@@ -219,7 +217,8 @@ setMethod("sdata2df", "ANY", function(object, sdata, ...)
   return(sf)
 })
 
-### Method sdata2pulse
+#' @rdname scenario-methods
+#' @aliases sdata2pulse,ANY-method
 setMethod("sdata2pulse", "ANY", function(object, conc, sdata, ...)
 {
   if(missing(conc)) stop("Error in ANY::sdata2pulse: 'conc' is missing.")

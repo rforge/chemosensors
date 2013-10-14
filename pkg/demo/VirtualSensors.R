@@ -7,10 +7,11 @@ nsensors <- 34
 plist <- list()
 for(beta in c(1, 2, 5, 10)) {
   sa <- SensorArray(nsensors = nsensors, beta = beta)
-  plist <- c(plist, list(plot(sa, 'polar', main = paste("beta:", beta), graphics = "ggplot", ret = TRUE)))
+  plist <- c(plist, list(plot(sa, 'polar', main = paste("beta:", beta), 
+    graphics = "ggplot", ret = TRUE)))
 }
 
-library(gridExtra) 
+require(gridExtra) 
 grid.arrange(plist[[1]], plist[[2]], plist[[3]], plist[[4]])
 
 ## part 2: compare two arrays (UNIMAN array of 17 sensors vs. virtual aray of 100 sensors)

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>UNIMANdnoise. chemosensors 0.7.6</title>
+<title>UNIMANdnoise. chemosensors 0.7.7</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.6</a>
+      <a class="brand" href="#">chemosensors 0.7.7</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -105,19 +105,20 @@ head(UNIMANdnoise$ndvar)
 <div class='output'>[1] 0.864246632 0.062158036 0.048459565 0.006925524 0.006465561 0.005053250
 </div>
 <div class='input'>
-barplot(UNIMANdnoise$ndvar, names.arg=1:length(UNIMANdnoise$ndvar), main="Importance of drift components")
+barplot(UNIMANdnoise$ndvar, names.arg=1:length(UNIMANdnoise$ndvar), 
+  main="Importance of drift components")
 </div>
 <p><img src='UNIMANdnoise-8.png' alt='' width='400' height='400' /></p>
-<p><img src='UNIMANdnoise-9.png' alt='' width='400' height='400' /></p>
 <div class='input'># comp. 1 dominates, 
 # comp. 1-3 dominate over the rest
 
 loadings <- UNIMANdnoise$dspace
 col <- grey.colors(3, start=0.3, end=0.9)
 matplot(loadings[, 1:3], t='l', col=col, lwd=2, lty=1,
-  xlab="Sensors", ylab="Loadings", main="Loadings of sensors on first 3 drift components")
+  xlab="Sensors", ylab="Loadings", 
+  main="Loadings of sensors on first 3 drift components")
 </div>
-<p><img src='UNIMANdnoise-11.png' alt='' width='400' height='400' /></p>
+<p><img src='UNIMANdnoise-10.png' alt='' width='400' height='400' /></p>
 <div class='input'># sensors 7, 8, 9, 17 seem to be less drifty  
 </div></pre>
   </div>
@@ -131,7 +132,7 @@ matplot(loadings[, 1:3], t='l', col=col, lwd=2, lty=1,
       
     <h2>See also</h2>
     
-  <code>DriftNoiseClass</code>
+  <code><a href='DriftNoiseModel-class.html'>DriftNoiseModel</a></code>
 
         
   </div>

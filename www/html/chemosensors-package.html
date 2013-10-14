@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>chemosensors-package. chemosensors 0.7.7</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.7</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Package chemosensors.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>loadUNIMANdata(dataset)
+
+subClasses(class)
+
+ConcUnitsNames()
+
+defaultDataModel()
+
+defaultConcUnitsInt()
+
+defaultConcUnits()
+
+defaultConcUnitsSorption()
+
+defaultSet()
+
+defaultDataPackage()
+
+defaultDataSensorModel()
+
+defaultDataDistr()
+
+defaultDataSensorNoiseModel()
+
+defaultDataSorptionModel()
+
+defaultDataDriftNoiseModel()</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>dataset</dt>
+      <dd>Name of dataset to be loaded.</dd>
+      <dt>class</dt>
+      <dd>Class name.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>Character vector of sub-classes.</p>
+  
+      <p>Character vector of units names.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>A tool to set up synthetic experiments in machine
+  olfaction.</p>
+  
+      <p>Function loadUNIMANdata.</p>
+  
+      <p>Support function to get sub-classes.</p>
+  
+      <p>Function to get available names for concentration units.</p>
+  
+      <p>Function defaultDataModel.</p>
+  
+      <p>Function defaultConcUnitsInt.</p>
+  
+      <p>Function defaultConcUnits.</p>
+  
+      <p>Function defaultConcUnitsSorption.</p>
+  
+      <p>Function defaultSet</p>
+  
+      <p>Function defaultDataPackage.</p>
+  
+      <p>Function defaultDataSensorModel.</p>
+  
+      <p>Function defaultDataDistr.</p>
+  
+      <p>Function defaultDataSensorNoiseModel.</p>
+  
+      <p>Function defaultDataSorptionModel.</p>
+  
+      <p>Function defaultDataDriftNoiseModel.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>
+# concentration matrix of 3 gas classes: A, C and AC
+conc <- matrix(0, 60, 3)
+conc[1:10, 1] <- 0.01 #  A0.01
+conc[11:20, 3] <- 0.1 # C0.1
+conc[21:30, 1] <- 0.05 #  A0.05
+conc[31:40, 3] <- 1 # C1
+conc[41:50, 1] <- 0.01 # A0.01C0.1
+conc[41:50, 3] <- 0.1 # A0.01C0.1
+conc[51:60, 1] <- 0.05 # A0.05C1
+conc[51:60, 3] <- 1 # A0.05C1
+
+conc <- conc[sample(1:nrow(conc)), ]
+
+# sensor array of 20 sensors with parametrized noise parameters
+sa <- SensorArray(nsensors=20, csd=0.1, ssd=0.1, dsd=0.1)
+
+# get information about the array
+print(sa)
+</div>
+<div class='output'> SensorArray
+ - enableSorption: TRUE 
+ (1) Sensor Model
+ - num 1, 2, 3 ... 3 
+ - beta 2 
+ - 3 gases A, B, C 
+ - (first) data model
+ - method: ispline (type: spline)
+ - sensor model: coeffNonneg TRUE
+   -- coefficients (first): 3.4868, 3.4731, 4.3785 ... 4.5575 
+ (2) Sorption Model
+ - knum 1, 2, 3 ... 3 
+ - 3 gases A, B, C 
+ (3) Concentration Noise Model
+ - 3 gases A, B, C 
+ - csd: 0.1 
+ - noise type: logconc 
+ - log-factor: 1, 1, 2 
+ (4) Sensor Noise Model
+ - num 1, 2, 3 ... 3 
+ - 3 gases A, B, C 
+ - ssd: 0.1 
+ - noise type: randomWalk 
+ - noise-factor: 1, 1, 1, 1, 1, 1, 1, 1, 1 
+ (5) Drift Noise Model
+ - num 1, 2, 3 ... 3 
+ drift common model
+ - method: cpc 
+ - ndcomp: 1 
+</div>
+<div class='input'>plot(sa)
+</div>
+<p><img src='chemosensors-package-4.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+# generate the data
+sdata <- predict(sa, conc)
+
+# plot the data
+plot(sa, "prediction", conc=conc, sdata=sdata, leg="top")
+</div>
+<p><img src='chemosensors-package-6.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>ConcUnitsNames</li><li>chemosensors-package</li><li>defaultConcUnits</li><li>defaultConcUnitsInt</li><li>defaultConcUnitsSorption</li><li>defaultDataDistr</li><li>defaultDataDriftNoiseModel</li><li>defaultDataModel</li><li>defaultDataPackage</li><li>defaultDataSensorModel</li><li>defaultDataSensorNoiseModel</li><li>defaultDataSorptionModel</li><li>defaultSet</li><li>loadUNIMANdata</li><li>subClasses</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

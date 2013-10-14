@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>DriftNoiseModel-class. chemosensors 0.7.7</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.7</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Method ndcomp.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>DriftModelNames()
+
+defaultParDriftNoiseModel()
+
+DriftNoiseModel(...)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>...</dt>
+      <dd>parameters of constructor.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>Character vector of model names.</p>
+  
+      <p>List of the default parameters.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Method ndcomp.</p>
+  
+      <p>Method ndvar.</p>
+  
+      <p>Method dspace.</p>
+  
+      <p>Class <code>DriftNoiseModel</code> generates the drift noise in
+  a multi-variate manner in several steps.</p>
+  
+      <p>Function to get model names of class
+  <code><a href='DriftNoiseModel-class.html'>DriftNoiseModel</a></code>.</p>
+  
+      <p>Function to get default constructor parameters of class
+  <code><a href='DriftNoiseModel-class.html'>DriftNoiseModel</a></code>.</p>
+  
+      <p>Constructor method of DriftNoiseModel Class.</p>
+  
+      <p>Wrapper function DriftNoiseModel.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>The primary question arising in drift modeling is related
+  to the way of one defines the drift phenomena for gas
+  sensor arrays. We propose to evaluate a drift subspace
+  via common principal component analysis. The hypothesis
+  of common principal component analysis states that exists
+  an orthogonal matrix <code>V</code> such that the covariance
+  matrices of <code>K</code> groups have the diagonal form
+  simultaneously. The resulted eigenvectors (columns of the
+  matrix <code>V</code>) define the subspace common for the
+  groups and orthogonal across the components.</p>
+  
+      <p>A preliminary step involves quantification of
+  drift-related data presented in the long-term UNIMAN
+  dataset. These results are stored in
+  <code><a href='UNIMANdnoise.html'>UNIMANdnoise</a></code> dataset.</p>
+  
+      <p>On the next step the drift is injected in the sensor
+  array data by generating the noise by multi-dimensional
+  random walk based on the multivariate normal distribution
+  with zero-mean and diagonal covariance matrix - in the
+  sub-space defined by the matrix <code>V</code>. The relative
+  proportion along the diagonal elements in the covariance
+  matrix is specified by the importance of drift components
+  in terms of of projected variance.</p>
+  
+      <p>On the final step the component correction operation is
+  recalled to induce the generated noise from the random
+  walk back into the complete multivariate space of the
+  sensor array data.</p>
+  
+      <p>Slots of the class: <table><tr><td> <code>num</code> </td>
+<td> Sensor
+  number (<code>1:17</code>), which drift profile is used. The
+  default value is <code>c(1, 2)</code>. </td>
+</tr><tr><td> <code>dsd</code> </td>
+<td>
+  Parameter of standard deviation used to generate the
+  drift noise. The deault value is 0.1. </td>
+</tr><tr><td> <code>ndcomp</code>
+  </td>
+<td> The number of components spanning the drift
+  sub-space. The default number is 2. </td>
+</tr><tr><td> <code>ndvar</code> </td>
+<td>
+  The importance values of drift components. The default
+  values are <code><a href='UNIMANdnoise.html'>UNIMANdnoise</a></code> dataset. </td>
+</tr><tr><td>
+  <code>driftModel</code> </td>
+<td> Drift model of class
+  <code>DriftCommonModel</code>. </td>
+</tr></table> Methods of the class:
+  <table><tr><td> <code>predict</code> </td>
+<td> Generates multi-variate
+  noise injeted to an input sensor array data. </td>
+</tr><tr><td>
+  <code>dsd</code> </td>
+<td> Gets the noise level. </td>
+</tr><tr><td> <code>dsd<-</code>
+  </td>
+<td> Sets the noise level. </td>
+</tr></table></p>
+  
+      <p>The <code>plot</code> method has three types (parameter
+  <code>y</code>): <table><tr><td> <code>noise</code> </td>
+<td> (default)
+  Depicts the drift noise generated by the model with a
+  linechart. </td>
+</tr><tr><td> <code>pc</code> </td>
+<td> Shows the drift components
+  in a PCA scoreplot of an input sensor array data
+  (parameter <code>X</code>.</td>
+</tr></table></p>
+  
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+      
+      <p>In the case <code>num</code> is different from value
+  <code>c(1:17)</code>, the number of components is not the same
+  as in <code>V</code> matrix. First, the colums in <code>V</code>
+  matrix are selected according to numbers pointed in
+  <code>num</code>. Second, QR-decomposition of the resulted
+  matrix is performed to orthogonolize the component
+  vectors.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># model: default initialization
+dn <- DriftNoiseModel()
+
+# get information about the model
+show(dn)
+</div>
+<div class='output'> Drift Noise Model (dsd 0.1), common model 'cpc'
+</div>
+<div class='input'>print(dn)
+</div>
+<div class='output'> Drift Noise Model
+ - num 1, 2 
+ drift common model
+ - method: cpc 
+ - ndcomp: 1 
+</div>
+<div class='input'>
+plot(dn)  
+</div>
+<p><img src='DriftNoiseModel-class-6.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+# model: custom parameters
+# - many sensors
+dn <- DriftNoiseModel(dsd=0.5, ndcomp=3, num=1:17)
+
+print(dn)
+</div>
+<div class='output'> Drift Noise Model
+ - num 1, 2, 3 ... 17 
+ drift common model
+ - method: cpc 
+ - ndcomp: 3 
+</div>
+<div class='input'>
+plot(dn)
+</div>
+<p><img src='DriftNoiseModel-class-10.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+# method plot
+#  - plot types 'y': barplot, noise, walk
+dn <- DriftNoiseModel() # default model
+
+plot(dn, "noise", main="plot(dn, 'noise')") 
+</div>
+<p><img src='DriftNoiseModel-class-12.png' alt='' width='400' height='400' /></p>
+<div class='input'># default plot type, i.e. 'plot(dn)' does the same plotting
+
+data(UNIMANshort)
+X <- UNIMANshort$dat[, num(dn)]
+plot(dn, "pc", X, main="plot(dn, 'pc', X)")
+</div>
+<p><img src='DriftNoiseModel-class-14.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+### example with a SensorArray
+set.seed(1)
+sa <- SensorArray(num = 1:5)
+
+set <- c("A 0.01", "A 0.05", "C 0.1", "C 1")
+sc <- Scenario(rep(set, 10))
+conc <- getConc(sc)
+
+sdata <- predict(sa, conc)
+
+p1 <- plotPCA(sa, conc = conc, sdata = sdata, air = FALSE, 
+  main = "feature: transient")
+p1
+</div>
+<p><img src='DriftNoiseModel-class-16.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+p2 <- plotPCA(sa, conc = conc, sdata = sdata, feature = "ss", 
+  main = "feature: steady-state")
+p2
+</div>
+<p><img src='DriftNoiseModel-class-18.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+p3 <- plotPCA(sa, conc = conc, sdata = sdata, feature = "step", 
+  main = "feature: step")
+p3
+</div>
+<p><img src='DriftNoiseModel-class-20.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>DriftModelNames</li><li>DriftNoiseModel</li><li>DriftNoiseModel-class</li><li>defaultParDriftNoiseModel</li><li>dspace</li><li>dspace,DriftNoiseModel-method</li><li>ndcomp</li><li>ndcomp,DriftNoiseModel-method</li><li>ndvar</li><li>ndvar,DriftNoiseModel-method</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  <code><a href='UNIMANdnoise.html'>UNIMANdnoise</a></code>, <code><a href='SensorArray-class.html'>SensorArray</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

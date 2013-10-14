@@ -6,7 +6,8 @@ NULL
 # PlotBoxplot Method
 #----------------------------
 
-### Method plotBox
+#' @rdname plot-methods
+#' @aliases plotBox,ANY-method
 setMethod("plotBox", "ANY", function(x, y, conc, sdata, set, scenario, 
   cf, sf, 
   sensors = 1, feature = "step", air = TRUE, 
@@ -93,7 +94,8 @@ setMethod("plotBox", "ANY", function(x, y, conc, sdata, set, scenario,
 # PlotRespone Method
 #----------------------------
 
-### Method plotSignal
+#' @rdname plot-methods
+#' @aliases plotResponse,ANY-method
 setMethod("plotResponse", "ANY", function(x, y, idx = 1, gas,
   concUnits = "default", 
   n = 100,
@@ -159,7 +161,8 @@ setMethod("plotResponse", "ANY", function(x, y, idx = 1, gas,
 # PlotPCA Method
 #----------------------------
 
-### Method plotPCA
+#' @rdname plot-methods
+#' @aliases plotPCA,ANY-method
 setMethod("plotPCA", "ANY", function(x, y, conc, sdata, set, scenario,
   feature = "transient", air = TRUE, 
   mod, center = TRUE, scale = TRUE, pc = 1:2,

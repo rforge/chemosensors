@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>demo-SensorArrayNoise. chemosensors 0.7.6</title>
+<title>demo-SensorArrayNoise. chemosensors 0.7.7</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.6</a>
+      <a class="brand" href="#">chemosensors 0.7.7</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -67,7 +67,8 @@ p0
 </div>
 <p><img src='demo-SensorArrayNoise-2.png' alt='' width='400' height='400' /></p>
 <div class='input'>
-p1 <- plotPCA(sa, conc = conc, mod = mod.uniman, main = "Synthetic data #1 \n projected on UNIMAN PCA")
+p1 <- plotPCA(sa, conc = conc, mod = mod.uniman, 
+  main = "Synthetic data #1 \n projected on UNIMAN PCA")
 p1
 </div>
 <p><img src='demo-SensorArrayNoise-4.png' alt='' width='400' height='400' /></p>
@@ -78,7 +79,8 @@ csd(sa) <- 0.5
 ssd(sa) <- 0.5
 dsd(sa) <- 0.5
 
-p2 <- plotPCA(sa, conc = conc, mod = mod.uniman, main = "Synthetic data #2 \n projected on UNIMAN PCA")
+p2 <- plotPCA(sa, conc = conc, mod = mod.uniman, 
+  main = "Synthetic data #2 \n projected on UNIMAN PCA")
 p2
 </div>
 <p><img src='demo-SensorArrayNoise-6.png' alt='' width='400' height='400' /></p>

@@ -7,12 +7,10 @@ NULL
 # Class constructor
 #----------------------------
 
-#' Get default constructor parameters of class \code{\link{SensorArray}}.
-#' @name defaultParSensorArray
-#' @rdname pub-defaultParSensorArray
-#' @keywords SensorArray defaults
+#' Function to get default constructor parameters of class \code{\link{SensorArray}}.
+#' @rdname SensorArray-class
+#' @aliases defaultParSensorArray
 #' @return List of the default parameters.
-#@example inst/examples/defaultParSensorArray.R
 #' @export
 defaultParSensorArray <- function()
 {
@@ -31,6 +29,10 @@ defaultParSensorArray <- function()
   return(par)
 }
 
+#' Constructor method of SensorArray Class.
+#'
+#' @name SensorArray
+#' @rdname SensorArray-class
 setMethod("initialize", "SensorArray", function(.Object,
   # specific for class SensorArray
   type = "character",
@@ -210,6 +212,11 @@ setMethod("initialize", "SensorArray", function(.Object,
   return(.Object)
 })
 
+#' Wrapper function SensorArray.
+#'
+#' @name SensorArray
+#' @rdname SensorArray-class
+#' @param ... parameters of constructor.
 #' @export
 SensorArray <- function(...) new("SensorArray", ...) 
 
@@ -223,11 +230,11 @@ SensorArray <- function(...) new("SensorArray", ...)
 #  do.call(SensorArray.new, args)
 #}
 
-#' Wrapper to Class Sensor.
+#' Wrapper function Sensor
 #'
 #' @name Sensor
-#' @rdname www-Sensor
-#' @keywords Sensor
+#' @rdname SensorArray-class
+#' @param num Type of sensors (or UNIMAN number).
 #' @seealso \code{\link{SensorArray}}, \code{\link{SensorModel}}
 #' @example inst/examples/Sensor-class.R
 #' @export
@@ -243,6 +250,8 @@ Sensor <- function(num = 1, ...)
 # Convert Methods
 #----------------------------
 
+#' @rdname SensorArray-class
+#' @aliases getSensor,SensorArray-method
 setMethod("getSensor", "SensorArray", function(object, index) 
 {
   stopifnot(index %in% object@idx)
@@ -269,6 +278,9 @@ setMethod("getSensor", "SensorArray", function(object, index)
 #----------------------------
 # Plot Methods
 #----------------------------
+
+#' @rdname plot-methods
+#' @aliases plot,SensorArray-method
 setMethod("plot", "SensorArray", function (x, y, ...) 
 {
   nsensors <- nsensors(x)
@@ -354,7 +366,8 @@ plot.SensorArray.polar <- function(x, y,
 # Predict Methods
 #----------------------------
 
-### Method coefficients
+#' @rdname get-methods
+#' @aliases coefficients,SensorArray-method
 setMethod("coefficients", "SensorArray", function(object, type, ...)
 {
   if(missing(type)) type <- "SensorModel"
@@ -366,7 +379,8 @@ setMethod("coefficients", "SensorArray", function(object, type, ...)
   return(coef)
 })
 
-### Method predict
+#' @rdname model-methods
+#' @aliases predict,SensorArray-method
 setMethod("predict", "SensorArray", function(object, conc, coef="numeric", concUnits="default", ...)
 {
   if(missing(coef)) coef <- coef(object)

@@ -8,9 +8,8 @@ NULL
 #----------------------------
 
 #' Get default constructor parameters of class \code{\link{ConcNoiseModel}}.
-#' @name defaultParConcNoiseModel
-#' @rdname pub-defaultParConcNoiseModel
-#' @keywords ConcNoiseModel defaults
+#' @rdname ConcNoiseModel-class
+#' @aliases defaultParConcNoiseModel
 #' @return List of the default parameters.
 #' @export
 defaultParConcNoiseModel <- function()
@@ -21,7 +20,10 @@ defaultParConcNoiseModel <- function()
   return(par)
 }
 
-### Constructor of ConcNoiseModel class.
+#' Constructor method of ConcNoiseModel Class.
+#'
+#' @name ConcNoiseModel
+#' @rdname ConcNoiseModel-class
 setMethod("initialize", "ConcNoiseModel", function(.Object,
   # common for sub-classes
   gases="numeric", gnames="character", concUnits="character", concUnitsInt="character",
@@ -74,6 +76,11 @@ setMethod("initialize", "ConcNoiseModel", function(.Object,
   return(.Object)
 })
 
+#' Wrapper function ConcNoiseModel.
+#'
+#' @name ConcNoiseModel
+#' @rdname ConcNoiseModel-class
+#' @param ... parameters of constructor.
 #' @export
 ConcNoiseModel <- function(...)
 {
@@ -83,6 +90,9 @@ ConcNoiseModel <- function(...)
 #----------------------------
 # Plot Methods
 #----------------------------
+
+#' @rdname plot-methods
+#' @aliases plot,ConcNoiseModel-method
 setMethod("plot", "ConcNoiseModel", function (x, y, ...) 
 {
   # missing
@@ -107,7 +117,7 @@ plot.ConcNoiseModel.noise <- function(x, y, n = 100, conc, concUnits="default",
 
   lty <- rep(lty, each=ngases)
   ylab <- paste(ylab, ", [", ConcUnitsStr(concUnits), "]", sep="")
-  matplot(cbind(conc, nconc), t='l', col=col, lwd = lwd, lty = lty,
+  matplot(cbind(conc, nconc), type = 'l', col=col, lwd = lwd, lty = lty,
     bty='n',
     main=main, xlab = xlab, ylab = ylab)  
 }
@@ -135,6 +145,8 @@ setMethod("scaledNoiseSd", "ConcNoiseModel", function(object, ...)
 # Predict Methods
 #----------------------------
 
+#' @rdname model-methods
+#' @aliases predict,ConcNoiseModel-method
 setMethod ("predict", "ConcNoiseModel", function(object, conc, concUnits="default", ...)
 {  
   if(concUnits == "default") concUnits <- concUnits(object)

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>UNIMANsnoise. chemosensors 0.7.6</title>
+<title>UNIMANsnoise. chemosensors 0.7.7</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">chemosensors 0.7.6</a>
+      <a class="brand" href="#">chemosensors 0.7.7</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -169,14 +169,16 @@ p2
 set.seed(10)
 sa1 <- SensorArray(model = "plsr", num = c(4, 7, 14), csd = 0, ssd = 1, dsd = 0)
 
-p3 <- plotPCA(sa1, set = rep(c("A", "B", "C"), 10), air = FALSE) + labs(title = "Less noisy sensors")
+p3 <- plotPCA(sa1, set = rep(c("A", "B", "C"), 10), air = FALSE) + 
+  labs(title = "Less noisy sensors")
 p3
 </div>
 <p><img src='UNIMANsnoise-14.png' alt='' width='400' height='400' /></p>
 <div class='input'>
 sa2 <- SensorArray(model = "plsr", num = c(1, 5, 17), csd = 0, ssd = 1, dsd = 0)
 
-p4 <- plotPCA(sa2, set = rep(c("A", "B", "C"), 10), air = FALSE) + labs(title = "More noisy sensors")
+p4 <- plotPCA(sa2, set = rep(c("A", "B", "C"), 10), air = FALSE) + 
+  labs(title = "More noisy sensors")
 p4
 </div>
 <p><img src='UNIMANsnoise-16.png' alt='' width='400' height='400' /></p></pre>
@@ -191,7 +193,7 @@ p4
       
     <h2>See also</h2>
     
-  <code>SensorNoiseClass</code>
+  <code><a href='SensorNoiseModel-class.html'>SensorNoiseModel</a></code>
 
         
   </div>

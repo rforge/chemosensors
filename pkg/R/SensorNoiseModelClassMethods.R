@@ -7,10 +7,9 @@ NULL
 # Class constructor
 #----------------------------
 
-#' Get default constructor parameters of class \code{\link{SensorNoiseModel}}.
-#' @name defaultSensorNoiseModel
-#' @rdname pub-defaultSensorNoiseModel
-#' @keywords SensorNoiseModel defaults
+#' Function to get default constructor parameters of class \code{\link{SensorNoiseModel}}.
+#' @rdname SensorNoiseModel-class
+#' @aliases defaultSensorNoiseModel
 #' @return List of the default parameters.
 #' @export
 defaultSensorNoiseModel <- function()
@@ -22,7 +21,10 @@ defaultSensorNoiseModel <- function()
   return(par)
 }
 
-### Constructor of SensorNoiseModel class.
+#' Constructor method of SensorNoiseModel Class.
+#'
+#' @name SensorNoiseModel
+#' @rdname SensorNoiseModel-class
 setMethod("initialize", "SensorNoiseModel", function(.Object,
   # common for sub-classes
   num="numeric", gases="numeric", gnames="character", concUnits="character", concUnitsInt="character",
@@ -122,6 +124,11 @@ setMethod("initialize", "SensorNoiseModel", function(.Object,
   return(.Object)
 })
 
+#' Wrapper function SensorNoiseModel.
+#'
+#' @name SensorNoiseModel
+#' @rdname SensorNoiseModel-class
+#' @param ... parameters of constructor.
 #' @export
 SensorNoiseModel <- function(...)
 {
@@ -131,6 +138,9 @@ SensorNoiseModel <- function(...)
 #----------------------------
 # Plot Methods
 #----------------------------
+
+#' @rdname plot-methods
+#' @aliases plot,SensorNoiseModel-method
 setMethod("plot", "SensorNoiseModel", function (x, y, ...) 
 {
   yval <- c("noise", "walk", "barplot")
@@ -174,7 +184,7 @@ plot.SensorNoiseModel.noise <- function(x, y, n, coef,
    
   col <- grey.colors(ncoef(x), start=0.3, end=0.7) 
   
-  matplot(ncoef, t='l', col=col, lwd = lwd, lty = lty,
+  matplot(ncoef, type = 'l', col=col, lwd = lwd, lty = lty,
     bty='n',
     main=main, xlab = xlab, ylab = ylab, ...)  
 }
@@ -244,8 +254,12 @@ plot.SensorNoiseModel.walk <- function(x, y, n = 100, k = 5, coef, coefind = 1:2
 # Get/Set Methods
 #----------------------------
 
+#' @rdname get-methods
+#' @aliases ncoef,SensorNoiseModel-method
 setMethod("ncoef", "SensorNoiseModel", function(x) nrow(x@sndata))
 
+#' @rdname get-methods
+#' @aliases coefnames,SensorNoiseModel-method
 setMethod("coefnames", "SensorNoiseModel", function(x) 
 {
   ncoef <- ncoef(x)
@@ -281,6 +295,8 @@ setMethod("scaledNoiseSd", "SensorNoiseModel", function(object, ...)
 # Predict Methods
 #----------------------------
 
+#' @rdname model-methods
+#' @aliases predict,SensorNoiseModel-method
 setMethod ("predict", "SensorNoiseModel", function(object, coef, n, ...)
 { 
   if(missing(coef)) 

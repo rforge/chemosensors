@@ -21,7 +21,8 @@ p
 # - sensors with affinities C > A: 2, 1, 3, ...
 
 # 1) sensors with affinities A > C
-# - set drift noise level 'dsd' to zero, in order to see more a class-relevant information, than drift
+# - set drift noise level 'dsd' to zero, 
+#   in order to see more a class-relevant information, than drift
 sa1 <- SensorArray(num = c(13, 14, 17), dsd = 0)
 
 # look at the level of signal in reponse to pure analytes and to a mixture

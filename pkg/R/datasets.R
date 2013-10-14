@@ -31,10 +31,10 @@
 #' \code{0.975}\%.
 #'
 #' @name UNIMANshort
-#' @rdname www-UNIMANshort
+#' @rdname UNIMANshort
 #' @docType data
 #' @keywords data
-#' @seealso \code{\link{SensorModel}}, \code{\link{SensorArrayModel}}
+#' @seealso \code{\link{SensorModel}}, \code{\link{SensorModel}}
 #' @example inst/examples/UNIMANshort-data.R
 NULL
 
@@ -65,10 +65,10 @@ NULL
 #' }
 #'
 #' @name UNIMANsnoise
-#' @rdname www-UNIMANsnoise
+#' @rdname UNIMANsnoise
 #' @docType data
 #' @keywords data
-#' @seealso \code{\link{SensorNoiseClass}}
+#' @seealso \code{\link{SensorNoiseModel}}
 #' @example inst/examples/UNIMANsnoise-data.R
 NULL
 
@@ -91,10 +91,10 @@ NULL
 #' }
 #'
 #' @name UNIMANdnoise
-#' @rdname www-UNIMANdnoise
+#' @rdname UNIMANdnoise
 #' @docType data
 #' @keywords data
-#' @seealso \code{\link{DriftNoiseClass}}
+#' @seealso \code{\link{DriftNoiseModel}}
 #' @example inst/examples/UNIMANdnoise-data.R
 NULL
 
@@ -128,9 +128,25 @@ NULL
 #'
 #'
 #' @name UNIMANsorption
-#' @rdname www-UNIMANsorption
+#' @rdname UNIMANsorption
 #' @docType data
 #' @keywords data
 #' @seealso \code{\link{SorptionModel}}
 #' @example inst/examples/UNIMANsorption-data.R
+NULL
+
+#' Dataset UNIMANdistr
+#' 
+#' @name UNIMANdistr
+#' @rdname UNIMANdistr
+#' @docType data
+#' @keywords data
+NULL
+
+#' Dataset UNIMANtransient
+#' 
+#' @name UNIMANtransient
+#' @rdname UNIMANtransient
+#' @docType data
+#' @keywords data
 NULL

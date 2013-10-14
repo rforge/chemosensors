@@ -7,12 +7,10 @@ NULL
 # Class constructor
 #----------------------------
 
-#' Get model names of class \code{\link{Sensor}}.
-#' @name SensorModelNames
-#' @rdname pub-SensorModelNames
-#' @keywords SensorModel
+#' Function to get model names of class \code{\link{SensorModel}}.
+#' @rdname SensorModel-class
+#' @aliases SensorModelNames
 #' @return Character vector of model names.
-#@example inst/examples/getSensorModelNames.R
 #' @export
 SensorModelNames <- function()
 {
@@ -20,12 +18,10 @@ SensorModelNames <- function()
   return(c("plsr", "mvr", "broken-stick", "ispline"))
 }
 
-#' Get default constructor parameters of class \code{\link{SensorModel}}.
-#' @name defaultParSensorModel
-#' @rdname pub-defaultParSensorModel
-#' @keywords SensorModel defaults
+#' Function to get default constructor parameters of class \code{\link{SensorModel}}.
+#' @rdname SensorModel-class
+#' @aliases defaultParSensorModel
 #' @return List of the default parameters.
-#@example inst/examples/defaultParSensorModel.R
 #' @export
 defaultParSensorModel <- function()
 {
@@ -40,7 +36,10 @@ defaultParSensorModel <- function()
   return(par)
 }
 
-### Constructor of SensorModel class.
+#' Constructor method of SensorModel Class.
+#'
+#' @name SensorModel
+#' @rdname SensorModel-class
 setMethod("initialize", "SensorModel", function(.Object,
   # common for sub-classes
   nsensors="numeric", num="numeric", gases="numeric", gnames="character", concUnits="character", concUnitsInt="character",
@@ -261,6 +260,11 @@ setMethod("initialize", "SensorModel", function(.Object,
   return(.Object)
 })
 
+#' Wrapper function SensorModel.
+#'
+#' @name SensorModel
+#' @rdname SensorModel-class
+#' @param ... parameters of constructor.
 #' @export
 SensorModel <- function(...)
 {
@@ -269,18 +273,18 @@ SensorModel <- function(...)
 
 ### Function 'initConc'
 
-#' Derive the concentration range.
-#'
-#' Concentration values of critical, saturation, minimal and maximum levels.
-#'
-#' @param object A \code{\link{SensorModel}} object
-#' @param conc Concentration matrix.
-#' @param type Type of concentration values: \code{crit}, \code{sat}, \code{min} and \code{max}. 
-#' @param sat.factor Factor by wich the maximum concentration value in \code{conc} is multiplicated.
-#' @return Concentration values for all gases.
-#' @name initConc
-#' @rdname int-initConc
-#' @keywords SensorModel
+# Derive the concentration range.
+#
+# Concentration values of critical, saturation, minimal and maximum levels.
+#
+# @param object A \code{\link{SensorModel}} object
+# @param conc Concentration matrix.
+# @param type Type of concentration values: \code{crit}, \code{sat}, \code{min} and \code{max}. 
+# @param sat.factor Factor by wich the maximum concentration value in \code{conc} is multiplicated.
+# @return Concentration values for all gases.
+# @name initConc
+# @rdname int-initConc
+# @keywords SensorModel
 initConc <- function(object, conc, type, sat.factor)
 { 
   ngases <- object@ngases
@@ -298,11 +302,6 @@ initConc <- function(object, conc, type, sat.factor)
   return(out.conc)
 }
 
-#' Derive coeffNonneg parameter.
-#'
-#' @name initCoeffNonneg
-#' @rdname int-initCoeffNonneg
-#' @keywords SensorModel
 initCoeffNonneg <- function(model, missing.coeffNonneg, coeffNonneg.par)
 {
   coeffNonneg.int <- switch(model, 
@@ -322,6 +321,9 @@ initCoeffNonneg <- function(model, missing.coeffNonneg, coeffNonneg.par)
 #----------------------------
 # Plot Methods
 #----------------------------
+
+#' @rdname plot-methods
+#' @aliases plot,SensorModel-method
 setMethod("plot", "SensorModel", function (x, y, ...) 
 {
   yval <- c("response", "predict")
@@ -379,7 +381,8 @@ plot.SensorModel.response <- function(x, y,
 # Predict Methods
 #----------------------------
 
-### Method coefficients
+#' @rdname get-methods
+#' @aliases coefficients,SensorModel-method
 setMethod("coefficients", "SensorModel", function(object, ...)
 {
   nsensors <- nsensors(object)
@@ -391,13 +394,16 @@ setMethod("coefficients", "SensorModel", function(object, ...)
   return(coef)
 })
 
-### Method ncoef
+#' @rdname get-methods
+#' @aliases ncoef,SensorModel-method
 setMethod("ncoef", "SensorModel", function(x)
 {
   length(coef(x@dataModel[[1]]))
 })
 
-### Method predict
+
+#' @rdname model-methods
+#' @aliases predict,SensorModel-method
 setMethod("predict", "SensorModel", function(object, conc, coef="numeric", concUnits="default", ...)
 {
   if(missing(coef)) coef <- coef(object)
@@ -419,7 +425,7 @@ setMethod("predict", "SensorModel", function(object, conc, coef="numeric", concU
 
 ### Method sdataModel
 setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", concUnits="default", enableDyn = "logical", 
-  nclusters = getOption("cores"), ...)
+  cores = getOption("cores"), nclusters, ...)
 {  
   if(missing(coef)) coef <- coef(object)
   if(concUnits == "default") concUnits <- concUnits(object)
@@ -428,11 +434,19 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
   if(concUnitsInt(object) != concUnits)
     stop("Error in SensorModel::sdataModel: 'concUnits' is different from slot 'concUnitsInt'.")    
 
-  if(is.null(nclusters)) nclusters <- 1
-
-  if(nclusters > 1) {q
-    cat(" * Started computing in parallel on", nclusters, "CPU cores (if available) (SensorModel::sdataModel).\n")
-    require(multicore)
+  if(is.null(cores)) {
+    if(!missing(nclusters)) { 
+      cores <- nclusters 
+    } else {
+      cores <- 1
+    }
+  }
+  
+  if(cores > 1) {
+    cat(" * Started computing in parallel on", cores, "CPU cores (if available) (SensorModel::sdataModel).\n")
+    if(!require(multicore)) {
+        stop("Package `multicore` is needed for parallel computing.")
+    } 
   }
 
   ngases <- ngases(object)
@@ -478,12 +492,12 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
       sdatai
     }
     
-    if(nclusters == 1) {
+    if(cores == 1) {
       sdata.out <- sapply(idx(object), run.sdata, simplify = FALSE)
     }
     else {
       sdata.out <- multicore::mclapply(idx(object), run.sdata, 
-        mc.cores = nclusters, mc.silent = TRUE, mc.cleanup = TRUE)
+        mc.cores = cores, mc.silent = TRUE, mc.cleanup = TRUE)
     }
     
     stopifnot(length(sdata.out) == nsensors)
@@ -520,12 +534,12 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
       sdatai
     }
 
-    if(nclusters == 1) {
+    if(cores == 1) {
       sdata.out <- sapply(idx(object), run.sdata, simplify = FALSE)
     }
     else {
       sdata.out <- multicore::mclapply(idx(object), run.sdata, 
-        mc.cores = nclusters, mc.silent = TRUE, mc.cleanup = TRUE)
+        mc.cores = cores, mc.silent = TRUE, mc.cleanup = TRUE)
     }
           
     stopifnot(length(sdata.out) == nsensors)
@@ -535,6 +549,10 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
   }
   else
     stop("Error in SensorModel::sdataModel: 'coef' dimenstion is unknown.")    
+
+  if(cores > 1) {
+    cat(" * Finished computing in parallel.\n")
+  }
   
   return(sdata)
 })

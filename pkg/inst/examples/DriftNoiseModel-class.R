@@ -19,7 +19,8 @@ plot(dn)
 #  - plot types 'y': barplot, noise, walk
 dn <- DriftNoiseModel() # default model
 
-plot(dn, "noise", main="plot(dn, 'noise')") # default plot type, i.e. 'plot(dn)' does the same plotting
+plot(dn, "noise", main="plot(dn, 'noise')") 
+# default plot type, i.e. 'plot(dn)' does the same plotting
 
 data(UNIMANshort)
 X <- UNIMANshort$dat[, num(dn)]
@@ -35,11 +36,14 @@ conc <- getConc(sc)
 
 sdata <- predict(sa, conc)
 
-p1 <- plotPCA(sa, conc = conc, sdata = sdata, air = FALSE, main = "feature: transient")
+p1 <- plotPCA(sa, conc = conc, sdata = sdata, air = FALSE, 
+  main = "feature: transient")
 p1
 
-p2 <- plotPCA(sa, conc = conc, sdata = sdata, feature = "ss", main = "feature: steady-state")
+p2 <- plotPCA(sa, conc = conc, sdata = sdata, feature = "ss", 
+  main = "feature: steady-state")
 p2
 
-p3 <- plotPCA(sa, conc = conc, sdata = sdata, feature = "step", main = "feature: step")
+p3 <- plotPCA(sa, conc = conc, sdata = sdata, feature = "step", 
+  main = "feature: step")
 p3

@@ -6,8 +6,7 @@
 
 #' Class DriftCommonModel.
 #' @name DriftCommonModel-class
-#' @rdname int-DriftCommonModel-class
-#' @keywords class
+#' @rdname DriftCommonModel-class
 #' @exportClass DriftCommonModel
 {}
 
@@ -18,6 +17,14 @@ setClass("DriftCommonModel")
 # Class constructor
 #----------------------------
 
+#' Constructor method of DriftCommonModel Class.
+#'
+#' @param dmodel Name of the drift model. The only supported value is \code{"cpc"}.
+#' @param ... Parameters of constructor.
+#' @return AN object of class \code{DriftCommonModel}
+#'
+#' @name DriftCommonModel
+#' @rdname DriftCommonModel-class
 #' @export
 DriftCommonModel <- function(dmodel, ...)
 {
@@ -27,13 +34,6 @@ DriftCommonModel <- function(dmodel, ...)
 }
 
 ### Function 'initCommonModelCpcPlsr'
-
-#' Build a common model based on common principal component analysis.
-#'
-#' @return A \code{\link{DriftCommonModel}} object.
-#' @name initCommonModelCcPlsr
-#' @rdname int-initCommonModelCcPlsr
-#' @keywords DriftNoiseModel
 initCommonModelCpcPlsr <- function(dspace, ndcomp, ndvar, 
   centered=TRUE, scaled=TRUE, center=centered, scale=scaled, centerX=NULL, scaleX=NULL, ...)
 {   

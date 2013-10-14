@@ -7,12 +7,6 @@ NULL
 # Class defintion
 #----------------------------
 
-#' The function \code{validObject} for class \code{\link{SorptionModel}}.
-#'
-#' @param object A \code{\link{SorptionModel}} object
-#' @return TRUE if the object is valid. Otherwise, a character error string.
-#' @name validSorptionModel
-#' @rdname int-validSorptionModel
 validSorptionModel <- function(object)
 {
   return(TRUE)
@@ -67,9 +61,8 @@ validSorptionModel <- function(object)
 #' Normalization can be disable by setting parameter \code{Knorm} to \code{FALSE},
 #' that results in usage of the sorption \code{K} parameters, equal to UNIMAN ones.
 #' 
-#' @name SorptionModel
-#' @rdname www-SorptionModel
-#' @keywords SorptionModel-class
+#' @name SorptionModel-class
+#' @rdname SorptionModel-class
 #' @seealso \code{\link{UNIMANsorption}}
 #' @example inst/examples/SorptionModel-class.R
 #' @exportClass SorptionModel
@@ -91,7 +84,8 @@ setClass(Class="SorptionModel",
 # Print/Show Methods
 #----------------------------
 
-#' @exportMethod print
+#' @rdname class-methods
+#' @aliases print,SorptionModel-method
 setMethod ("print","SorptionModel", function(x, ...)
 {
   cat(" Sorption Model\n")
@@ -99,7 +93,6 @@ setMethod ("print","SorptionModel", function(x, ...)
   cat(" -", ngases(x), "gases", paste(gnames(x), collapse=", "), "\n")
 })
 
-#' @exportMethod show
 setMethod ("show","SorptionModel", function(object)
 {
   cat(" Sorption Model (knum ", knumStr(object), "), alpha ", alpha(object), "\n", sep='')
@@ -114,7 +107,10 @@ setMethod ("show","SorptionModel", function(object)
 # Get/Set Methods
 #----------------------------
 
+#' @rdname SorptionModel-class
+#' @aliases knum,SorptionModel-method
 setMethod("knum", "SorptionModel", function(x) x@knum)
+
 setMethod("knumStr", "ANY", function(x) {
   num <- x@knum
   n <- length(num)
@@ -123,9 +119,17 @@ setMethod("knumStr", "ANY", function(x) {
     paste(paste(num[1:3], collapse=", "), " ... ", num[n], sep=''))
   return(numStr)
 })
+
+#' @rdname SorptionModel-class
+#' @aliases concUnitsSorption,SorptionModel-method
 setMethod("concUnitsSorption", "SorptionModel", function(x) x@concUnitsSorption)
+
+#' @rdname get-methods
+#' @aliases alpha,SorptionModel-method
 setMethod("alpha", "SorptionModel", function(x) x@alpha)
 
+#' @rdname get-methods
+#' @aliases nsensors,SorptionModel-method
 setMethod("nsensors", "SorptionModel", function(x) length(x@knum))
 
 #----------------------------

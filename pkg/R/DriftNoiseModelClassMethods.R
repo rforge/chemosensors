@@ -7,24 +7,22 @@ NULL
 # Class constructor
 #----------------------------
 
-#' Get model names of class \code{\link{DriftNoiseModel}}.
-#' @name DriftModelNames
-#' @rdname pub-DriftModelNames
-#' @keywords DriftNoiseModel
+#' Function to get model names of class \code{\link{DriftNoiseModel}}.
+#'
+#' @rdname DriftNoiseModel-class
+#' @aliases DriftModelNames
 #' @return Character vector of model names.
-#@example inst/examples/getDriftModelNames.R
 #' @export
 DriftModelNames <- function()
 {
   return(c("cpc"))
 }
 
-#' Get default constructor parameters of class \code{\link{DriftNoiseModel}}.
-#' @name defaultParDriftNoiseModel
-#' @rdname pub-defaultParDriftNoiseModel
-#' @keywords DriftNoiseModel defaults
+#' Function to get default constructor parameters of class \code{\link{DriftNoiseModel}}.
+#'
+#' @rdname DriftNoiseModel-class
+#' @aliases defaultParDriftNoiseModel
 #' @return List of the default parameters.
-#@example inst/examples/defaultParDriftNoiseModel.R
 #' @export
 defaultParDriftNoiseModel <- function()
 {
@@ -35,7 +33,10 @@ defaultParDriftNoiseModel <- function()
   return(par)
 }
 
-### Constructor of DriftNoiseModel class.
+#' Constructor method of DriftNoiseModel Class.
+#'
+#' @name DriftNoiseModel
+#' @rdname DriftNoiseModel-class
 setMethod("initialize", "DriftNoiseModel", function(.Object,
   # common for sub-classes
   num = "numeric", 
@@ -120,6 +121,11 @@ setMethod("initialize", "DriftNoiseModel", function(.Object,
   return(.Object)
 })
 
+#' Wrapper function DriftNoiseModel.
+#'
+#' @name DriftNoiseModel
+#' @rdname DriftNoiseModel-class
+#' @param ... parameters of constructor.
 #' @export
 DriftNoiseModel <- function(...)
 {
@@ -129,6 +135,8 @@ DriftNoiseModel <- function(...)
 #----------------------------
 # Plot Methods
 #----------------------------
+#' @rdname plot-methods
+#' @aliases plot,DriftNoiseModel-method
 setMethod("plot", "DriftNoiseModel", function (x, y, ...) 
 {
   yval <- c("noise", "pc")
@@ -156,7 +164,7 @@ plot.DriftNoiseModel.noise <- function(x, y, n = 100, sdata,
   col <- grey.colors(nsensors, start=0.3, end=0.7) 
   
   lty <- rep(lty, each=nsensors)
-  matplot(cbind(sdata, nsdata), t='l', col=col, lwd = lwd, lty = lty,
+  matplot(cbind(sdata, nsdata), type = 'l', col=col, lwd = lwd, lty = lty,
     bty='n',
     main=main, xlab = xlab, ylab = ylab, ...)  
 }
@@ -233,7 +241,8 @@ setMethod("scaledNoiseSd", "DriftNoiseModel", function(object, ...)
 # Predict Methods
 #----------------------------
 
-### Method predict
+#' @rdname model-methods
+#' @aliases predict,DriftNoiseModel-method
 setMethod("predict", "DriftNoiseModel", function(object, sdata, ...)
 {
   sdataModel(object, sdata=sdata, ...)  # sdataModel

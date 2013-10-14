@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>SensorDynamics-class. chemosensors 0.7.7</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">chemosensors 0.7.7</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Method nconst.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>defaultParSensorDynamics()
+
+SensorDynamics(...)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>...</dt>
+      <dd>parameters of constructor.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>List of the default parameters.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Method nconst.</p>
+  
+      <p>Method trange.</p>
+  
+      <p>Method tconst.</p>
+  
+      <p>Class <code><a href='SensorDynamics-class.html'>SensorDynamics</a></code> emulates a temporal
+  dynamics of the sensor as a low-pass filter.</p>
+  
+      <p>Function to get default constructor parameters of class
+  <code><a href='SensorDynamics-class.html'>SensorDynamics</a></code>.</p>
+  
+      <p>Constructor method of SensorDynamics Class.</p>
+  
+      <p>Wrapper function SensorDynamics.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>Slots of the class: <table><tr><td> <code>num</code> </td>
+<td> Sensor
+  number (<code>1:17</code>). The default value is <code>1</code>. </td>
+</tr><tr><td>
+  <code>gases</code> </td>
+<td> Gas indices. </td>
+</tr><tr><td> <code>ngases</code> </td>
+<td> The
+  number of gases. </td>
+</tr><tr><td> <code>gnames</code> </td>
+<td> Names of gases.
+  </td>
+</tr><tr><td> <code>concUnits</code> </td>
+<td> Concentration units external to
+  the model. </td>
+</tr><tr><td> <code>concUnitsInt</code> </td>
+<td> Concentration
+  units internal to the model. </td>
+</tr><tr><td> <code>tunit</code> </td>
+<td> Time
+  length of the gas pulses. The default value is <code>60</code>.
+  </td>
+</tr><tr><td> <code>enableDyn</code> </td>
+<td> A logical value indicates
+  whether time dynamics is enabled. It is <code>TRUE</code> if
+  <code>tunit</code> is greater than one. </td>
+</tr><tr><td> <code>tconst</code> </td>
+<td>
+  Time constants of the low pass filter. </td>
+</tr></table></p>
+  
+      <p>Methods of the class: <table><tr><td> <code>predict</code> </td>
+<td>
+  Predicts a temporal response of the sensor. </td>
+</tr><tr><td>
+  <code>coef</code> </td>
+<td> Extracts the time constants of the
+  filter. </td>
+</tr></table></p>
+  
+      <p>The <code>plot</code> method has one type (parameter <code>y</code>):
+  <table><tr><td> <code>predict</code> </td>
+<td> Depicts a temporal
+  signal of the model. </td>
+</tr></table></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>### Sensor dynamics: default initialization
+sdyn <- SensorDynamics()
+
+sdyn # equivalent to: show(sdyn)
+</div>
+<div class='output'> Sensor Dynamics Model (num 1)
+</div>
+<div class='input'>
+print(sdyn)
+</div>
+<div class='output'> Sensor Dynamics Model
+ - num 1 
+ - 3 gases A, B, C 
+</div>
+<div class='input'>
+#plot(sdyn)
+
+### SensorDynamics as a part of SensorModel
+sm <- SensorModel(tunit = 60)
+sdyn <- as(sm, "SensorDynamics")
+
+### Demo 1: response to pulses of different concentrations
+set.seed(5)
+sa <- SensorArray(tunit = 60, csd = 1, ssd = 0, dsd = 0)
+
+# mixture at low concentrations
+p1 <- plotSignal(sa, set = c("A 0.01", "C 0.1", "A 0.01, C 0.1"), main = "Low concentrations")
+p1
+</div>
+<p><img src='SensorDynamics-class-6.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+# mixture at high concentrations
+p2 <- plotSignal(sa, set = c("A 0.05", "C 1", "A 0.05, C 1"), main = "High concentrations")
+p2
+</div>
+<p><img src='SensorDynamics-class-8.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+###
+sa <- SensorArray(tunit = 60, nsd = 0)
+
+p3 <- plotSignal(sa, set = c("A", "B", "C"))
+p3
+</div>
+<p><img src='SensorDynamics-class-10.png' alt='' width='400' height='400' /></p>
+<div class='input'>
+p4 <- plotPCA(sa, set = c("A", "B", "C"))
+p4
+</div>
+<p><img src='SensorDynamics-class-12.png' alt='' width='400' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>SensorDynamics</li><li>SensorDynamics-class</li><li>defaultParSensorDynamics</li><li>nconst</li><li>nconst,SensorDynamics-method</li><li>tconst</li><li>tconst,SensorDynamics-method</li><li>trange</li><li>trange,SensorDynamics-method</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  <code><a href='UNIMANtransient.html'>UNIMANtransient</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

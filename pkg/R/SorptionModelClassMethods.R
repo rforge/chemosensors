@@ -7,10 +7,9 @@ NULL
 # Class constructor
 #----------------------------
 
-#' Get default constructor parameters of class \code{\link{SorptionModel}}.
-#' @name defaultSorptionModel
-#' @rdname pub-defaultSorptionModel
-#' @keywords SorptionModel defaults
+#' Function to get default constructor parameters of class \code{\link{SorptionModel}}.
+#' @rdname SorptionModel-class
+#' @aliases defaultSorptionModel
 #' @return List of the default parameters.
 #' @export
 defaultSorptionModel <- function()
@@ -23,7 +22,10 @@ defaultSorptionModel <- function()
   return(par)
 }
 
-### Constructor of SorptionModel class.
+#' Constructor method of SorptionModel Class.
+#'
+#' @name SorptionModel
+#' @rdname SorptionModel-class
 setMethod("initialize", "SorptionModel", function(.Object,
   # common for sub-classes
   gases="numeric", gnames="character", concUnits="character", concUnitsSorption="character",
@@ -163,6 +165,11 @@ setMethod("initialize", "SorptionModel", function(.Object,
   return(.Object)
 })
 
+#' Wrapper function SorptionModel.
+#'
+#' @name SorptionModel
+#' @rdname SorptionModel-class
+#' @param ... parameters of constructor.
 #' @export
 SorptionModel <- function(...)
 {
@@ -184,6 +191,9 @@ initSorptionK <- function(K, Kmin, Kmax)
 #----------------------------
 # Plot Methods
 #----------------------------
+
+#' @rdname plot-methods
+#' @aliases plot,SorptionModel-method
 setMethod("plot", "SorptionModel", function (x, y, ...) 
 {
   yval <- c("response", "heatmap", "data", "predict")
@@ -238,7 +248,7 @@ plot.SorptionModel.predict <- function(x, y, n, conc, concUnits="default",
   lty <- rep(lty, each=ngases(x))
   ylab <- paste(ylab, ConcUnitsStr(concUnits), sep=", ")
   
-  matplot(cbind(nconc, conc), t='l', col = col, lty=lty, lwd=lwd,
+  matplot(cbind(nconc, conc), type = 'l', col = col, lty=lty, lwd=lwd,
     bty='n', 
     main=main, xlab = xlab, ylab = ylab)  
 }
@@ -279,7 +289,7 @@ plot.SorptionModel.response <- function(x, y,
   }
   
   col <- gcol(x, gases=rep(gases, each=nsensors))  
-  matplot(xp, yp, bty='n', t='l', col=col, 
+  matplot(xp, yp, bty='n', type='l', col=col, 
     lwd = lwd, lty = lty,
     xlim = xlim,
     main=main, xlab = xlab, ylab = ylab)  
@@ -293,6 +303,8 @@ plot.SorptionModel.response <- function(x, y,
 # Predict Methods
 #----------------------------
 
+#' @rdname model-methods
+#' @aliases predict,SorptionModel-method
 setMethod ("predict", "SorptionModel", function(object, conc, concUnits="default", ...)
 {  
   if(concUnits == "default") concUnits <- concUnits(object)

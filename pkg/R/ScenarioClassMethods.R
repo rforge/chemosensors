@@ -7,10 +7,9 @@ NULL
 # Class constructor
 #----------------------------
 
-#' Get default constructor parameters of class \code{\link{Scenario}}.
-#' @name defaultParScenario
-#' @rdname pub-defaultParScenario
-#' @keywords Scenario defaults
+#' Function to get default constructor parameters of class \code{\link{Scenario}}.
+#' @rdname Scenario-class
+#' @aliases defaultParScenario
 #' @return List of the default parameters.
 #' @export
 defaultParScenario <- function()
@@ -22,7 +21,10 @@ defaultParScenario <- function()
   return(par)
 }
 
-### Constructor of Scenario class.
+#' Constructor method of Scenario Class.
+#'
+#' @name Scenario
+#' @rdname Scenario-class
 setMethod("initialize", "Scenario", function(.Object,
   # specific for class Scenario
   T, nT, V, nV,
@@ -83,13 +85,16 @@ setMethod("initialize", "Scenario", function(.Object,
   .Object@tunit <- tunit
   .Object@randomize <- randomize
   .Object@seed <- seed  
-
-  .Object <- randomize(.Object)
-
+  
   validObject(.Object)
   return(.Object)
 })
 
+#' Wrapper function Scenario.
+#'
+#' @name Scenario
+#' @rdname Scenario-class
+#' @param ... parameters of constructor.
 #' @export
 Scenario <- function(...)
 {
@@ -138,8 +143,14 @@ randomize <- function(object)
 #----------------------------
 # Export Methods
 #----------------------------
+#' @rdname scenario-methods
+#' @aliases sdata.frame,Scenario-method
 setMethod("sdata.frame", "Scenario", function(x, unique = FALSE, step = FALSE, ...) 
 { 
+  if(x@randomize) {
+    x <- randomize(x)
+  }
+  
   lab <- set2lab(x, unique = unique)
   df <- lab2df(x, lab, step = step)
   
@@ -155,14 +166,101 @@ setMethod("sdata.frame", "Scenario", function(x, unique = FALSE, step = FALSE, .
 # Get/Set Methods
 #----------------------------
 
+#' @name add<-
+#' @rdname scenario-methods
+#' @aliases add<-,Scenario-method
 setReplaceMethod("add", "Scenario", function(object, value) 
 {
-  stop("not implemented yet")
-    
+  if(class(value) != "list")  
+    stop("Error in Scenario::add: value must be a list (gas, conc. level, #samples).")
+  if(length(value) < 3)
+    stop("Error in Scenario::add: value must be a list of 3 entries.")
+  if(length(value) == 3)  # if 3 parameters, the 4th will be added (Training Set)
+    value <- c(value, "T")
+
+  concUnitsInt <- concUnitsInt(object)
+  gases <- gases(object)
+  gnames <- gnames(object)
+  gind <- gind(object)
+  ngases <- ngases(object)
+ 
+  # parameter #1 (gas)
+  par.gas <- value[[1]]
+  gi <- switch(class(par.gas),
+    character = as.numeric(sapply(par.gas, function(x) which(x == gnames))), 
+    numeric = par.gas,
+    integer = par.gas,    
+    stop("Error in Scenario::add: first entry (gas) must be a character or a number."))
+  if(!length(gi)) 
+    stop("Error in Scenario::add: first entry (gas) is incorrect (wrong gas number or gas character?).")
+  if(sum(is.na(gi)))
+    stop("Error in Scenario::add: first entry (gas) is incorrect (wrong gas character?).")    
+  if(sum(!(gi %in% gind)))
+    stop("Error in Scenario::add: first entry (gas) is incorrect (wrong gas number or gas character?).")    
+
+  gname <- gnames[gi] 
+  cval.max <- concMax(object)[gi]
+  
+  # parameter #2 (conc)
+  cval <- value[[2]]
+  ind <- which(is.na(cval))
+  if(length(ind)) {
+    cval[ind] <- cval.max[ind]
+  }
+  if(!(class(cval) %in% c("numeric", "integer")))
+    stop("Error in Scenario::add: second entry (conc. level) must be a numeric.")
+  if(sum(cval < 0))
+    stop("Error in Scenario::add: second entry (conc. level) must be a non-negative value.")
+  if(length(cval) != length(gi))
+    stop("Error in Scenario::add: second entry (conc. level) must have the same length as the first entry (gas).")  
+
+  # parameter #3 (n)
+  n <- value[[3]]
+  if(!(class(n) %in% c("integer", "numeric")))
+    stop("Error in Scenario::add: third entry (#samples) must be a numeric.")
+  n <- as.integer(n)
+  if(n <= 0)
+    stop("Error in Scenario::add: third entry (#samples) must be a positive integer.")
+
+  # parameter #4 (set)
+  set <- value[[4]]
+  if(class(set) != "character")
+    stop("Error in Scenario::add: forth entry (set) must be a character.")  
+  if(length(set) > 2)
+    stop("Error in Scenario::add: forth entry (set) must be a vector of maximum 2 elements.")  
+
+  if(!(sum(set %in% c("T", "V"))))
+    stop("Error in Scenario::add: forth entry (set) is unknown; must be 'T', 'V' or 'I'.")  
+
+  # check par.
+  if(sum(cval > 2.0 * cval.max)) 
+    warning("warning in Scenario::add: second entry (conc. level) ", paste(cval, collapse=", "), 
+    " is greater than the 2 maximum levels ", paste(2.0 * cval.max, collapse=", "), "", " for gas ", paste(gname, collapse=", "), " at conc. units '", 
+    concUnitsInt, "'.", sep="")
+  
+  ### update slots `T`, `nT`, `V` and `nV`
+  gas <- gnames[gi]
+  lab <- paste(gas, cval, collapse = ", ")
+  
+  for(seti in set) {
+    if(seti == "T") {
+      object@T <- c(object@T, lab)
+      object@nT <- c(object@nT, n)
+    }
+    else if(seti == "V") {
+      object@V <- c(object@V, lab)
+      object@nV <- c(object@nV, n)
+    }
+    else
+      stop("Error in Scenario:add: updating slots.")
+  }
+  
   validObject(object)
   return(object)
 })
 
+#' @rdname scenario-methods
+#' @aliases set2lab,Scenario-method
 setMethod("set2lab", "Scenario", function(object, unique = FALSE, ...)
 {
   T <- object@T
@@ -203,7 +301,8 @@ setMethod("set2lab", "Scenario", function(object, unique = FALSE, ...)
   return(df)
 })
 
-
+#' @rdname scenario-methods
+#' @aliases lab2df,Scenario-method
 setMethod("lab2df", "Scenario", function(object, lab, step = FALSE, ...)
 {
   cmatrix <- matrix(nrow = 0, ncol = object@ngases)
@@ -234,6 +333,8 @@ setMethod("lab2df", "Scenario", function(object, lab, step = FALSE, ...)
   return(of)
 })
 
+#' @rdname scenario-methods
+#' @aliases label2df,Scenario-method
 setMethod("label2df", "Scenario", function(object, value, nsamples = 0, step = FALSE, ...)
 {
   if(class(value) != "list")  
@@ -346,6 +447,8 @@ setMethod("label2df", "Scenario", function(object, value, nsamples = 0, step = F
 #----------------------------
 # Model Methods
 #----------------------------
+#' @rdname model-methods
+#' @aliases concSample,Scenario-method
 setMethod("concSample", "Scenario", function(object, n = 1, ...)
 {
   ngases <- ngases(object)
@@ -363,7 +466,8 @@ setMethod("concSample", "Scenario", function(object, n = 1, ...)
   return(df)
 })
 
-### Method getConc
+#' @rdname model-methods
+#' @aliases getConc,Scenario-method
 setMethod("getConc", "Scenario", function(object, set, ...)
 {
   df <- sdata.frame(object)
@@ -388,9 +492,11 @@ setMethod("getConc", "Scenario", function(object, set, ...)
 #----------------------------
 # Plot Methods
 #----------------------------
-#' @export
+
 plotScenario <- function(...) plot.Scenario.class(...)
 
+#' @rdname plot-methods
+#' @aliases plot,Scenario-method
 setMethod("plot", "Scenario", function (x, y, ret = TRUE, ...) 
 {
   # missing
@@ -452,18 +558,18 @@ plot.Scenario.class <- function(x, y, concUnits = "character",
     }    
   }
   
-  mf <- mutate(mf,
-    set = ifelse(set == "T", "Training Set", ifelse(set == "V", "Validation Set", "Unknown Set")),
-    gas = variable)
+  #mf <- mutate(mf,
+  #  set = ifelse(set == "T", "Training Set", ifelse(set == "V", "Validation Set", "Unknown Set")),
+  #  gas = variable)
 
-  p <- ggplot(mf, aes(x = time, y = value)) + 
-    geom_area(aes(color = gas, fill = gas), position = "stack") + 
-    scale_fill_manual(values = col) + 
-    scale_colour_manual(values = rep("white", length(col))) + 
-    facet_grid(scenario ~ set) +
-    labs(x = xlab, y = ylab) 
+  #p <- ggplot(mf, aes(x = time, y = value)) + 
+  #  geom_area(aes(color = gas, fill = gas), position = "stack") + 
+  #  scale_fill_manual(values = col) + 
+  #  scale_colour_manual(values = rep("white", length(col))) + 
+  #  facet_grid(scenario ~ set) +
+  #  labs(x = xlab, y = ylab) 
   
-  return(p)    
+  #return(p)    
 }  
 
 plot.Scenario.time <- function(x, y, concUnits = "character", 
@@ -512,6 +618,9 @@ plot.Scenario.time <- function(x, y, concUnits = "character",
     }    
   }
   
+  # dummy assignment to get rid of errors from `R CMD check` (no visible binding for global variable ‘gas’)
+  set <- variable <- gas <- value <- NULL
+  
   mf <- mutate(mf,
     set = ifelse(set == "T", "Training Set", ifelse(set == "V", "Validation Set", "Unknown Set")),
     gas = variable)
@@ -523,68 +632,6 @@ plot.Scenario.time <- function(x, y, concUnits = "character",
     facet_grid(scenario ~ set) +
     labs(x = xlab, y = ylab) 
   
-  return(p)      
-  
-  ############
-  conc <- cmatrix(x)
-  concUnitsInt <- concUnitsInt(x)
-  if(concUnitsInt != concUnits) conc <- concNorm(x, conc, concUnitsInt=concUnits, concUnits=concUnitsInt) 
-
-  ### plot par.
-  if(missing(lty)) lty <- c(1:3)[gases(x)]
-  if(missing(col)) col <- gcol(x)
-  ylab <- paste(ylab, ", ", ConcUnitsStr(concUnits), sep="")
-
-  ### plot  
-  if(graphics == "base") {
-    matplot(x@df$time, conc, t='l', col=col, lwd = lwd, lty = lty,
-      bty='n',
-      main=main, xlab = xlab, ylab = ylab, ...)  
- 
-    # points
-    if(points) {
-      ind <- which(x@df$tpoint == "gasin")
-      len <- length(ind)
-      if(len) points(x@df[ind, "time"], rep(0, len), pch=16)
-    
-      ind <- which(x@df$tpoint == "airin")
-      len <- length(ind)
-      if(len) points(x@df[ind, "time"], rep(0, len), pch=1)
-    }
-    
-    return(invisible())
-  }
-  else if(graphics == "ggplot") {
-    df <- x@df  
-    df[, gnames] <- conc
-  
-    # filter by non-zero conc.
-    conc.sum <- apply(df[, gnames], 2, sum)
-    gind.nonzero <- which(conc.sum > 0)
-    gind.zero <- which(conc.sum == 0)    
-    stopifnot(length(gind.nonzero) > 1)
-
-    if(length(gind.zero)) df <- df[, -gind.zero]
-    mf <- melt(df, measure.vars = gnames[gind.nonzero])
-    colnames(mf)[which(colnames(mf) == "variable")] <- "gas"
-    
-    #p <- qplot(time, value, data = mf, colour = gas, geom = "line") +
-    #  scale_colour_manual(values = gcol(x)) + 
-    #  facet_grid(gas ~ ., scales = "free_y") + 
-    #  labs(x = xlab, y = ylab.new) + 
-    #  opts(title = main)
-
-    col <- gcol(x)[gind.nonzero]
-    p <- ggplot(mf, aes(x = time, y = value)) +
-      geom_area(aes(colour = gas, fill = gas), position = 'stack') +
-      scale_fill_manual(values = col) + 
-      scale_colour_manual(values = rep("white", length(col))) + 
-      labs(x = xlab, y = ylab) + 
-      opts(title = main)
-      
-      if(facet) p <- p + facet_grid(gas ~ ., scales = "free_y")
-      
-    return(p)
-  }
+  #return(p)      
 }
 

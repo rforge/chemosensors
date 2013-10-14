@@ -1,3 +1,4 @@
+set.seed(1)
 
 ### 1) a concentration matrix of three gases (tunit 4)
 sa <- SensorArray(tunit = 4)
@@ -14,11 +15,11 @@ p1 <- plotSignal(sa, conc = conc, sdata = sdata)
 p1
 
 # get a data.frame of features
-df.transient <- sdata.frame(sa, conc, sdata, feature = "transient")
+df.transient <- sdata.frame(sa, conc = conc, sdata = sdata, feature = "transient")
 
-df.ss <- sdata.frame(sa, conc, sdata, feature = "steady-state")
+df.ss <- sdata.frame(sa, conc = conc, sdata = sdata, feature = "steady-state")
 
-df.step <- sdata.frame(sa, conc, sdata, feature = "step")
+df.step <- sdata.frame(sa, conc = conc, sdata = sdata, feature = "step")
 
 # plot
 p2 <- ggplot(df.transient, aes(x = 1:length(S1))) +
@@ -30,5 +31,5 @@ p2
 df <- rbind(data.frame(df.ss, feature = "steady-state"),
   data.frame(df.step, feature = "step"))
   
-p3 <- ggplot(df, aes(lab, S1, fill = feature)) + geom_bar(position = "dodge")
+p3 <- ggplot(df, aes(lab, S1, fill = feature)) + geom_bar(stat = "identity", position = "dodge")
 p3

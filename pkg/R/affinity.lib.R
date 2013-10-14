@@ -6,6 +6,8 @@ NULL
 # ComputeAffinity Methods
 #----------------------------
 
+#' @rdname compute-methods
+#' @aliases computeAffinity,ANY-method
 setMethod("computeAffinity", "ANY", function(object, method, norm, ...)
 {
   if(missing(method)) method <- "integral"
@@ -45,7 +47,9 @@ computeAffinity.integral <- function(object, cores)
   
   parallel <- (cores > 1)
   if(parallel) {
-    require(doMC)
+    if(!require(doMC)) {
+      stop("Package `doMC` is needef for parallel computation.")
+    }
     registerDoMC(cores)
   }
   
