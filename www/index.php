@@ -95,7 +95,7 @@ install.packages("chemosensors")
 </pre>
 
 <p>
-The package from the CRAN repository (the stable version) will installed.
+The stable version of chemosensors package from the CRAN repository will be installed
 </p>
 
 <h3>Installation from R-forge</h3>
