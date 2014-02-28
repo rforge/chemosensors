@@ -59,6 +59,19 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <!-- end of project description -->
 
+<h3>Citation</h3>
+
+<ol>
+  <li>Ziyatdinov, A., Fernández Diaz, E., Chaudry, A., Marco, S., Persaud, K., & Perera, A. (2013). 
+    A software tool for large-scale synthetic experiments based on polymeric sensor arrays. 
+    Sensors and Actuators B: Chemical, 177, 596–604. doi:10.1016/j.snb.2012.09.093 
+    <a href="http://linkinghub.elsevier.com/retrieve/pii/S0925400512010076">[link]</a></li>
+  <li>Ziyatdinov, A., & Perera-Lluna, A. (2014). 
+    Data Simulation in Machine Olfaction with the R Package Chemosensors. 
+    (H. A. Kestler, Ed.) PLoS ONE, 9(2), e88839. doi:10.1371/journal.pone.0088839
+    <a href="http://dx.plos.org/10.1371/journal.pone.0088839">[link]</a></li>
+</ol>
+
 <h3>References</h3>
 
 <p>
@@ -107,41 +120,8 @@ install.packages("chemosensors", dep=TRUE, repos="http://r-forge.r-project.org")
 <p>That will install the latest development version with all dependencies.</p>
 
 <h3>Installation from source</h3>
-<p>If the installation suggested above fails, it is still possible to install the package from source.
-For example, the local source file is 'chemosensors_0.7.1.tar.gz'.</p> 
 
-<p>The user should run two commands inside R.</p>
-
-Depends:
-    R (>= 2.11.0),
-    methods,
-    stats,
-    pls,
-    plyr,
-    reshape2,
-    ggplot2
-Imports:
-    LearnBayes,
-    quadprog,
-    RColorBrewer
-Suggests:
-    doMC,
-    multicore,
-    car,
-    gridExtra
-
-<pre>
-install.packages("methods", "stats", "pls", "plyr", "reshape2", "ggplot2",
-  "LearnBayes", "quadprog",  "RColorBrewer", "doMC", "multicore", "car", "gridExtra")  
-</pre>
-
-<pre>
-install.packages("chemosensors_0.7.1.tar.gz", repos = NULL)
-</pre>
-
-<p>The first line will install all the required dependencies. 
-The second line will install the package 'chemosensors' from local file.
-</p>
+<p>If the installation suggested above fails, it is still possible to install the package from source.</p> 
 
 <p>
 In the case you don't have the local file of the package sourse, you can get it 
@@ -153,7 +133,6 @@ Commands in Linux are the following.
 svn checkout svn://scm.r-forge.r-project.org/svnroot/chemosensors/pkg
 sudo R CMD INSTALL pkg/
 </pre>
-
 
 <p>Please let us know if you have any problems related to installation or  
 running the software.</p>
@@ -176,7 +155,7 @@ conc[101:200, 3] <- 1 # C
 conc[201:300, 1] <- 0.05 # AC
 conc[201:300, 3] <- 1 # AC
 
-conc <- conc[sample(1:nrow(conc)  ), ]
+conc <- conc[sample(1:nrow(conc)), ]
 
 # sensor array of 5 sensors with parametrized noise levels
 sa <- SensorArray(num=1:5, csd=0.1, ssd=0.1, dsd=0.1)
@@ -187,9 +166,6 @@ plot(sa)
 
 # generate the data
 sdata <- predict(sa, conc)
-
-# plot the data
-plot(sa, "prediction", conc=conc)
 </pre>
 
 <h3>Animation demo</h3>

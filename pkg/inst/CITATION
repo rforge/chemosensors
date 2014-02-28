@@ -11,10 +11,23 @@ citEntry(
     as.person("Krishna C. Persaud"),            
     as.person("Alexandre Perera i Lluna")),
   journal = "Sensors and Actuators B: Chemical",
-  year = "2012",
+  year = "2013",
   textVersion =  paste("A. Ziyatdinov et al.,",
     "A software tool for large-scale synthetic experiments based on polymeric sensor arrays,",
-    "SAB, 2012")
+    "SAB, 2013")
+)
+
+citEntry(
+  entry="article",
+  title = "Data Simulation in Machine Olfaction with the R Package Chemosensors",
+  author = personList(
+    as.person("Andrey Ziyatdinov"),
+    as.person("Alexandre Perera-Lluna")),
+  journal = "PLoS ONE",
+  year = "2014",
+  textVersion =  paste("A. Ziyatdinov & A. Perera-Lluna,",
+    "Data Simulation in Machine Olfaction with the R Package Chemosensors,",
+    "PLoS ONE, 2013")
 )
 
 citFooter("This work was funded from the FP7 European project NEUROChem (http://neurochem.sisbio.recerca.upc.edu/).")
