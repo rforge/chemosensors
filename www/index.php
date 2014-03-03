@@ -194,6 +194,6 @@ Tel.: +34 93 407 07 73</p>
 <p>This work was funded from the European Community's Seventh Framework Programme (FP7/2007-2013) under grant agreement no. 216916: Biologically inspired computation for chemical sensing (NEUROChem), the Ramon y Cajal program from the Spanish Ministerio de Educacion y Ciencia and TEC2010-20886-C02-02. CIBER-BBN is an initiative of the Spanish ISCIII.</p>
 
 <h3>Updated</h3>
-<p>This page was last updated: 2013-10-13.</p>
+<p>This page was last updated: 2014-03-04.</p>
 </body>
 </html>
