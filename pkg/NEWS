@@ -1,3 +1,9 @@
+chemosensors 0.7.8
+==================
+
+* This version was submitted to CRAN #2. 
+  The `multicore` package was depreciated according to the updated CRAN policies.
+  
 chemosensors 0.7.7
 ==================
 

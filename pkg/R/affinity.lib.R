@@ -50,7 +50,9 @@ computeAffinity.integral <- function(object, cores)
     if(!require(doMC)) {
       stop("Package `doMC` is needef for parallel computation.")
     }
-    registerDoMC(cores)
+    else {
+      doMC::registerDoMC(cores)
+    }
   }
   
   for(i in 1:ngases) {

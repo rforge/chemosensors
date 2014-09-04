@@ -444,9 +444,12 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
   
   if(cores > 1) {
     cat(" * Started computing in parallel on", cores, "CPU cores (if available) (SensorModel::sdataModel).\n")
-    if(!require(multicore)) {
-        stop("Package `multicore` is needed for parallel computing.")
-    } 
+    if(!require(doMC)) {
+        stop("Package `doMC` is required for parallel computing.")
+    }
+    else {
+      doMC::registerDoMC(cores) 
+    }
   }
 
   ngases <- ngases(object)
@@ -496,8 +499,7 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
       sdata.out <- sapply(idx(object), run.sdata, simplify = FALSE)
     }
     else {
-      sdata.out <- multicore::mclapply(idx(object), run.sdata, 
-        mc.cores = cores, mc.silent = TRUE, mc.cleanup = TRUE)
+      sdata.out <- llply(idx(object), run.sdata, .parallel = TRUE)
     }
     
     stopifnot(length(sdata.out) == nsensors)
@@ -538,8 +540,7 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
       sdata.out <- sapply(idx(object), run.sdata, simplify = FALSE)
     }
     else {
-      sdata.out <- multicore::mclapply(idx(object), run.sdata, 
-        mc.cores = cores, mc.silent = TRUE, mc.cleanup = TRUE)
+      sdata.out <- llply(idx(object), run.sdata, .parallel = TRUE) 
     }
           
     stopifnot(length(sdata.out) == nsensors)
