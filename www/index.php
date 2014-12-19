@@ -136,7 +136,7 @@ where the injection of an analyte in the sensor chamber lasted from 0 s to 180 s
 
 <p>
 When the sensor dynamics is disabled (R code: <code>SensorArray(enableDyn = FALSE)</code>),
-an arbitrary concentration matrix (e.g. sampling protocol) is possible.
+an arbitrary concentration matrix (i.e. sampling protocol) is possible.
 In this case there is nothing to deal with the sensor dynamics.
 We suggest the user to follow the rectangle pulse protocol
 for the simulations based on the reference UNIMAN data set.
