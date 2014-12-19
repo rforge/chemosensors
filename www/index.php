@@ -99,6 +99,49 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 </ul>
 </p>
 
+<h3>FAQ</h3>
+
+<ul>
+  <li>
+     Ideally I'd like to simulate the mixture of more than 3 gas components.
+     My understanding is that the software allows the simulation of only three gas classes. 
+     Is there a possibility to go beyond this limitation and simulate more than 3 gases?
+  </li>
+</ul>   
+
+<p>
+The current version of software allows for simulations with mixtures of up to 3 gas classes.
+This limitation comes from the fact the the only reference UNIMAN data set 
+contains records for three analytes (ammonia, propanoic acid and n-butanol).
+</p>
+
+<p>
+An extension of the data simulation software to higher-order gas mixtures
+is possible if approriate reference data sets become available.
+Please contact us if you are interested to share some data to be simulated with our software.
+</p>
+
+<ul>
+  <li>
+    I see that the sensor dynamics is modeled under the sampling protocol 
+    of a pulse of 60 time-units. Any other sampling protocols are available? 
+  </li>
+</ul>   
+
+<p>
+The rectangular gas pulse is the only sampling available till now.
+Again, this sampling was used in the measurement of the reference UNIMAN data set,
+where the injection of an analyte in the sensor chamber lasted from 0 s to 180 s.
+</p>
+
+<p>
+When the sensor dynamics is disabled (<code>> SensorArray(enableDyn = FALSE)</code>),
+an arbitrary concentration matrix (e.g. sampling protocol) is possible.
+In this case there is nothing to deal with the sensor dynamics.
+We suggest the user to follow the rectangle pulse protocol
+for the simulations based on the reference UNIMAN data set.
+</p>
+
 
 <h3>Installation from CRAN (recommended)</h3>
 
