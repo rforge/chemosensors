@@ -1,3 +1,12 @@
+chemosensors 0.7.9
+==================
+
+* `getConc` method for `Scenario` class is updated: `cf` argument is added.
+  In the code for 'Classification' example in Ziyatdinov et al. (2014), PLOSEONE,
+  the following two commands `conc <- getConc(sc); cf <- sdata.frame(sc);`
+  to be be changed for `cf <- sdata.frame(sc); conc <- getConc(sc, cf = cf)`.
+  Otherwise, concentration data in `conc` and `cf` will be randomized independently.
+
 chemosensors 0.7.8
 ==================
 

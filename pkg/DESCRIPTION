@@ -1,7 +1,7 @@
 Package: chemosensors
 Type: Package
 Title: A tool for the design of synthetic experiments in machine olfaction.
-Version: 0.7.8
+Version: 0.7.9
 Date: 2014-08-31
 Author: Alexandre Perera-Lluna and Andrey Ziyatdinov
 Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
@@ -35,19 +35,9 @@ Suggests:
     car,
     gridExtra
 Collate:
-    'package.R'
-    'datasets.R'
-    'methods.R'
-    'demos.R'
-    'dev.lib.R'
     'support.lib.R'
-    'spline.lib.R'
     'ChemosensorsClass.R'
     'ChemosensorsClassMethods.R'
-    'conc.lib.R'
-    'sdata.lib.R'
-    'plot.lib.R'
-    'SensorDataModelClassMethods.R'
     'ConcNoiseModelClass.R'
     'ConcNoiseModelClassMethods.R'
     'DriftCommonModelClassMethods.R'
@@ -55,14 +45,24 @@ Collate:
     'DriftNoiseModelClassMethods.R'
     'ScenarioClass.R'
     'ScenarioClassMethods.R'
-    'SensorDynamicsClass.R'
-    'SensorDynamicsClassMethods.R'
-    'SensorModelClass.R'
-    'SensorModelClassMethods.R'
-    'SensorNoiseModelClass.R'
-    'SensorNoiseModelClassMethods.R'
     'SorptionModelClass.R'
-    'SorptionModelClassMethods.R'
+    'SensorNoiseModelClass.R'
+    'SensorDynamicsClass.R'
+    'SensorModelClass.R'
     'SensorArrayClass.R'
     'SensorArrayClassMethods.R'
+    'spline.lib.R'
+    'SensorDataModelClassMethods.R'
+    'SensorDynamicsClassMethods.R'
+    'SensorModelClassMethods.R'
+    'SensorNoiseModelClassMethods.R'
+    'SorptionModelClassMethods.R'
     'affinity.lib.R'
+    'conc.lib.R'
+    'datasets.R'
+    'demos.R'
+    'dev.lib.R'
+    'methods.R'
+    'package.R'
+    'plot.lib.R'
+    'sdata.lib.R'

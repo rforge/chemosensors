@@ -468,17 +468,19 @@ setMethod("concSample", "Scenario", function(object, n = 1, ...)
 
 #' @rdname model-methods
 #' @aliases getConc,Scenario-method
-setMethod("getConc", "Scenario", function(object, set, ...)
+setMethod("getConc", "Scenario", function(object, set, cf, ...)
 {
-  df <- sdata.frame(object)
-  
   if(!missing(set)) {
     if(set == "T") conc <- subset(df, set == "T", select = gnames(object))
     else if(set == "V") conc <- subset(df, set == "V", select = gnames(object))
     else 
       stop("Error in Scenario::getConc: parameter 'set' is not recognized.")
   }
+  else if(!missing(cf)) {
+    conc <- subset(cf, select = gnames(object))    
+  }
   else {
+    df <- sdata.frame(object)
     conc <- subset(df, select = gnames(object))    
   }
   

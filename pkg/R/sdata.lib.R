@@ -112,7 +112,7 @@ setMethod("sdata2feature", "ANY", function(object, conc, sdata, feature = "trans
   airout <- getTPoint(object, conc, "airout")
   gasin <- getTPoint(object, conc, "gasin")
   gasout <- getTPoint(object, conc, "gasout")
-    
+  
   df <- switch(feature,
     "transient" = cbind(sf, cf),
     "steady-state" = {
@@ -127,10 +127,10 @@ setMethod("sdata2feature", "ANY", function(object, conc, sdata, feature = "trans
       stopifnot(length(gasout) > 0)
       stopifnot(length(gasout) == length(airin))
       stopifnot(all(gasout > airin))
-
+      
       cf <- cf[gasout, , drop = FALSE]
       sf <- sf[gasout, , drop = FALSE] - sf[airin, , drop = FALSE]
-
+      
       cbind(sf, cf)      
     },
     stop("Error in ANY::sdata2feature: switch."))
