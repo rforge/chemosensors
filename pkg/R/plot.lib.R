@@ -96,7 +96,7 @@ setMethod("plotBox", "ANY", function(x, y, conc, sdata, set, scenario,
 
 #' @rdname plot-methods
 #' @aliases plotResponse,ANY-method
-setMethod("plotResponse", "ANY", function(x, y, idx = 1, gas,
+setMethod("plotResponse", "ANY", function(x, y, idx = 1, sensor, gas,
   concUnits = "default", 
   n = 100,
   main = "Model Response", 
@@ -111,6 +111,10 @@ setMethod("plotResponse", "ANY", function(x, y, idx = 1, gas,
 
   if(missing(gas)) gas <- gnames
   stopifnot(all(gas %in% gnames))
+  
+  if(!missing(sensor)) {
+    idx <- sensor
+  }
   
   enableDyn(x) <- FALSE
   nsd(x) <- 0
@@ -130,9 +134,8 @@ setMethod("plotResponse", "ANY", function(x, y, idx = 1, gas,
       conci[, gi] <- seq(0, ci, length = n)
     
       sdata <- predict(x, conc = conci, concUnits = concUnits)
-      sdatai <- sdata[, idx, drop = FALSE]
     
-      dfi <- data.frame(sample = 1:n, conc = conci[, gi], sdata = sdata[, 1], gas = gni)
+      dfi <- data.frame(sample = 1:n, conc = conci[, gi], sdata = sdata[, idx], gas = gni)
       
       df <- rbind(df, dfi)
     }
