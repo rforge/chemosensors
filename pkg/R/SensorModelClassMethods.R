@@ -444,12 +444,8 @@ setMethod("sdataModel", "SensorModel", function(object, conc, coef="numeric", co
   
   if(cores > 1) {
     cat(" * Started computing in parallel on", cores, "CPU cores (if available) (SensorModel::sdataModel).\n")
-    if(!require(doMC)) {
-        stop("Package `doMC` is required for parallel computing.")
-    }
-    else {
-      doMC::registerDoMC(cores) 
-    }
+    stopifnot(requireNamespace("doMC", quietly = TRUE))
+    doMC::registerDoMC(cores)
   }
 
   ngases <- ngases(object)

@@ -314,7 +314,7 @@ initDataModelMvrBrokenStick <- function(X, C, ncomp=ncol(C),
 #----------------------------
 # Print Methods
 #----------------------------
-#' @S3method print SensorDataModel
+#' @export print SensorDataModel
 print.SensorDataModel <- function(x, ...)
 {
   cat(" data model\n")
@@ -327,7 +327,7 @@ print.SensorDataModel <- function(x, ...)
 # Plot Methods
 #----------------------------
 
-#' @S3method plot SensorDataModel
+#' @export plot SensorDataModel
 plot.SensorDataModel <- function(x, y="prediction", ...)
 {
   switch(y,
@@ -369,13 +369,13 @@ plot.DataModel.pca <- function(x, y, C, Y, mod, ...)
 # Predict Methods
 #----------------------------
 
-# @S3method ncoef SensorDataModel
+# @export ncoef SensorDataModel
 #ncoef.SensorDataModel <- function(x)
 #{
 #  length(coef(x))
 #}
 
-#' @S3method predict SensorDataModel
+#' @export predict SensorDataModel
 predict.SensorDataModel <- function(object, C, B, ...)
 {
   X <- switch(object$type,
@@ -579,7 +579,7 @@ predict.SensorDataModel.spline <- function(object, C, B, out = 'sum', ...)
 # Other Class Methods
 #----------------------------
 
-#' @S3method ncoef SensorDataModel
+#' @export ncoef SensorDataModel
 ncoef.SensorDataModel <- function(object)
 {
   length(coef(object))

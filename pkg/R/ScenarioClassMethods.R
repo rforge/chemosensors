@@ -620,7 +620,7 @@ plot.Scenario.time <- function(x, y, concUnits = "character",
     }    
   }
   
-  # dummy assignment to get rid of errors from `R CMD check` (no visible binding for global variable ‘gas’)
+  # dummy assignment to get rid of errors from 'R CMD check' (no visible binding for global variable ‘gas’)
   set <- variable <- gas <- value <- NULL
   
   mf <- mutate(mf,

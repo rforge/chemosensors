@@ -144,7 +144,7 @@ plot.SensorDynamics.predict <- function(x, y,
 
   nsdata <- predict(x, conc, sdata, sensors=sind, ...)  
 
-  # dummy assignment to get rid of errors from `R CMD check` (no visible binding for global variable ‘gas’)
+  # dummy assignment to get rid of errors from 'R CMD check' (no visible binding for global variable ‘gas’)
   gas <- sensor <- value <- label <- NULL
 
   df1 <- data.frame(melt(sdata, varnames = c("sample", "gas", "sensor")), data = "input")

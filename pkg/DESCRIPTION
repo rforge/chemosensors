@@ -1,11 +1,11 @@
 Package: chemosensors
 Type: Package
-Title: A tool for the design of synthetic experiments in machine olfaction.
-Version: 0.7.10
-Date: 2015-02-27
+Title: A Tool for Synthetic Experiments in Machine Olfaction
+Version: 0.7.11
+Date: 2016-03-02
 Author: Alexandre Perera-Lluna and Andrey Ziyatdinov
 Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
-Description: This package introduces a software tool for the design of
+Description: This package introduces a software tool to design
     synthetic experiments in machine olfaction. The generator of gas sensor
     signals can be used in applications related to test and benchmarking of
     signal processing methods, neuromorphic simulations in machine olfaction
@@ -46,9 +46,9 @@ Collate:
     'ScenarioClass.R'
     'ScenarioClassMethods.R'
     'SorptionModelClass.R'
-    'SensorNoiseModelClass.R'
     'SensorDynamicsClass.R'
     'SensorModelClass.R'
+    'SensorNoiseModelClass.R'
     'SensorArrayClass.R'
     'SensorArrayClassMethods.R'
     'spline.lib.R'
@@ -66,3 +66,4 @@ Collate:
     'package.R'
     'plot.lib.R'
     'sdata.lib.R'
+RoxygenNote: 5.0.1

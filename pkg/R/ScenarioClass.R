@@ -85,7 +85,7 @@ setMethod ("show", "Scenario", function(object)
   {
     if(length(n) == 0 | length(n) == 1 & n[1] == 0) { return("empty") }
     
-    # dummy assignment to get rid of errors from `R CMD check` (no visible binding for global variable ‘label’)
+    # dummy assignment to get rid of errors from 'R CMD check' (no visible binding for global variable ‘label’)
     label <- NULL
     
     df <- data.frame(label = rep(set, n)) # training frame

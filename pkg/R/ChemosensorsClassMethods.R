@@ -581,8 +581,10 @@ setMethod("plotPolar", "ANY", function(x, y, polar = TRUE, geom = "line",
     colnames(df)[c(ncol(df) - 1, ncol(df))] <- c("sensor", "y")
     df <- mutate(df, S = paste("S", sensor, sep = ""))
 
+    sensor <- NULL
     df <- mutate(df, sensor = as.numeric(sensor))
-  
+    
+    S <- NULL
     ff <- subset(df, S == "S1") # fake frame
     ff$sensor <- nsensors + 1
     ff$S <- ""  
@@ -590,7 +592,8 @@ setMethod("plotPolar", "ANY", function(x, y, polar = TRUE, geom = "line",
 
     yr <- range(df2$y)
     yr[1] <- min(yr[1], 0)
-
+  
+    gas <- NULL
     if(geom == "line") {
       p <- ggplot(df2, aes(x = sensor, y = y, group = gas)) + ylim(yr)
       p <- p + geom_line(aes(color = gas)) + scale_color_manual(values = gcol) 
@@ -677,8 +680,10 @@ setMethod("plotPolarGases", "ANY", function(x, y, polar = TRUE, geom = "line",
     colnames(df)[c(ncol(df) - 1, ncol(df))] <- c("sensor", "y")
     df <- mutate(df, S = paste("S", sensor, sep = ""))
 
+    sensor <- NULL
     df <- mutate(df, sensor = as.numeric(sensor))
   
+    S <- NULL
     ff <- subset(df, S == "S1") # fake frame
     ff$sensor <- nsensors + 1
     ff$S <- ""  
@@ -687,28 +692,30 @@ setMethod("plotPolarGases", "ANY", function(x, y, polar = TRUE, geom = "line",
     yr <- range(df2$y)
     yr[1] <- min(yr[1], 0)
 
-    #if(geom == "line") {
-    #  p <- ggplot(df2, aes(x = sensor, y = y, group = conc.level)) + ylim(yr)
-    #  #p <- p + geom_line()
-    #  p <- p + geom_line(aes(size = conc.level)) + scale_size_manual(values = c(0.5, 0.3, 0.1))  
-    #}
-    #else if(geom == "area") {
-    #  p <- ggplot(df2, aes(x = sensor, y = y, group = conc.level, fill = conc.level)) + scale_fill_grey()
-    #  #p <- p + geom_area(position = "fill")
-    #  p <- p + geom_line() + geom_area(position = "identity")
-    #} 
-    #else
-    #  stop("Error in ANY::plotPolar: 'geom' is incorrect.")  
-    #
-    #p <- p + facet_wrap(~ gas, ncol = 2)
-    #p <- p +  labs(x = xlab, y = ylab) + opts(title = main)
-    #    
-    #if(polar) {
-    #  p <- p + coord_polar(theta = "x")
-    #
-    #  df3 <- subset(df2, gas == df2$gas[1])
-    #  p <- p + scale_x_continuous(breaks = df3$sensor, labels = df3$S)
-    #}
+    conc.level <- NULL
+    if(geom == "line") {
+      p <- ggplot(df2, aes(x = sensor, y = y, group = conc.level)) + ylim(yr)
+      #p <- p + geom_line()
+      p <- p + geom_line(aes(size = conc.level)) + scale_size_manual(values = c(0.5, 0.3, 0.1))  
+    }
+    else if(geom == "area") {
+      p <- ggplot(df2, aes(x = sensor, y = y, group = conc.level, fill = conc.level)) + scale_fill_grey()
+      #p <- p + geom_area(position = "fill")
+      p <- p + geom_line() + geom_area(position = "identity")
+    } 
+    else
+      stop("Error in ANY::plotPolar: 'geom' is incorrect.")  
+    
+    p <- p + facet_wrap(~ gas, ncol = 2)
+    p <- p +  labs(x = xlab, y = ylab, title = main) 
+        
+    if(polar) {
+      p <- p + coord_polar(theta = "x")
+    
+      gas <- NULL
+      df3 <- subset(df2, gas == df2$gas[1])
+      p <- p + scale_x_continuous(breaks = df3$sensor, labels = df3$S)
+    }
     
     if(ret) {
       return(p)
@@ -772,6 +779,7 @@ setMethod("plotResponseOld", "ANY", function(x, y, concUnits = "norm",
   
   # ylim
   if(uniman) {
+    dat <- NULL
     data(list=datasetSensorModel, package=pck, envir=environment()) # -> 'C', 'dat', 'dat.corrected'
     X <- dat
 
@@ -795,7 +803,7 @@ setMethod("plotResponseOld", "ANY", function(x, y, concUnits = "norm",
   }
     
   if(graphics == "base") {
-    matplot(xp, yp, bty='n', t='l', col=col, 
+    matplot(xp, yp, bty='n', type='l', col=col, 
       lwd = lwd, lty = lty,
       xlim = xlim, ylim=ylim, 
       main=main, xlab = xlab, ylab = ylab, ...)  
@@ -816,6 +824,7 @@ setMethod("plotResponseOld", "ANY", function(x, y, concUnits = "norm",
     dm$sensor <- paste("S", as.numeric(unlist(lapply(tmp, function(x) x[1]))), sep = "")
     dm$gas <- gnames[as.numeric(unlist(lapply(tmp, function(x) x[2])))]
     
+    conc <- sdata <- gas <- NULL
     p <- qplot(conc, sdata, data = dm, geom = "line", group = id, color = gas) +
       scale_colour_manual(values = gcol(x)) + 
       labs(x = xlab, y = ylab, title = main)
@@ -892,7 +901,7 @@ setMethod("plotTimeline", "ANY", function(x, y, conc, sdata, concUnits = "defaul
   if(missing(col)) col <- scol(x, nsensors)
   
   # plot
-  matplot(sdata, t="l", lwd=lwd, lty=lty, bty=bty, 
+  matplot(sdata, type="l", lwd=lwd, lty=lty, bty=bty, 
     col=col,
     main=main, xlab = xlab, ylab = ylab, ...)  
   abline(h=0, lty=3, col='lightgrey', lwd=lwd)
@@ -900,7 +909,7 @@ setMethod("plotTimeline", "ANY", function(x, y, conc, sdata, concUnits = "defaul
   # legend
   if(leg != "none") {
     lab <- paste("S", 1:nsensors, sep='')
-    legend(leg, legend=lab, col=col, lwd=lwd, lty=lty, bt="n")
+    legend(leg, legend=lab, col=col, lwd=lwd, lty=lty, bty="n")
   }
   
 })
@@ -1068,11 +1077,13 @@ setMethod("plotAffinitySpace", "ANY", function(x, y, type = 'points',
     df <- melt(df, id.vars = colnames(cf))  
     colnames(df)[c(ncol(df) - 1, ncol(df))] <- c("sensor", "y")
     df <- mutate(df, S = paste("S", sensor, sep = ""))
-
+  
+    sensor <- NULL
     df <- mutate(df, sensor = as.numeric(sensor))
   
     # filter by gases
     stopifnot(length(gases) == 2)
+    gas <- NULL
     df <- subset(df, gas %in% gases)
 
     df1 <- subset(df, gas == gases[1])
@@ -1085,6 +1096,7 @@ setMethod("plotAffinitySpace", "ANY", function(x, y, type = 'points',
     rxy <- range(range(jf$y1), range(jf$y2))
     
     if(geom == "point") {
+      y1 <- y2 <- NULL
       p <- ggplot(jf, aes(x = y1, y = y2)) + xlim(rxy) + ylim(rxy)
       p <- p + geom_point() + geom_abline(intercept = 0, slope = 1) 
     }
@@ -1264,6 +1276,7 @@ setMethod("plotSignal", "ANY", function(x, y, conc, set,
   
   df <- rbind(data.frame(cf, matrix = "conc"), data.frame(sf, matrix = "sdata"))
   
+  value <- NULL
   p <- ggplot(df, aes(x = sample, y = value)) + geom_line(aes(color = as.factor(data))) +
     facet_grid(matrix ~ ., scales = "free_y") + 
     labs(title = main)

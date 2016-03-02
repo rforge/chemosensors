@@ -47,12 +47,8 @@ computeAffinity.integral <- function(object, cores)
   
   parallel <- (cores > 1)
   if(parallel) {
-    if(!require(doMC)) {
-      stop("Package `doMC` is needef for parallel computation.")
-    }
-    else {
-      doMC::registerDoMC(cores)
-    }
+    stopifnot(requireNamespace("doMC", quietly = TRUE))
+    doMC::registerDoMC(cores)
   }
   
   for(i in 1:ngases) {

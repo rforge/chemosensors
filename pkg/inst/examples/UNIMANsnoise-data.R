@@ -15,7 +15,7 @@ df <- mutate(df,
   gas = LETTERS[gas], 
   sensor = factor(paste("S", sensor, sep = ""), levels = paste("S", 1:17, sep = "")))
   
-p1 <- qplot(sensor, value, data = df, geom = "bar") + 
+p1 <- ggplot(df, aes(x = sensor, weight = value)) + geom_bar() + 
   facet_grid(gas ~ ., scales = "free_y") +
   labs(x = "sensor", y = "sd parameter", title = "Sensor Noise in data model 'plsr'")
 p1  
@@ -30,7 +30,7 @@ df <- mutate(df,
   gas = LETTERS[gas], 
   sensor = factor(paste("S", sensor, sep = ""), levels = paste("S", 1:17, sep = "")))
 
-p2 <- ggplot(df, aes(x = sensor, y = value, fill = gas)) + 
+p2 <- ggplot(df, aes(x = sensor, weight = value, fill = gas)) + 
   geom_bar(position = "stack") +
   labs(x = "sensor", y = "sd parameter (normalized acroos gases)")
 p2

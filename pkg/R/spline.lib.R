@@ -163,7 +163,7 @@ createIQSplineBasis <- function(breaks, norder)
 # Print/Show Methods
 #----------------------------
 
-#' @S3method print SplineBasis
+#' @export print SplineBasis
 print.SplineBasis <- function(x, ...)
 {
   cat(" SplineBasis\n")
@@ -176,7 +176,7 @@ print.SplineBasis <- function(x, ...)
 #----------------------------
 # Plot Methods
 #----------------------------
-#' @S3method plot SplineBasis
+#' @export plot SplineBasis
 plot.SplineBasis <- function(x, y="default", ...)
 {
   plotSplineBasis(x, y, ...)
@@ -497,7 +497,7 @@ fitSplineBasis <- function(bs, x, y)
   return(beta)    
 }
 
-#' @S3method predict SplineBasis
+#' @export predict SplineBasis
 predict.SplineBasis <- function(object, x, beta, ...)
 {
   bs <- object

@@ -63,6 +63,7 @@ setMethod("plotBox", "ANY", function(x, y, conc, sdata, set, scenario,
   if(missing(xlab)) xlab <- "Gas Labels"
   if(missing(ylab)) ylab <- paste("Sensor Response (feature '", feature, "')", sep = "")
 
+  lab <- value <- NULL
   p <- qplot(lab, value, color = glab, data = mf, geom = "boxplot") +
     facet_wrap(~ variable, scales = scales) + 
     labs(title = main, x = xlab, y = ylab)
@@ -145,7 +146,8 @@ setMethod("plotResponse", "ANY", function(x, y, idx = 1, sensor, gas,
   main <- paste(main, paste("(S", x@idx[idx], ", num ", x@num[idx], ")", sep = ""))
   
   mf <- melt(df, measure.vars = c("conc", "sdata"))
-
+  
+  value <- variable <- NULL
   p <- ggplot(mf, aes(sample, value)) + 
     geom_line(aes(color = variable)) + 
     facet_wrap(variable ~ gas, scales = "free") +
@@ -235,10 +237,12 @@ setMethod("plotPCA", "ANY", function(x, y, conc, sdata, set, scenario,
   colnames(df) <- c("PCx", "PCy")
 
   df <- cbind(df, cf)
-  
+
+  PCx <- PCy <- NULL
   p <- ggplot(df, aes(PCx, PCy)) +  
     labs(title = main, x = xlab, y = ylab)
-
+  
+  lab <- NULL
   if(!is.null(size) && !is.null(alpha)) {
     p <- p + geom_point(aes(color = lab), size = size, alpha = alpha)  
   }

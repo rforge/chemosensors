@@ -49,7 +49,7 @@ initCommonModelCpcPlsr <- function(dspace, ndcomp, ndvar,
 #----------------------------
 # Print Methods
 #----------------------------
-#' @S3method print DriftCommonModel
+#' @export print DriftCommonModel
 print.DriftCommonModel <- function(x, ...)
 {
   cat(" drift common model\n")
@@ -61,7 +61,7 @@ print.DriftCommonModel <- function(x, ...)
 # Plot Methods
 #----------------------------
 
-#' @S3method plot DriftCommonModel
+#' @export plot DriftCommonModel
 plot.DriftCommonModel <- function(x, y="prediction", ...)
 {
   switch(y,
@@ -94,7 +94,7 @@ plot.DriftCommonModel.prediction <- function(x, y, C, p = 1,
 # Predict Methods
 #----------------------------
 
-#' @S3method predict DriftCommonModel
+#' @export predict DriftCommonModel
 predict.DriftCommonModel <- function(object, X, dsd, ...)
 {
   if(missing(X)) stop("Error in 'predict.DriftCommonModel': missing 'X'.")
